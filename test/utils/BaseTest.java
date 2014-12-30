@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static play.test.Helpers.fakeApplication;
+import static play.test.Helpers.fakeGlobal;
 import static play.test.Helpers.inMemoryDatabase;
 
 public class BaseTest extends WithApplication {
@@ -16,7 +17,8 @@ public class BaseTest extends WithApplication {
         Map<String, String> settings = inMemoryDatabase();
         settings = new HashMap<String, String>(settings);
         settings.put("ebean.default", "models.*");
-        return fakeApplication(settings);
+//        return fakeApplication(settings);
+        return fakeApplication(settings, fakeGlobal());
     }
 
 }
