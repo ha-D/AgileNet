@@ -16,7 +16,7 @@ public class Application extends Controller {
     }
 
     public static Result signup() {
-        return ok(views.html.singUp.render());
+        return ok(views.html.signUp.render());
     }
 
     public static Result login() {
