@@ -39,7 +39,7 @@ public class LoginTest extends BaseTest {
             "password", "thewrongpassword"
         );
         Result result = makeRequest(params);
-        assertSuccess("Login should fail if fields are invalid", result);
+        assertFail("Login should fail if fields are invalid", result);
         assertNull("User email should not exist in session after failed login", session(result).get("email"));
     }
 
@@ -50,7 +50,7 @@ public class LoginTest extends BaseTest {
             "password", "somepassword"
         );
         Result result = makeRequest(params);
-        assertSuccess("Login should fail if fields are invalid", result);
+        assertFail("Login should fail if fields are invalid", result);
         assertNull("User email should not exist in session after failed login", session(result).get("email"));
     }
 
@@ -62,7 +62,8 @@ public class LoginTest extends BaseTest {
     }
 
     private void assertSuccess(String message, Result result) {
-        assertEquals(message, 302, status(result));
+        int status = status(result);
+        assertTrue(message, status == 200 || status == 302 || status == 303);
     }
 
     private void assertFail(String message, Result result) {

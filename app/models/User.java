@@ -55,7 +55,7 @@ public class User extends Model {
         user.firstName = firstName;
         user.lastName = lastName;
         user.email = email;
-        user.password = password;
+        user.setPassword(password);
         user.save();
         return user;
     }

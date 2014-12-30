@@ -16,18 +16,18 @@ public class SignupTest extends BaseTest {
     @Test
     public void signupSuccess() {
         Map params = ImmutableMap.of(
-            "first_name", "hadi",
-            "last_name", "zolfaghari",
+            "firstName", "hadi",
+            "lastName", "zolfaghari",
             "email", "hadi@zolfaghari.com",
             "password", "thepassword",
-            "confirm_password", "thepassword"
+            "passwordConfirm", "thepassword"
         );
         Result result = makeRequest(params);
         assertSuccess("Sign up should be successful with required fields", result);
 
-        User user = User.findByEmail("hadi@zolfaghari.com");
-
         String message = "User data should be valid in database after successful sign up";
+        User user = User.findByEmail("hadi@zolfaghari.com");
+        assertNotNull(message, user);
         assertEquals(message, "hadi", user.firstName);
         assertEquals(message, "zolfaghari", user.lastName);
         assertEquals(message, "hadi@zolfaghari.com", user.email);
@@ -39,10 +39,10 @@ public class SignupTest extends BaseTest {
     @Test
     public void signupFail() {
         Map params = ImmutableMap.of(
-            "first_name", "hadi",
+            "firstName", "hadi",
             "email", "hadi@zolfaghari.com",
             "password", "thepassword",
-            "confirm_password", "thepassword"
+            "passwordConfirm", "thepassword"
         );
         Result result = makeRequest(params);
         assertFail("Sign Up should fail without required fields", result);
@@ -51,14 +51,28 @@ public class SignupTest extends BaseTest {
     @Test
     public void signupPasswordFail() {
         Map params = ImmutableMap.of(
-            "first_name", "hadi",
-            "last_name", "zolfaghari",
+            "firstName", "hadi",
+            "lastName", "zolfaghari",
             "email", "hadi@zolfaghari.com",
             "password", "thepassword",
-            "confirm_password", "adifferentpassword"
+            "passwordConfirm", "adifferentpassword"
         );
         Result result = makeRequest(params);
-        assertSuccess("Sign up should fail if passwords differ", result);
+        assertFail("Sign up should fail if passwords differ", result);
+    }
+
+    @Test
+    public void signupDuplicateFail() {
+        User.create("some", "guy", "hadi@zolfaghari.com", "somepassword");
+        Map params = ImmutableMap.of(
+                "firstName", "hadi",
+                "lastName", "zolfaghari",
+                "email", "hadi@zolfaghari.com",
+                "password", "thepassword",
+                "passwordConfirm", "adifferentpassword"
+        );
+        Result result = makeRequest(params);
+        assertFail("Sign up should fail if email already exists", result);
     }
 
     private Result makeRequest(Map params) {
@@ -69,7 +83,8 @@ public class SignupTest extends BaseTest {
     }
 
     private void assertSuccess(String message, Result result) {
-        assertEquals(message, 302, status(result));
+        int status = status(result);
+        assertTrue(message, status == 200 || status == 302 || status == 303);
     }
 
     private void assertFail(String message, Result result) {
