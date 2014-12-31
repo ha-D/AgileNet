@@ -34,6 +34,9 @@ public class SignupTest extends BaseTest {
 
         user = User.authenticate("hadi@zolfaghari.com", "thepassword");
         assertNotNull("User password should be correct after sign up", user);
+
+        assertFalse("User should not be activated after signup", user.isActivated);
+        assertFalse("User should not be suspended after signup", user.isSuspended);
     }
 
     @Test
@@ -77,7 +80,7 @@ public class SignupTest extends BaseTest {
 
     private Result makeRequest(Map params) {
         return callAction(
-                routes.ref.Accounts.signup(),
+                routes.ref.Accounts.signupSubmit(),
                 fakeRequest().withFormUrlEncodedBody(params)
         );
     }

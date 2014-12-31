@@ -10,7 +10,7 @@ public class Global extends GlobalSettings {
     @Override
     public void onStart(Application application) {
         if (Role.find.findRowCount() == 0) {
-//            Ebean.save((List) Yaml.load("initial-data/roles.yml"));
+            Ebean.save((List) Yaml.load("initial-data/roles.yml"));
         }
     }
 }

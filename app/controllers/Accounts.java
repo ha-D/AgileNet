@@ -6,11 +6,14 @@ import models.User;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
-import views.html.login;
 
 public class Accounts extends Controller {
 
     public static Result signup() {
+        return ok(views.html.signUp.render(Form.form(SignupForm.class)));
+    }
+
+    public static Result signupSubmit() {
         Form<SignupForm> form = Form.form(SignupForm.class).bindFromRequest();
 
         if (form.hasErrors()) {
@@ -21,7 +24,7 @@ public class Accounts extends Controller {
             user.lastName = form.get().lastName;
             user.email = form.get().email;
             user.contactPhone = form.get().contactPhone;
-            user.nationalId = form.get().nationalId;
+            user.nationalId = form.get().nationalID;
             user.setPassword(form.get().password);
             user.save();
             return redirect(routes.Application.index());
@@ -51,7 +54,7 @@ public class Accounts extends Controller {
         public String password;
         @Required
         public String passwordConfirm;
-        public String nationalId;
+        public String nationalID;
         public String contactPhone;
 
         public String validate() {
