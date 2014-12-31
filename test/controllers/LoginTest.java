@@ -28,7 +28,7 @@ public class LoginTest extends BaseTest {
         );
         Result result = makeRequest(params);
         assertSuccess("Login should be successful with valid fields", result);
-        assertEquals("User email should exist in session after successful login",
+        assertEquals("User email should exist in session after successful loginSubmit",
                 "hadi@zolfaghari.com", session(result).get("email"));
     }
 
@@ -40,7 +40,7 @@ public class LoginTest extends BaseTest {
         );
         Result result = makeRequest(params);
         assertFail("Login should fail if fields are invalid", result);
-        assertNull("User email should not exist in session after failed login", session(result).get("email"));
+        assertNull("User email should not exist in session after failed loginSubmit", session(result).get("email"));
     }
 
     @Test
@@ -51,7 +51,7 @@ public class LoginTest extends BaseTest {
         );
         Result result = makeRequest(params);
         assertFail("Login should fail if fields are invalid", result);
-        assertNull("User email should not exist in session after failed login", session(result).get("email"));
+        assertNull("User email should not exist in session after failed loginSubmit", session(result).get("email"));
     }
 
     private Result makeRequest(Map params) {

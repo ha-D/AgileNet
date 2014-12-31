@@ -17,7 +17,7 @@ public class Accounts extends Controller {
         Form<SignupForm> form = Form.form(SignupForm.class).bindFromRequest();
 
         if (form.hasErrors()) {
-            return badRequest("Signup Form");
+            return badRequest(views.html.signUp.render(form));
         } else {
             User user = new User();
             user.firstName = form.get().firstName;
@@ -32,14 +32,23 @@ public class Accounts extends Controller {
     }
 
     public static Result login() {
+        return ok(views.html.login.render(Form.form(LoginForm.class)));
+    }
+
+    public static Result loginSubmit() {
         Form<LoginForm> form = Form.form(LoginForm.class).bindFromRequest();
         if (form.hasErrors()) {
-            return badRequest("Login Form");
+            return badRequest(views.html.login.render(form));
         } else {
             session().clear();
             session().put("email", form.get().email);
             return redirect(routes.Application.index());
         }
+    }
+
+    public static Result logout() {
+        session().clear();
+        return redirect(routes.Application.index());
     }
 
     public static class SignupForm {
