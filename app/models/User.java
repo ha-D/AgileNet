@@ -75,6 +75,13 @@ public class User extends Model {
         return roles.contains(role);
     }
 
+    public boolean isExpert(){
+        for(Role r: this.roles)
+            if(r.name.equals("expert"))
+                return true;
+        return false;
+    }
+
     public static Finder<String,User> find = new Finder<String,User>(
             String.class, User.class
     );
@@ -90,6 +97,10 @@ public class User extends Model {
         }
         return null;
 
+    }
+
+    public static List<User> getAllUsers(){
+        return find.all();
     }
 
     @Override
