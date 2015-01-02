@@ -1,0 +1,32 @@
+- !!models.User
+    firstName:   asghar
+    lastName:   akbari
+    email:      asghar@akbar.com
+    password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
+- !!models.User
+    firstName:   jafar
+    lastName:   jafari
+    email:      jafar@akbar.com
+    password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
+- !!models.User
+    firstName:   asghar2
+    lastName:   akbari
+    email:      asghar2@akbar.com
+    password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
+- !!models.User
+    firstName:   jafar2
+    lastName:   jafari
+    email:      jafar2@akbar.com
+    password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
+    isSuspended: true
+- !!models.User
+    firstName:   asghar3
+    lastName:   akbari3
+    email:      asghar3@akbar.com
+    password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
+    isSuspended: true
+- !!models.User
+    firstName:   jafar3
+    lastName:   jafari
+    email:      jafar3@akbar.com
+    password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
