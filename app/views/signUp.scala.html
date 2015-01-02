@@ -20,45 +20,53 @@
 
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-                    @helper.form(routes.Accounts.signupSubmit) {
+                    @helper.form(routes.Accounts.signupSubmit, 'id -> "signUpForm") {
+
                         <h2 class="text-right">لطفا عضو شوید. <small>عضویت رایگان است</small></h2>
                         <hr class="colorgraph">
                         <div class="row">
                             <div class="col-xs-6 col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <input type="text" name="lastName" id="lastName" class="form-control input-lg text-right" placeholder="نام خانوادگی" tabindex="2">
+                                <div class="form-group @if(form("lastName").errors.size > 0) {has-error}">
+                                    @helper.inputText(form("lastName"), 'id -> "lastName", 'class -> "form-control input-lg text-right", 'placeholder -> "نام خانوادگی" , 'tabindex -> "2", '_label -> null)
+                                    @*<input type="text" name="lastName" id="lastName" class="form-control input-lg text-right" placeholder="نام خانوادگی" tabindex="2">*@
                                 </div>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <input type="text" name="firstName" id="firstName" class="form-control input-lg text-right" placeholder="نام" tabindex="1">
+                                <div class="form-group @if(form("firstName").errors.size > 0) {has-error}">
+                                    @helper.inputText(form("firstName"), 'id -> "firstName", 'class -> "form-control input-lg text-right", 'placeholder -> "نام" , 'tabindex -> "1", '_label -> null)
+                                    @*<input type="text" name="firstName" id="firstName" class="form-control input-lg text-right" placeholder="نام" tabindex="1">*@
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-xs-6 col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <input type="text" name="" id="contactPhone" class="form-control input-lg" placeholder="شماره تلفن" tabindex="3">
+                                <div class="form-group @if(form("contactPhone").errors.size > 0) {has-error}">
+                                    @helper.inputText(form("contactPhone"), 'id -> "contactPhone", 'class -> "form-control input-lg", 'placeholder -> "شماره تلفن" , 'tabindex -> "3", '_label -> null)
+                                    @*<input type="text" name="" id="contactPhone" class="form-control input-lg" placeholder="شماره تلفن" tabindex="3">*@
                                 </div>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <input type="text" name="" id="nationalID" class="form-control input-lg" placeholder="شماره ملی" tabindex="4">
+                                <div class="form-group @if(form("lnationalID").errors.size > 0) {has-error}">
+                                    @helper.inputText(form("nationalID"), 'id -> "nationalID", 'class -> "form-control input-lg", 'placeholder -> "شماره ملی" , 'tabindex -> "4", '_label -> null)
+                                    @*<input type="text" name="" id="nationalID" class="form-control input-lg" placeholder="شماره ملی" tabindex="4">*@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <input type="email" name="email" id="email" class="form-control input-lg" placeholder="پست الکترونیکی" tabindex="5">
+                        <div class="form-group @if(form("email").errors.size > 0) {has-error}">
+                            @helper.inputText(form("email"), 'id -> "email", 'type -> "email", 'class -> "form-control input-lg", 'placeholder -> "پست الکترونیکی" , 'tabindex -> "5", '_label -> null)
+                            @*<input type="email" name="email" id="email" class="form-control input-lg" placeholder="پست الکترونیکی" tabindex="5">*@
                         </div>
                         <div class="row">
                             <div class="col-xs-6 col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <input type="password" name="password" id="password" class="form-control input-lg" placeholder="رمز عبور" tabindex="6">
+                                <div class="form-group @if(form("password").errors.size > 0) {has-error}">
+                                    @helper.inputPassword(form("password"), 'id -> "password", 'class -> "form-control input-lg", 'placeholder -> "رمز عبور" , 'tabindex -> "6", '_label -> null)
+                                    @*<input type="password" name="password" id="password" class="form-control input-lg" placeholder="رمز عبور" tabindex="6">*@
                                 </div>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6">
-                                <div class="form-group">
-                                    <input type="password" name="passwordConfirm" id="password_confirmation" class="form-control input-lg" placeholder="رمز عبور مجدد" tabindex="7">
+                                <div class="form-group @if(form("passwordConfirm").errors.size > 0) {has-error}">
+                                    @helper.inputPassword(form("passwordConfirm"), 'id -> "passwordConfirm", 'class -> "form-control input-lg", 'placeholder -> "رمز عبور مجدد" , 'tabindex -> "7", '_label -> null)
+                                    @*<input type="password" name="passwordConfirm" id="password_confirmation" class="form-control input-lg" placeholder="رمز عبور مجدد" tabindex="7">*@
                                 </div>
                             </div>
                         </div>
