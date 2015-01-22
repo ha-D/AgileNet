@@ -40,7 +40,12 @@ public class User extends Model {
     @ManyToMany(cascade= CascadeType.ALL)
     public List<Role> roles;
 
+    @Transient
     private UserDao userDao;
+
+    public User() {
+        this(Dependencies.getUserDao());
+    }
 
     public User(UserDao userDao) {
         creationDate = new Date();

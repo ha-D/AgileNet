@@ -3,10 +3,7 @@ package models;
 import dao.RoleDao;
 import play.db.ebean.Model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 
 @Entity
@@ -16,7 +13,12 @@ public class Role extends Model {
     @Column(nullable = false, unique = true)
     public String name;
 
+    @Transient
     private RoleDao roleDao;
+
+    public Role() {
+        this.roleDao = Dependencies.getRoleDao();
+    }
 
     public Role(RoleDao roleDao) {
         this.roleDao = roleDao;
@@ -26,7 +28,6 @@ public class Role extends Model {
         this(roleDao);
         this.name = name;
     }
-
 
     @Override
     public boolean equals(Object o) {

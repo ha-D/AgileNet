@@ -1,5 +1,6 @@
 package controllers;
 
+import actions.Authorized;
 import models.Dependencies;
 import play.*;
 import play.data.Form;
@@ -17,6 +18,7 @@ public class Application extends Controller {
         return ok(index.render("Your new application is ready."));
     }
 
+    @Authorized()
     public static Result users() {
         return ok(users.render(Dependencies.getUserDao().getAllUsers()));
     }
