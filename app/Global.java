@@ -1,4 +1,8 @@
 import com.avaje.ebean.Ebean;
+import dao.EBeanRoleDao;
+import dao.EBeanUserDao;
+import dao.RoleDao;
+import models.Dependencies;
 import models.Role;
 import play.Application;
 import play.GlobalSettings;
@@ -9,7 +13,9 @@ import java.util.List;
 public class Global extends GlobalSettings {
     @Override
     public void onStart(Application application) {
-        if (Role.find.findRowCount() == 0) {
+        Dependencies.initialize(new EBeanUserDao(), new EBeanRoleDao());
+
+        if (Dependencies.getRoleDao().getRoleCount() == 0) {
             Ebean.save((List) Yaml.load("initial-data/roles.yml"));
         }
     }

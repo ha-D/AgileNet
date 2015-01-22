@@ -1,5 +1,6 @@
 package models;
 
+import dao.RoleDao;
 import play.db.ebean.Model;
 
 import javax.persistence.Column;
@@ -15,25 +16,17 @@ public class Role extends Model {
     @Column(nullable = false, unique = true)
     public String name;
 
-    public Role() {
+    private RoleDao roleDao;
+
+    public Role(RoleDao roleDao) {
+        this.roleDao = roleDao;
     }
-    public Role(String name) {
+
+    public Role(String name, RoleDao roleDao) {
+        this(roleDao);
         this.name = name;
     }
 
-    public static Role create(String name) {
-        Role role = new Role(name);
-        role.save();
-        return role;
-    }
-
-    public static Finder<String,Role> find = new Finder<String,Role>(
-            String.class, Role.class
-    );
-
-    public static Role findByName(String name) {
-        return find.where().eq("name", name).findUnique();
-    }
 
     @Override
     public boolean equals(Object o) {

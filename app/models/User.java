@@ -1,5 +1,6 @@
 package models;
 
+import dao.UserDao;
 import play.data.validation.Constraints;
 import org.mindrot.jbcrypt.BCrypt;
 import play.db.ebean.Model;
@@ -39,10 +40,14 @@ public class User extends Model {
     @ManyToMany(cascade= CascadeType.ALL)
     public List<Role> roles;
 
-    public User() {
+    private UserDao userDao;
+
+    public User(UserDao userDao) {
         creationDate = new Date();
         isActivated = false;
         isSuspended = false;
+
+        this.userDao = userDao;
     }
 
     public void setPassword(String password) {
@@ -50,15 +55,7 @@ public class User extends Model {
     }
 
 
-    public static User create(String firstName, String lastName, String email, String password) {
-        User user = new User();
-        user.firstName = firstName;
-        user.lastName = lastName;
-        user.email = email;
-        user.setPassword(password);
-        user.save();
-        return user;
-    }
+
 
     public void assignRole(Role role) {
         assignRole(role, true);
@@ -67,7 +64,7 @@ public class User extends Model {
     public void assignRole(Role role, boolean commit) {
         roles.add(role);
         if (commit) {
-            this.save();
+            userDao.update(this);
         }
     }
 
@@ -75,26 +72,10 @@ public class User extends Model {
         return roles.contains(role);
     }
 
-    public static Finder<String,User> find = new Finder<String,User>(
-            String.class, User.class
-    );
-
-    public static User findByEmail(String email) {
-        return find.where().eq("email", email).findUnique();
-    }
-
-    public static User authenticate(String email, String password) {
-        User user = find.where().eq("email", email).findUnique();
-        if (user != null && BCrypt.checkpw(password, user.password)) {
-            return user;
-        }
-        return null;
-
-    }
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof Role) {
+        if (o instanceof User) {
             User u = (User)o;
             if (email == null || u.email == null) {
                 return false;
@@ -104,4 +85,10 @@ public class User extends Model {
         return false;
     }
 
+    public boolean authenticate(String password) {
+        if (BCrypt.checkpw(password, this.password)) {
+            return true;
+        }
+        return false;
+    }
 }

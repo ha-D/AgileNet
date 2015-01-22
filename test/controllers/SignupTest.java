@@ -1,8 +1,13 @@
 package controllers;
 
 import com.google.common.collect.ImmutableMap;
+import dao.UserDao;
+import models.Dependencies;
 import models.User;
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import play.mvc.Result;
 import utils.BaseTest;
 
@@ -12,6 +17,12 @@ import static org.junit.Assert.*;
 import static play.test.Helpers.*;
 
 public class SignupTest extends BaseTest {
+
+    @Before
+    public void before() {
+        UserDao userDao = Mockito.mock(UserDao.class);
+        Dependencies.setUserDao(userDao);
+    }
 
     @Test
     public void signupSuccess() {
@@ -24,19 +35,6 @@ public class SignupTest extends BaseTest {
         );
         Result result = makeRequest(params);
         assertSuccess("Sign up should be successful with required fields", result);
-
-        String message = "User data should be valid in database after successful sign up";
-        User user = User.findByEmail("hadi@zolfaghari.com");
-        assertNotNull(message, user);
-        assertEquals(message, "hadi", user.firstName);
-        assertEquals(message, "zolfaghari", user.lastName);
-        assertEquals(message, "hadi@zolfaghari.com", user.email);
-
-        user = User.authenticate("hadi@zolfaghari.com", "thepassword");
-        assertNotNull("User password should be correct after sign up", user);
-
-        assertFalse("User should not be activated after signup", user.isActivated);
-        assertFalse("User should not be suspended after signup", user.isSuspended);
     }
 
     @Test
@@ -66,7 +64,10 @@ public class SignupTest extends BaseTest {
 
     @Test
     public void signupDuplicateFail() {
-        User.create("some", "guy", "hadi@zolfaghari.com", "somepassword");
+        UserDao userDao = Mockito.mock(UserDao.class);
+        Dependencies.setUserDao(userDao);
+        Mockito.when(userDao.findByEmail("hadi@zolfaghari.com")).thenReturn(new User(userDao));
+
         Map params = ImmutableMap.of(
                 "firstName", "hadi",
                 "lastName", "zolfaghari",

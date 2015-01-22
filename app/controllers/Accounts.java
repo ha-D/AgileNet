@@ -2,13 +2,14 @@ package controllers;
 
 import static play.data.validation.Constraints.*;
 
+import dao.UserDao;
+import models.Dependencies;
 import models.User;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 
 public class Accounts extends Controller {
-
     public static Result signup() {
         return ok(views.html.signUp.render(Form.form(SignupForm.class)));
     }
@@ -19,14 +20,14 @@ public class Accounts extends Controller {
         if (form.hasErrors()) {
             return badRequest(views.html.signUp.render(form));
         } else {
-            User user = new User();
+            User user = new User(Dependencies.getUserDao());
             user.firstName = form.get().firstName;
             user.lastName = form.get().lastName;
             user.email = form.get().email;
             user.contactPhone = form.get().contactPhone;
             user.nationalId = form.get().nationalID;
             user.setPassword(form.get().password);
-            user.save();
+            Dependencies.getUserDao().create(user);
             return redirect(routes.Application.index());
         }
     }
@@ -67,7 +68,8 @@ public class Accounts extends Controller {
         public String contactPhone;
 
         public String validate() {
-            User user = User.findByEmail(email);
+            UserDao userDao = Dependencies.getUserDao();
+            User user = userDao.findByEmail(email);
             if (user != null) {
                 return "A user already exists with that email address";
             }
@@ -85,8 +87,9 @@ public class Accounts extends Controller {
         public String password;
 
         public String validate() {
-            User user = User.authenticate(email, password);
-            if (user == null) {
+            UserDao userDao = Dependencies.getUserDao();
+            User user = userDao.findByEmail(email);
+            if (user == null || !user.authenticate(password)) {
                 return "The Email/Password is not valid";
             }
             return null;
