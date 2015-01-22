@@ -18,10 +18,11 @@ $(function(){
 
             var id =el.getAttribute("data-id");
             $.ajax({
-                url: '/users/makeOrdinary',
+                url: '/users/roles/remove/',
                 method: 'POST',
                 data:{
-                    id: id
+                    user: id,
+                    role: "expert"
                 }
             });
         }
@@ -37,10 +38,11 @@ $(function(){
             el.setAttribute('style', 'position: relative;');
             var id =el.getAttribute("data-id");
             $.ajax({
-                url: '/users/makeExpert',
+                url: '/users/roles/add/',
                 method: 'POST',
                 data:{
-                    id: id
+                    user: id,
+                    role: "expert"
                 }
             });
         }
@@ -56,10 +58,10 @@ $(function(){
             el.setAttribute('style', 'position: relative;');
             var id =el.getAttribute("data-id");
             $.ajax({
-                url: '/users/makeSuspended',
+                url: '/users/suspend/',
                 method: 'POST',
                 data:{
-                    id: id
+                    user: id
                 }
             });
         }

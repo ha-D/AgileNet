@@ -1,27 +1,27 @@
 package controllers;
 
 import com.google.common.collect.ImmutableMap;
-import dao.EBeanUserDao;
 import dao.UserDao;
 import models.Dependencies;
 import models.User;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import play.mvc.Result;
-import utils.BaseTest;
+import testutils.BaseTest;
 
 import java.util.Map;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static play.test.Helpers.*;
 
 public class LoginTest extends BaseTest {
 
     @Before
     public void before() {
-        UserDao userDao = Mockito.mock(UserDao.class);
+        UserDao userDao = mock(UserDao.class);
 
         User user = new User(userDao);
         user.email = "hadi@zolfaghari";
@@ -29,7 +29,7 @@ public class LoginTest extends BaseTest {
         user.firstName = "hadi";
         user.lastName = "zolfaghari";
 
-        Mockito.when(userDao.findByEmail("hadi@zolfaghari.com")).thenReturn(user);
+        when(userDao.findByEmail("hadi@zolfaghari.com")).thenReturn(user);
 
         Dependencies.setUserDao(userDao);
     }

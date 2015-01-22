@@ -5,7 +5,7 @@ import dao.EBeanUserDao;
 import dao.RoleDao;
 import dao.UserDao;
 import org.junit.Test;
-import utils.BaseTest;
+import testutils.BaseTest;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertFalse;

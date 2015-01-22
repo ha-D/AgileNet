@@ -1,4 +1,4 @@
-package utils;
+package testutils;
 
 import play.test.FakeApplication;
 import play.test.WithApplication;

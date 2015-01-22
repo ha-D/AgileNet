@@ -12,6 +12,11 @@ public class EBeanUserDao implements UserDao {
     }
 
     @Override
+    public User findById(int id) {
+        return find.where().eq("id", id).findUnique();
+    }
+
+    @Override
     public  User create(String firstName, String lastName, String email, String password) {
         User user = new User(this);
         user.firstName = firstName;

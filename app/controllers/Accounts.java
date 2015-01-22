@@ -1,13 +1,16 @@
 package controllers;
 
 import static play.data.validation.Constraints.*;
+import static utils.FormRequest.formBody;
 
+import actions.Ajax;
 import dao.UserDao;
 import models.Dependencies;
 import models.User;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
+import utils.FormRequest;
 
 public class Accounts extends Controller {
     public static Result signup() {
@@ -50,6 +53,15 @@ public class Accounts extends Controller {
     public static Result logout() {
         session().clear();
         return redirect(routes.Application.index());
+    }
+
+    @Ajax
+    public static Result suspendUser() {
+        FormRequest request = formBody();
+        User user = request.parseUser();
+        user.isSuspended = true;
+        Dependencies.getUserDao().update(user);
+        return ok();
     }
 
     public static class SignupForm {

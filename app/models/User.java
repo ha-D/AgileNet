@@ -13,7 +13,7 @@ import java.util.List;
 @Entity
 public class User extends Model {
     @Id
-    public String id;
+    public int id;
 
     @Column(nullable = false)
     public String firstName;
@@ -59,9 +59,6 @@ public class User extends Model {
         this.password = BCrypt.hashpw(password, BCrypt.gensalt());
     }
 
-
-
-
     public void assignRole(Role role) {
         assignRole(role, true);
     }
@@ -73,15 +70,32 @@ public class User extends Model {
         }
     }
 
+    public void removeRole(Role role) {
+        removeRole(role, true);
+    }
+
+    public void removeRole(Role role, boolean commit) {
+        roles.remove(role);
+        if (commit) {
+            userDao.update(this);
+        }
+    }
+
     public boolean hasRole(Role role) {
         return roles.contains(role);
     }
 
-    public boolean isExpert(){
-        for(Role r: this.roles)
-            if(r.name.equals("expert"))
+    public boolean hasRole(String role) {
+        for(Role r: this.roles) {
+            if (r.name.equals(role)) {
                 return true;
+            }
+        }
         return false;
+    }
+
+    public boolean isExpert(){
+        return hasRole("expert");
     }
 
     @Override

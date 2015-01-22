@@ -6,10 +6,9 @@ import models.Dependencies;
 import models.User;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import play.mvc.Result;
-import utils.BaseTest;
+import testutils.BaseTest;
 
 import java.util.Map;
 

@@ -9,7 +9,7 @@ import java.util.List;
 @Entity
 public class Category extends Model {
     @Id
-    public String id;
+    public int id;
 
     @Constraints.Required
     public String name;
