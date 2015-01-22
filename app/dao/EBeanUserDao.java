@@ -3,6 +3,8 @@ package dao;
 import models.User;
 import play.db.ebean.Model;
 
+import java.util.List;
+
 public class EBeanUserDao implements UserDao {
     @Override
     public User findByEmail(String email) {
@@ -29,6 +31,11 @@ public class EBeanUserDao implements UserDao {
     @Override
     public void update(User user) {
         user.save();
+    }
+
+    @Override
+    public List<User> getAllUsers(){
+        return find.all();
     }
 
     public static Model.Finder<String,User> find = new Model.Finder<String,User>(

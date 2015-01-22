@@ -72,6 +72,12 @@ public class User extends Model {
         return roles.contains(role);
     }
 
+    public boolean isExpert(){
+        for(Role r: this.roles)
+            if(r.name.equals("expert"))
+                return true;
+        return false;
+    }
 
     @Override
     public boolean equals(Object o) {
