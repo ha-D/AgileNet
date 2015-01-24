@@ -15,6 +15,8 @@ public class Roles {
         User user = request.parseUser();
         Role role = request.parseRole();
         user.assignRole(role, true);
+
+        Accounts.unsuspendUser();
         return ok();
     }
 
@@ -24,6 +26,8 @@ public class Roles {
         User user = request.parseUser();
         Role role = request.parseRole();
         user.removeRole(role, true);
+
+        Accounts.unsuspendUser();
         return ok();
     }
 }

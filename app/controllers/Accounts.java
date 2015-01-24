@@ -64,6 +64,15 @@ public class Accounts extends Controller {
         return ok();
     }
 
+    @Ajax
+    public static Result unsuspendUser() {
+        FormRequest request = formBody();
+        User user = request.parseUser();
+        user.isSuspended = false;
+        Dependencies.getUserDao().update(user);
+        return ok();
+    }
+
     public static class SignupForm {
         @Required
         public String firstName;

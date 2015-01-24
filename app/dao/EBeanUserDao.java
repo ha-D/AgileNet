@@ -1,5 +1,6 @@
 package dao;
 
+import com.avaje.ebean.Ebean;
 import models.User;
 import play.db.ebean.Model;
 
@@ -23,19 +24,19 @@ public class EBeanUserDao implements UserDao {
         user.lastName = lastName;
         user.email = email;
         user.setPassword(password);
-        user.save();
+        Ebean.save(user);
         return user;
     }
 
     @Override
     public User create(User user) {
-        user.save();
+        Ebean.save(user);
         return user;
     }
 
     @Override
     public void update(User user) {
-        user.save();
+        Ebean.save(user);
     }
 
     @Override
@@ -43,7 +44,7 @@ public class EBeanUserDao implements UserDao {
         return find.all();
     }
 
-    public static Model.Finder<String,User> find = new Model.Finder<String,User>(
-            String.class, User.class
+    public static Model.Finder<Integer, User> find = new Model.Finder<Integer, User>(
+            Integer.class, User.class
     );
 }
