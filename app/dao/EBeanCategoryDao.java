@@ -39,7 +39,7 @@ public class EBeanCategoryDao implements CategoryDao {
     }
 
     @Override
-    public void deleteCategory(String id){
-        Category category = find.byId()
+    public void deleteCategory(Integer id){
+        Category category = find.byId(id);
     }
 }
