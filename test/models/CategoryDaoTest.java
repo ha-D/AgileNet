@@ -38,7 +38,7 @@ public class CategoryDaoTest extends BaseTest {
         category = categorydao.create("child", parent.id);
         Category found_category = EBeanCategoryDao.find.byId(category.id);
         assertEquals(parent, found_category.parent);
-        assertTrue(parent.children.contains(found_category));
+        assertTrue(EBeanCategoryDao.find.byId(parent.id).children.contains(found_category));
 
         categorydaoParent.deleteCategory(parent.id);
         assertNull("parent should be deleted",EBeanCategoryDao.find.byId(parent.id));
