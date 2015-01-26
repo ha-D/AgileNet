@@ -18,7 +18,7 @@ public class Application extends Controller {
         return ok(index.render("Your new application is ready."));
     }
 
-    @Authorized()
+    @Authorized({})
     public static Result users() {
         return ok(users.render(Dependencies.getUserDao().getAllUsers()));
     }

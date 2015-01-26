@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Entity
 public class Role extends Model {
     @Id
-    public String id;
+    public int id;
     @Column(nullable = false, unique = true)
     public String name;
 

@@ -1,7 +1,7 @@
 package models;
 
 import org.junit.Test;
-import utils.BaseTest;
+import testutils.BaseTest;
 
 import static org.junit.Assert.*;
 
