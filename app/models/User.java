@@ -1,5 +1,6 @@
 package models;
 
+import com.avaje.ebean.Ebean;
 import dao.UserDao;
 import play.data.validation.Constraints;
 import org.mindrot.jbcrypt.BCrypt;
@@ -9,9 +10,12 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+
+import static play.mvc.Controller.session;
 
 @Entity
-public class User extends Model {
+public class User extends BaseModel<UserDao> {
     @Id
     public int id;
 
@@ -38,21 +42,17 @@ public class User extends Model {
     public boolean isSuspended;
 
     @ManyToMany(cascade= CascadeType.ALL)
-    public List<Role> roles;
-
-    @Transient
-    private UserDao userDao;
+    public Set<Role> roles;
 
     public User() {
         this(Dependencies.getUserDao());
     }
 
     public User(UserDao userDao) {
+        super(userDao);
         creationDate = new Date();
         isActivated = false;
         isSuspended = false;
-
-        this.userDao = userDao;
     }
 
     public void setPassword(String password) {
@@ -66,7 +66,7 @@ public class User extends Model {
     public void assignRole(Role role, boolean commit) {
         roles.add(role);
         if (commit) {
-            userDao.update(this);
+            save();
         }
     }
 
@@ -77,7 +77,7 @@ public class User extends Model {
     public void removeRole(Role role, boolean commit) {
         roles.remove(role);
         if (commit) {
-            userDao.update(this);
+            save();
         }
     }
 

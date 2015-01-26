@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 
 @Entity
-public class Role extends Model {
+public class Role extends BaseModel<RoleDao> {
     @Id
     public int id;
     @Column(nullable = false, unique = true)
@@ -17,11 +17,11 @@ public class Role extends Model {
     private RoleDao roleDao;
 
     public Role() {
-        this.roleDao = Dependencies.getRoleDao();
+        this(Dependencies.getRoleDao());
     }
 
     public Role(RoleDao roleDao) {
-        this.roleDao = roleDao;
+        super(roleDao);
     }
 
     public Role(String name, RoleDao roleDao) {

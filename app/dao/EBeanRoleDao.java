@@ -1,5 +1,6 @@
 package dao;
 
+import com.avaje.ebean.Ebean;
 import models.Role;
 import play.db.ebean.Model;
 
@@ -8,8 +9,14 @@ import java.util.List;
 public class EBeanRoleDao implements RoleDao {
     public Role create(String name) {
         Role role = new Role(name, this);
-        role.save();
+        Ebean.save(role);
         return role;
+    }
+
+    @Override
+    public Role create(Role object) {
+        Ebean.save(object);
+        return object;
     }
 
     public Role findByName(String name) {
@@ -25,7 +32,17 @@ public class EBeanRoleDao implements RoleDao {
         return null;
     }
 
-    public static Model.Finder<String, Role> find = new Model.Finder<String,Role>(
-            String.class, Role.class
+    @Override
+    public Role findById(int id) {
+        return find.where().eq("id", id).findUnique();
+    }
+
+    @Override
+    public void update(Role object) {
+        Ebean.save(object);
+    }
+
+    public static Model.Finder<Integer, Role> find = new Model.Finder<Integer,Role>(
+            Integer.class, Role.class
     );
 }
