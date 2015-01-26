@@ -1,10 +1,71 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
+@(form: Form[models.User])
+<!DOCTYPE html >
+<html dir="rtl">
+
+<head>
+
     <meta charset="UTF-8">
-    <title></title>
+
+    <title>
+        صفحه‌ی شخصی
+    </title>
+
+    <link rel='stylesheet prefetch' href='@routes.Assets.at("stylesheets/bootstrap.min.css")'>
+    <!-- Bootstrap RTL Theme -->
+
+    <link rel="stylesheet" href='@routes.Assets.at("stylesheets/login.css")' media="screen" type="text/css" />
+
 </head>
+
 <body>
 
+<div class="container text-right">
+
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            <h2>نمایش و ویرایش اطلاعات شخصی</h2>
+            <hr class="colorgraph">
+            <div class="panel panel-default" style="padding: 10px;">
+                <!-- Default panel contents -->
+                @helper.form(routes.Accounts.updateProfile, 'id -> "signUpForm") {
+                <div class="row">
+
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="form-group @if(form("firstName").errors.size > 0) {has-error}">
+                        @helper.inputText(form("firstName"), 'id -> "firstName", 'class -> "form-control input-lg text-right", '_label -> "نام" , 'tabindex -> "1")
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="form-group @if(form("lastName").errors.size > 0) {has-error}">
+                        @helper.inputText(form("lastName"), 'id -> "lastName", 'class -> "form-control input-lg text-right", '_label -> "نام خانوادگی" , 'tabindex -> "2")
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="form-group @if(form("lnationalID").errors.size > 0) {has-error}">
+                        @helper.inputText(form("nationalID"), 'id -> "nationalID", 'class -> "form-control input-lg", '_label -> "شماره ملی" , 'tabindex -> "4")
+                        </div>
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6">
+                        <div class="form-group @if(form("contactPhone").errors.size > 0) {has-error}">
+                        @helper.inputText(form("contactPhone"), 'id -> "contactPhone", 'class -> "form-control input-lg", '_label -> "شماره تلفن" , 'tabindex -> "3")
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-md-6 col-sm-offset-6 col-xs-offset-6"><input type="submit" value="به‌روزرسانی مشخصات" class="btn btn-primary btn-block btn-lg center-block" tabindex="9"></div>
+                </div>
+                }
+            </div>
+            <hr class="colorgraph">
+        </div>
+    </div>
+</div>
+
+<script src='@routes.Assets.at("javascripts/jquery-2.1.3.min.js")'></script>
+
 </body>
+
 </html>

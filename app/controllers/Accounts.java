@@ -1,5 +1,6 @@
 package controllers;
 
+import static play.mvc.Controller.session;
 import static play.data.validation.Constraints.*;
 import static utils.FormRequest.formBody;
 
@@ -11,6 +12,14 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import utils.FormRequest;
+
+import java.lang.String;
+import java.lang.System;
+import java.net.UnknownServiceException;
+import java.util.Scanner;
+
+
+import actions.Authorized;
 
 public class Accounts extends Controller {
     public static Result signup() {
@@ -106,5 +115,35 @@ public class Accounts extends Controller {
             }
             return null;
         }
+    }
+
+    @Authorized({})
+    public static Result profile() {
+        String email = session().get("email");
+        User user = Dependencies.getUserDao().findByEmail(email);
+        Form<User> userForm = Form.form(User.class);
+        userForm = userForm.fill(user);
+        return ok(views.html.profile.render(userForm));
+    }
+
+    @Authorized({})
+    public static Result updateProfile() {
+        Form<User> form = Form.form(User.class).bindFromRequest();
+        if (form.hasErrors()) {
+            return badRequest(views.html.profile.render(form));
+        } else {
+            updateUser(form);
+            System.out.println("new firstName is: "+ form.get().firstName);
+            return redirect(routes.Application.index());
+        }
+    }
+
+    private static void updateUser(Form<User> form) {
+    }
+
+    public static User getUser(Integer id) {
+        UserDao userDao = Dependencies.getUserDao();
+        User user = userDao.findById(id);
+        return user;
     }
 }
