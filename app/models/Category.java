@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Category extends Model {
+public class Category extends BaseModel<CategoryDao> {
     @Id
     public int id;
 
@@ -22,16 +22,12 @@ public class Category extends Model {
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     public List<Category> children;
 
-
-    @Transient
-    private CategoryDao categoryDao;
-
     public Category(){
         this(Dependencies.getCategoryDao());
     }
 
     public Category(CategoryDao categoryDao){
-        this.categoryDao = categoryDao;
+        super(categoryDao);
     }
 
     @Override

@@ -2,7 +2,7 @@ package dao;
 
 import models.Category;
 
-public interface CategoryDao {
+public interface CategoryDao extends BaseDao<Category> {
     Category create(String name);
     Category create(String name, int id);
 //    void addChild(String parent_name, Category category);

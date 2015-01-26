@@ -5,7 +5,7 @@ import dao.EBeanCategoryDao;
 import junit.framework.Assert;
 import junit.framework.TestCase;
 import org.junit.Test;
-import utils.BaseTest;
+import testutils.BaseTest;
 
 import static junit.framework.Assert.*;
 import static junit.framework.TestCase.assertNull;
