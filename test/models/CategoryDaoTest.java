@@ -18,7 +18,6 @@ public class CategoryDaoTest extends BaseTest {
     @Test
     public void testCategoryCreation(){
         CategoryDao categorydao = new EBeanCategoryDao();
-        CategoryDao categorydaoParent = new EBeanCategoryDao();
 
         Category category = new Category(categorydao);
         Category parent;
@@ -29,19 +28,19 @@ public class CategoryDaoTest extends BaseTest {
         } catch (Exception e) {
         }
 
-        parent = categorydaoParent.create("parent");
+        parent = categorydao.create("parent");
         assertNotNull("user should have id after being saved", parent.id);
-        Category found_parent = EBeanCategoryDao.find.byId(parent.id);
+        Category found_parent = categorydao.findById(parent.id);
         assertNotNull("user should have been saved", found_parent);
         assertEquals("parent", found_parent.name);
         assertEquals(null, found_parent.parent);
         category = categorydao.create("child", parent.id);
-        Category found_category = EBeanCategoryDao.find.byId(category.id);
+        Category found_category = categorydao.findById(category.id);
         assertEquals(parent, found_category.parent);
-        assertTrue(EBeanCategoryDao.find.byId(parent.id).children.contains(found_category));
+        assertTrue(categorydao.findById(parent.id).children.contains(found_category));
 
-        categorydaoParent.deleteCategory(parent.id);
-        assertNull("parent should be deleted",EBeanCategoryDao.find.byId(parent.id));
-        assertNull("child should be deleted", EBeanCategoryDao.find.byId(category.id));
+        categorydao.deleteCategory(parent.id);
+        assertNull("parent should be deleted",categorydao.findById(parent.id));
+        assertNull("child should be deleted", categorydao.findById(category.id));
     }
 }

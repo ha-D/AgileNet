@@ -42,7 +42,7 @@ public class EBeanRoleDao implements RoleDao {
         Ebean.save(object);
     }
 
-    public static Model.Finder<Integer, Role> find = new Model.Finder<Integer,Role>(
+    public Model.Finder<Integer, Role> find = new Model.Finder<Integer,Role>(
             Integer.class, Role.class
     );
 }
