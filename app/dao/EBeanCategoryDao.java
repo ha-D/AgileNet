@@ -28,6 +28,12 @@ public class EBeanCategoryDao implements CategoryDao {
         return category;
     }
 
+    @Override
+    public Category create(Category category) {
+        category.save();
+        return category;
+    }
+
 //    @Override
 //    public void addChild(String parent_name, Category category){
 //        Category parent = find.where().eq("name", parent_name).findUnique();
@@ -46,5 +52,10 @@ public class EBeanCategoryDao implements CategoryDao {
             deleteCategory(cat.id);
         }
         category.delete();
+    }
+
+    @Override
+    public Category findById(int id) {
+        return find.byId(id);
     }
 }
