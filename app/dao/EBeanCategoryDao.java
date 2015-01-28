@@ -1,19 +1,20 @@
 package dao;
 
+import com.avaje.ebean.Ebean;
 import models.Category;
 import play.db.ebean.Model;
 
 public class EBeanCategoryDao implements CategoryDao {
-    public static Model.Finder<Integer,Category> find = new Model.Finder<Integer,Category>(
+    public Model.Finder<Integer,Category> find = new Model.Finder<Integer,Category>(
             Integer.class, Category.class
     );
 
     @Override
     public Category create(String name){
-        Category category = new Category();
+        Category category = new Category(this);
         category.name = name;
         category.parent = null;
-        category.save();
+        Ebean.save(category);
         return category;
     }
 
@@ -28,6 +29,12 @@ public class EBeanCategoryDao implements CategoryDao {
         return category;
     }
 
+    @Override
+    public Category create(Category category) {
+        category.save();
+        return category;
+    }
+
 //    @Override
 //    public void addChild(String parent_name, Category category){
 //        Category parent = find.where().eq("name", parent_name).findUnique();
@@ -36,7 +43,7 @@ public class EBeanCategoryDao implements CategoryDao {
 
     @Override
     public void update(Category category){
-        category.update();
+        Ebean.update(category);
     }
 
     @Override
@@ -46,5 +53,10 @@ public class EBeanCategoryDao implements CategoryDao {
             deleteCategory(cat.id);
         }
         category.delete();
+    }
+
+    @Override
+    public Category findById(int id) {
+        return find.byId(id);
     }
 }

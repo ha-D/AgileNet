@@ -44,7 +44,7 @@ public class EBeanUserDao implements UserDao {
         return find.all();
     }
 
-    public static Model.Finder<Integer, User> find = new Model.Finder<Integer, User>(
+    public Model.Finder<Integer, User> find = new Model.Finder<Integer, User>(
             Integer.class, User.class
     );
 }
