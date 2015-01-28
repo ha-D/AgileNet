@@ -16,6 +16,8 @@ import utils.FormRequest;
 import java.lang.String;
 import java.lang.System;
 import java.net.UnknownServiceException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 
@@ -28,6 +30,15 @@ public class Accounts extends Controller {
 
     public static Result signupSubmit() {
         Form<SignupForm> form = Form.form(SignupForm.class).bindFromRequest();
+
+        String[] partial = request().body().asFormUrlEncoded().get("partial");
+        if (partial != null) {
+            SignupForm templateForm = new SignupForm();
+            templateForm.email = form.data().get("email");
+
+            templateForm.password = form.data().get("password");
+            return ok(views.html.signUp.render(Form.form(SignupForm.class).fill(templateForm)));
+        }
 
         if (form.hasErrors()) {
             return badRequest(views.html.signUp.render(form));
