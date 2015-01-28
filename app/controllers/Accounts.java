@@ -153,17 +153,16 @@ public class Accounts extends Controller {
             return badRequest(views.html.profile.render(form));
         } else {
             updateUser(form);
-            System.out.println("new firstName is: "+ form.get().firstName);
-            return redirect(routes.Application.index());
+            return redirect(routes.Accounts.profile());
         }
     }
 
     private static void updateUser(Form<User> form) {
-    }
-
-    public static User getUser(Integer id) {
-        UserDao userDao = Dependencies.getUserDao();
-        User user = userDao.findById(id);
-        return user;
+        User user = Dependencies.getUserDao().findByEmail(session().get("email"));
+        user.firstName = form.get().firstName;
+        user.lastName = form.get().lastName;
+        user.nationalId = form.get().nationalId;
+        user.contactPhone = form.get().contactPhone;
+        Dependencies.getUserDao().update(user);
     }
 }
