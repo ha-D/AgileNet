@@ -8,7 +8,7 @@ import java.util.List;
 
 public class EBeanRoleDao implements RoleDao {
     public Role create(String name) {
-        Role role = new Role(name, this);
+        Role role = new Role(name);
         Ebean.save(role);
         return role;
     }

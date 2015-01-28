@@ -65,7 +65,7 @@ public class SignupTest extends BaseTest {
     public void signupDuplicateFail() {
         UserDao userDao = Mockito.mock(UserDao.class);
         Dependencies.setUserDao(userDao);
-        Mockito.when(userDao.findByEmail("hadi@zolfaghari.com")).thenReturn(new User(userDao));
+        Mockito.when(userDao.findByEmail("hadi@zolfaghari.com")).thenReturn(new User());
 
         Map params = ImmutableMap.of(
                 "firstName", "hadi",

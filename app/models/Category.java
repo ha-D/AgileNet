@@ -23,11 +23,6 @@ public class Category extends BaseModel<CategoryDao> {
     public List<Category> children;
 
     public Category(){
-        this(Dependencies.getCategoryDao());
-    }
-
-    public Category(CategoryDao categoryDao){
-        super(categoryDao);
     }
 
     @Override

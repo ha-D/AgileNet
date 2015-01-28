@@ -7,6 +7,8 @@ import models.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import play.api.mvc.Session;
+import play.mvc.Http;
 import play.mvc.Result;
 import testutils.BaseTest;
 
@@ -23,7 +25,7 @@ public class LoginTest extends BaseTest {
     public void before() {
         UserDao userDao = mock(UserDao.class);
 
-        User user = new User(userDao);
+        User user = new User();
         user.email = "hadi@zolfaghari";
         user.setPassword("thepassword");
         user.firstName = "hadi";

@@ -32,7 +32,7 @@ public class Accounts extends Controller {
         if (form.hasErrors()) {
             return badRequest(views.html.signUp.render(form));
         } else {
-            User user = new User(Dependencies.getUserDao());
+            User user = new User();
             user.firstName = form.get().firstName;
             user.lastName = form.get().lastName;
             user.email = form.get().email;

@@ -11,7 +11,7 @@ public class EBeanCategoryDao implements CategoryDao {
 
     @Override
     public Category create(String name){
-        Category category = new Category(this);
+        Category category = new Category();
         category.name = name;
         category.parent = null;
         Ebean.save(category);

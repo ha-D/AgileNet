@@ -13,19 +13,10 @@ public class Role extends BaseModel<RoleDao> {
     @Column(nullable = false, unique = true)
     public String name;
 
-    @Transient
-    private RoleDao roleDao;
-
     public Role() {
-        this(Dependencies.getRoleDao());
     }
 
-    public Role(RoleDao roleDao) {
-        super(roleDao);
-    }
-
-    public Role(String name, RoleDao roleDao) {
-        this(roleDao);
+    public Role(String name) {
         this.name = name;
     }
 

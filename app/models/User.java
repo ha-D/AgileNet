@@ -45,11 +45,6 @@ public class User extends BaseModel<UserDao> {
     public Set<Role> roles;
 
     public User() {
-        this(Dependencies.getUserDao());
-    }
-
-    public User(UserDao userDao) {
-        super(userDao);
         creationDate = new Date();
         isActivated = false;
         isSuspended = false;
@@ -66,7 +61,7 @@ public class User extends BaseModel<UserDao> {
     public void assignRole(Role role, boolean commit) {
         roles.add(role);
         if (commit) {
-            save();
+            Dependencies.getUserDao().update(this);
         }
     }
 
@@ -77,7 +72,7 @@ public class User extends BaseModel<UserDao> {
     public void removeRole(Role role, boolean commit) {
         roles.remove(role);
         if (commit) {
-            save();
+            Dependencies.getUserDao().update(this);
         }
     }
 

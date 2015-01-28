@@ -8,16 +8,16 @@ import static org.junit.Assert.*;
 public class UserTest extends BaseTest {
     @Test
     public void testUserEquals() {
-        User user1 = new User(null);
+        User user1 = new User();
         user1.email = "hadi@zolfaghari.com";
 
-        User user2 = new User(null);
+        User user2 = new User();
         user2.email = "hadi@zolfaghari.com";
 
-        User user3 = new User(null);
+        User user3 = new User();
         user3.email = "nothadi@zolfaghari.com";
 
-        User user4 = new User(null);
+        User user4 = new User();
 
         assertTrue("Users are equal by email address", user1.equals(user2));
         assertTrue("Users are equal by email address", user2.equals(user1));
@@ -30,7 +30,7 @@ public class UserTest extends BaseTest {
 
     @Test
     public void testAuthenticate() {
-        User user = new User(null);
+        User user = new User();
         user.email = "hadi@zolfaghari";
         user.setPassword("thepassword");
         user.firstName = "hadi";

@@ -17,7 +17,7 @@ public class UserDaoTest extends BaseTest {
     public void testUserCreation() {
         UserDao userDao = new EBeanUserDao();
 
-        User user = new User(userDao);
+        User user = new User();
         user.firstName = "Hadi";
         user.lastName = "Zolfaghari";
         try {

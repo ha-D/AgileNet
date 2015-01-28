@@ -19,7 +19,7 @@ public class EBeanUserDao implements UserDao {
 
     @Override
     public  User create(String firstName, String lastName, String email, String password) {
-        User user = new User(this);
+        User user = new User();
         user.firstName = firstName;
         user.lastName = lastName;
         user.email = email;

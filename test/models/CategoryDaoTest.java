@@ -18,8 +18,9 @@ public class CategoryDaoTest extends BaseTest {
     @Test
     public void testCategoryCreation(){
         CategoryDao categorydao = new EBeanCategoryDao();
+        Dependencies.setCategoryDao(categorydao);
 
-        Category category = new Category(categorydao);
+        Category category = new Category();
         Category parent;
 
         try {
