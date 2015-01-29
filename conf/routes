@@ -18,3 +18,9 @@ GET         /assets/*file              controllers.Assets.at(path="/public", fil
 
 GET         /profile               controllers.Accounts.profile()
 POST        /profile               controllers.Accounts.updateProfile()
+
+
+GET         /newResource               controllers.Accounts.newResource()
+POST        /addResource               controllers.Accounts.addResource()
+
+GET         /resource/:id               controllers.Accounts.resourceView(id: Integer)

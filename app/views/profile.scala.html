@@ -1,6 +1,6 @@
 @(myForm: Form[models.User])
 @import helper._
-@implicitField = @{ FieldConstructor(myFieldConstructorTemplate.f) }
+@implicitField = @{helper.FieldConstructor(myFieldConstructorTemplate.f) }
 
 <!DOCTYPE html >
 <html dir="rtl">
@@ -29,39 +29,28 @@
         <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
             <h2>نمایش و ویرایش اطلاعات شخصی</h2>
             <hr class="colorgraph">
-            <div class="panel panel-default" style="padding: 10px;">
-                <!-- Default panel contents -->
-                @helper.form(routes.Accounts.updateProfile, 'id -> "signUpForm") {
-                <div class="row">
+            @form(routes.Accounts.updateProfile, 'id -> "signUpForm") {
+            <div class="row">
 
-                    <div class="col-xs-6 col-sm-6 col-md-6">
-                        <div class="form-group @if(myForm("firstName").errors.size > 0) {has-error}">
-                        @helper.inputText(myForm("firstName"), 'id -> "firstName", 'class -> "form-control input-lg text-right", '_label -> "نام" , 'tabindex -> "1")
-                        </div>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6">
-                        <div class="form-group @if(myForm("lastName").errors.size > 0) {has-error}">
-                        @helper.inputText(myForm("lastName"), 'id -> "lastName", 'class -> "form-control input-lg text-right", '_label -> "نام خانوادگی" , 'tabindex -> "2")
-                        </div>
-                    </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    @inputText(myForm("firstName"))
                 </div>
-                <div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6">
-                        <div class="form-group @if(myForm("lnationalID").errors.size > 0) {has-error}">
-                        @helper.inputText(myForm("nationalID"), 'id -> "nationalID", 'class -> "form-control input-lg", '_label -> "شماره ملی" , 'tabindex -> "4")
-                        </div>
-                    </div>
-                    <div class="col-xs-6 col-sm-6 col-md-6">
-                        <div class="form-group @if(myForm("contactPhone").errors.size > 0) {has-error}">
-                        @helper.inputText(myForm("contactPhone"), 'id -> "contactPhone", 'class -> "form-control input-lg", '_label -> "شماره تلفن" , 'tabindex -> "3")
-                        </div>
-                    </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    @inputText(myForm("lastName"))
                 </div>
-                <div class="row">
-                    <div class="col-xs-6 col-md-6 col-sm-offset-6 col-xs-offset-6"><input type="submit" value="به‌روزرسانی مشخصات" class="btn btn-primary btn-block btn-lg center-block" tabindex="9"></div>
-                </div>
-                }
             </div>
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    @inputText(myForm("nationalId"))
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    @inputText(myForm("contactPhone"))
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-md-12"><input type="submit" value="به‌روزرسانی مشخصات" class="btn btn-primary btn-block btn-lg center-block" tabindex="9"></div>
+            </div>
+            }
             <hr class="colorgraph">
         </div>
     </div>

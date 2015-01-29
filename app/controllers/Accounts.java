@@ -5,14 +5,22 @@ import static play.data.validation.Constraints.*;
 import static utils.FormRequest.formBody;
 
 import actions.Ajax;
+import com.avaje.ebean.Ebean;
+import com.google.common.io.Files;
 import dao.UserDao;
 import models.Dependencies;
+import models.Resource;
+import models.ResourceType;
 import models.User;
 import play.data.Form;
+import play.mvc.BodyParser;
 import play.mvc.Controller;
+import play.mvc.Http.*;
 import play.mvc.Result;
 import utils.FormRequest;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.String;
 
 
@@ -159,5 +167,35 @@ public class Accounts extends Controller {
         user.nationalId = form.get().nationalId;
         user.contactPhone = form.get().contactPhone;
         Dependencies.getUserDao().update(user);
+    }
+
+    @Authorized({})
+    public static Result newResource() {
+        Form<Resource> resourceForm = Form.form(Resource.class);
+        return ok(views.html.addResource.render(resourceForm));
+    }
+
+    @Authorized({})
+    public static Result addResource() {
+        Form<Resource> bookForm = Form.form(Resource.class).bindFromRequest();
+        Resource b = bookForm.get();
+        MultipartFormData body = request().body().asMultipartFormData();
+        MultipartFormData.FilePart part = body.getFile("content");
+
+        if(part!=null){
+            File content = part.getFile();
+            // TODO: Save file
+            // b.url = ..
+        }
+        b.resourceType = ResourceType.BOOK;
+        Dependencies.getResourceDao().create(b);
+//        return redirect(routes.Accounts.resourceView(b.id));
+        return ok(views.html.index.render());
+    }
+
+    @Authorized({})
+    public static Result resourceView(Integer id) {
+        Resource resource = Dependencies.getResourceDao().findById(id);
+        return ok(views.html.resource.render(resource));
     }
 }

@@ -1,10 +1,18 @@
 @(elements: helper.FieldElements)
 
+<!--<div class="form-group @if(elements.hasErrors) {error}">-->
+    <!--<label for="@elements.id">@elements.label</label>-->
+    <!--<input class="form-control input-lg text-right" type="text" id="@elements.id" name="@elements.id">-->
+        <!--<span class="errors">@elements.errors.mkString(", ")</span>-->
+        <!--@*<span class="help">@elements.infos.mkString(", ")</span>*@-->
+    <!--</input>-->
+<!--</div>-->
+
 <div class="@if(elements.hasErrors) {error}">
-    <label for="@elements.id">@elements.label</label>
-    <div class="form-group input">
-        @elements.input
-        <span class="errors">@elements.errors.mkString(", ")</span>
-        @*<span class="help">@elements.infos.mkString(", ")</span>*@
+    <label for="@elements.id">@elements.label(elements.lang)</label>
+    <div class="input form-group">
+        <!--@elements.input-->
+        @Html(elements.input.body.dropRight(2)+"class='form-control large-input'>")
+        <span class="errors">@elements.errors(elements.lang).mkString(", ")</span>
     </div>
 </div>
