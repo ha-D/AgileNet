@@ -5,7 +5,7 @@ import testutils.BaseTest;
 
 import static org.junit.Assert.*;
 
-public class UserTest extends BaseTest {
+public class UserTest {
     @Test
     public void testUserEquals() {
         User user1 = new User();

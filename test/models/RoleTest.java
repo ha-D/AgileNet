@@ -5,7 +5,7 @@ import testutils.BaseTest;
 
 import static org.junit.Assert.*;
 
-public class RoleTest extends BaseTest  {
+public class RoleTest  {
 
     @Test
     public void testRoleAssignment() {

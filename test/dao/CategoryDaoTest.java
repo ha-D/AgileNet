@@ -1,9 +1,11 @@
-package models;
+package dao;
 
 import dao.CategoryDao;
 import dao.EBeanCategoryDao;
 import junit.framework.Assert;
 import junit.framework.TestCase;
+import models.Category;
+import models.Dependencies;
 import org.junit.Test;
 import testutils.BaseTest;
 
@@ -11,9 +13,6 @@ import static junit.framework.Assert.*;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.fail;
 
-/**
- * Created by Atiye on 1/24/2015.
- */
 public class CategoryDaoTest extends BaseTest {
     @Test
     public void testCategoryCreation(){

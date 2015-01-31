@@ -6,7 +6,7 @@ import testutils.BaseTest;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class CategoryTest extends BaseTest {
+public class CategoryTest {
     @Test
     public void testCategoryEquals() {
         Category category1 = new Category();

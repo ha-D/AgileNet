@@ -9,15 +9,11 @@ import views.html.resource;
 
 import java.util.Set;
 
-/**
- * Created by Phoenix on 29/01/2015.
- */
 public class EBeanResourceDao implements ResourceDao {
 
     public Model.Finder<Integer,Resource> find = new Model.Finder<Integer,Resource>(
             Integer.class, Resource.class
     );
-
 
     @Override
     public Resource create(ResourceType resourceType, String name, Set<Category> categories, String description){
