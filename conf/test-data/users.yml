@@ -1,12 +1,12 @@
-- !!models.User
+- !!models.User &asghar
     id: 1
     firstName:  asghar
     lastName:   akbari
     email:      asghar@akbar.com
     password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
-- !!models.User
+- !!models.User &mamad
     id: 2
-    firstName:  asghar
+    firstName:  mamad
     lastName:   akbarii
     email:      asgharii@akbar.com
     password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i

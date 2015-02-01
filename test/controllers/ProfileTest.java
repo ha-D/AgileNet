@@ -24,7 +24,7 @@ public class ProfileTest extends BaseTest {
     public void before() {
         UserDao userDao = mock(UserDao.class);
 
-        User user = new User(userDao);
+        User user = new User();
         user.email = "hadi@zolfaghari";
         user.setPassword("thepassword");
         user.firstName = "hadi";

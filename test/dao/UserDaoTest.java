@@ -1,8 +1,9 @@
-package models;
+package dao;
 
 import com.avaje.ebean.Ebean;
 import dao.EBeanUserDao;
 import dao.UserDao;
+import models.User;
 import org.junit.Test;
 import play.libs.Yaml;
 import testutils.BaseTest;
