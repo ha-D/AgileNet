@@ -5,15 +5,13 @@ import static play.data.validation.Constraints.*;
 import static utils.FormRequest.formBody;
 
 import actions.Ajax;
-import com.avaje.ebean.Ebean;
-import com.google.common.io.Files;
 import dao.UserDao;
 import models.Dependencies;
 import models.Resource;
 import models.ResourceType;
 import models.User;
+import org.apache.commons.io.FileUtils;
 import play.data.Form;
-import play.mvc.BodyParser;
 import play.mvc.Controller;
 import play.mvc.Http.*;
 import play.mvc.Result;
@@ -177,19 +175,25 @@ public class Accounts extends Controller {
 
     @Authorized({})
     public static Result addResource() {
-        Form<Resource> bookForm = Form.form(Resource.class).bindFromRequest();
-        Resource b = bookForm.get();
+        Form<Resource> form = Form.form(Resource.class).bindFromRequest();
+        if(form.hasErrors())
+            return badRequest(views.html.addResource.render(form));
+        Resource r = form.get();
         MultipartFormData body = request().body().asMultipartFormData();
         MultipartFormData.FilePart part = body.getFile("content");
-
-        if(part!=null){
-            File content = part.getFile();
-            // TODO: Save file
-            // b.url = ..
+        if(r.resourceType!=ResourceType.WEBSITE && part!=null){
+            File file = part.getFile();
+            System.out.println(file.getName());
+            try {
+                File newFile = new File("public/resources/" + r.id, file.getName());
+                FileUtils.moveFile(file, newFile);
+                r.url=newFile.getPath();
+            } catch (IOException ioe) {
+                System.out.println("Problem operating on filesystem");
+            }
         }
-        b.resourceType = ResourceType.BOOK;
-        Dependencies.getResourceDao().create(b);
-//        return redirect(routes.Accounts.resourceView(b.id));
+        Dependencies.getResourceDao().create(r);
+//        return redirect(routes.Accounts.resourceView(r.id));
         return ok(views.html.index.render());
     }
 

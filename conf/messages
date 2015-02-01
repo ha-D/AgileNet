@@ -7,3 +7,5 @@ firstName=نام
 lastName=نام خانوادگی
 nationalId=کدملی
 contactPhone=شماره تماس
+password=رمزعبور
+my.required.message=وارد کردن نام اجباری است

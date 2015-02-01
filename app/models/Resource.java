@@ -12,7 +12,7 @@ public final class Resource extends BaseModel<ResourceDao>{
     @Id
     public int id;
 
-    @Constraints.Required
+    @Constraints.Required(message = "my.required.message")
     @Column(nullable = false)
     public String name;
 
