@@ -7,25 +7,16 @@ import javax.persistence.*;
 
 
 @Entity
-public class Role extends Model {
+public class Role extends BaseModel<RoleDao> {
     @Id
     public int id;
     @Column(nullable = false, unique = true)
     public String name;
 
-    @Transient
-    private RoleDao roleDao;
-
     public Role() {
-        this.roleDao = Dependencies.getRoleDao();
     }
 
-    public Role(RoleDao roleDao) {
-        this.roleDao = roleDao;
-    }
-
-    public Role(String name, RoleDao roleDao) {
-        this(roleDao);
+    public Role(String name) {
         this.name = name;
     }
 

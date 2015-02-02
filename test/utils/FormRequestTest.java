@@ -21,7 +21,7 @@ public class FormRequestTest {
     public void testParseUser() {
         UserDao userDao = mock(UserDao.class);
         when(userDao.findById(Mockito.anyInt())).thenReturn(null);
-        when(userDao.findById(1)).thenReturn(new User(userDao));
+        when(userDao.findById(1)).thenReturn(new User());
 
         Dependencies.setUserDao(userDao);
 
@@ -49,8 +49,9 @@ public class FormRequestTest {
     @Test
     public void testParseRole() {
         RoleDao roleDao = mock(RoleDao.class);
+
         when(roleDao.findByName(Mockito.anyString())).thenReturn(null);
-        when(roleDao.findByName("somerole")).thenReturn(new Role("somerole", roleDao));
+        when(roleDao.findByName("somerole")).thenReturn(new Role("somerole"));
 
         Dependencies.setRoleDao(roleDao);
 

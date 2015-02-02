@@ -5,14 +5,14 @@ import testutils.BaseTest;
 
 import static org.junit.Assert.*;
 
-public class RoleTest extends BaseTest  {
+public class RoleTest  {
 
     @Test
     public void testRoleAssignment() {
-        Role role1 = new Role("newrole", null);
-        Role role2 = new Role("anothernewrole", null);
+        Role role1 = new Role("newrole");
+        Role role2 = new Role("anothernewrole");
 
-        User user = new User(null);
+        User user = new User();
 
         user.assignRole(role1, false);
         assertTrue("User must have assigned role", user.hasRole(role1));
@@ -21,9 +21,9 @@ public class RoleTest extends BaseTest  {
 
     @Test
     public void testRoleEquals() {
-        Role role1 = new Role("arole", null);
-        Role role2 = new Role("arole", null);
-        Role role3 = new Role("anotherrole", null);
+        Role role1 = new Role("arole");
+        Role role2 = new Role("arole");
+        Role role3 = new Role("anotherrole");
 
         assertTrue("Roles are equal by name", role1.equals(role2));
         assertTrue("Roles are equal by name", role2.equals(role1));

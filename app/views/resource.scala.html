@@ -1,0 +1,20 @@
+@(resource: models.Resource)
+@import helper._
+@implicitField = @{ FieldConstructor(myFieldConstructorTemplate.f) }
+
+@styles = {
+<link rel="stylesheet" href="@routes.Assets.at("stylesheets/login.css")" media="screen" type="text/css" />
+}
+
+@base(title="افزودن مرجع", styles=styles) {
+<div class="addResource container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <hr class="colorgraph">
+            <div>@resource.name</div>
+            <hr class="colorgraph">
+        </div>
+
+    </div>
+</div>
+}

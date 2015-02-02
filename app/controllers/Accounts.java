@@ -1,16 +1,28 @@
 package controllers;
 
+import static play.mvc.Controller.session;
 import static play.data.validation.Constraints.*;
 import static utils.FormRequest.formBody;
 
 import actions.Ajax;
 import dao.UserDao;
 import models.Dependencies;
+import models.Resource;
+import models.ResourceType;
 import models.User;
+import org.apache.commons.io.FileUtils;
 import play.data.Form;
 import play.mvc.Controller;
+import play.mvc.Http.*;
 import play.mvc.Result;
 import utils.FormRequest;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.String;
+
+
+import actions.Authorized;
 
 public class Accounts extends Controller {
     public static Result signup() {
@@ -20,10 +32,19 @@ public class Accounts extends Controller {
     public static Result signupSubmit() {
         Form<SignupForm> form = Form.form(SignupForm.class).bindFromRequest();
 
+        String[] partial = request().body().asFormUrlEncoded().get("partial");
+        if (partial != null) {
+            SignupForm templateForm = new SignupForm();
+            templateForm.email = form.data().get("email");
+
+            templateForm.password = form.data().get("password");
+            return ok(views.html.signUp.render(Form.form(SignupForm.class).fill(templateForm)));
+        }
+
         if (form.hasErrors()) {
             return badRequest(views.html.signUp.render(form));
         } else {
-            User user = new User(Dependencies.getUserDao());
+            User user = new User();
             user.firstName = form.get().firstName;
             user.lastName = form.get().lastName;
             user.email = form.get().email;
@@ -60,6 +81,15 @@ public class Accounts extends Controller {
         FormRequest request = formBody();
         User user = request.parseUser();
         user.isSuspended = true;
+        Dependencies.getUserDao().update(user);
+        return ok();
+    }
+
+    @Ajax
+    public static Result unsuspendUser() {
+        FormRequest request = formBody();
+        User user = request.parseUser();
+        user.isSuspended = false;
         Dependencies.getUserDao().update(user);
         return ok();
     }
@@ -106,5 +136,70 @@ public class Accounts extends Controller {
             }
             return null;
         }
+    }
+
+    @Authorized({})
+    public static Result profile() {
+        String email = session().get("email");
+        User user = Dependencies.getUserDao().findByEmail(email);
+        Form<User> userForm = Form.form(User.class);
+        userForm = userForm.fill(user);
+        return ok(views.html.profile.render(userForm));
+    }
+
+    @Authorized({})
+    public static Result updateProfile() {
+        Form<User> form = Form.form(User.class).bindFromRequest();
+        if (form.hasErrors()) {
+            return badRequest(views.html.profile.render(form));
+        } else {
+            updateUser(form);
+            return redirect(routes.Accounts.profile());
+        }
+    }
+
+    private static void updateUser(Form<User> form) {
+        User user = Dependencies.getUserDao().findByEmail(session().get("email"));
+        user.firstName = form.get().firstName;
+        user.lastName = form.get().lastName;
+        user.nationalId = form.get().nationalId;
+        user.contactPhone = form.get().contactPhone;
+        Dependencies.getUserDao().update(user);
+    }
+
+    @Authorized({})
+    public static Result newResource() {
+        Form<Resource> resourceForm = Form.form(Resource.class);
+        return ok(views.html.addResource.render(resourceForm));
+    }
+
+    @Authorized({})
+    public static Result addResource() {
+        Form<Resource> form = Form.form(Resource.class).bindFromRequest();
+        if(form.hasErrors())
+            return badRequest(views.html.addResource.render(form));
+        Resource r = form.get();
+        MultipartFormData body = request().body().asMultipartFormData();
+        MultipartFormData.FilePart part = body.getFile("content");
+        if(r.resourceType!=ResourceType.WEBSITE && part!=null){
+            File file = part.getFile();
+            System.out.println(file.getName());
+            try {
+                File newFile = new File("public/resources/" + r.id, file.getName());
+                FileUtils.moveFile(file, newFile);
+                r.url=newFile.getPath();
+            } catch (IOException ioe) {
+                System.out.println("Problem operating on filesystem");
+            }
+        }
+        Dependencies.getResourceDao().create(r);
+//        return redirect(routes.Accounts.resourceView(r.id));
+        return ok(views.html.index.render());
+    }
+
+    @Authorized({})
+    public static Result resourceView(Integer id) {
+        Resource resource = Dependencies.getResourceDao().findById(id);
+        return ok(views.html.resource.render(resource));
     }
 }

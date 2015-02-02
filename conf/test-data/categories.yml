@@ -1,0 +1,12 @@
+- !!models.Category &category1
+    id: 1
+    name: "category1"
+- !!models.Category &category2
+    id: 2
+    name: "category2"
+    parent: *category1
+- !!models.Category &category3
+    id: 3
+    name: "category3"
+
+

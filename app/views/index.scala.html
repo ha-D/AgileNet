@@ -1,7 +1,29 @@
-@(message: String)
+@base(title="چابک‌نت"){
 
-@main("Welcome to Play") {
+    <header class="header">
+        <div class="right-part">
+            <h1>
+                با ما چابک شوید
+            </h1>
+        </div>
+        <div class="left-part">
+            <form action="@routes.Accounts.signupSubmit" method="post">
+                <input type="hidden" name="partial" value="true"/>
+                <input type="text" name="email" class="form-control" placeholder="آدرس ایمیل">
+                <input type="password" name="password" class="form-control" placeholder="رمز عبور">
+                <p>
+                    با انتخال گزینه‌ی ثبت‌نام شما با
+                    <a>
+                        قوانین و مقررات سایت
+                    </a>
+                    موافقت می‌کنید.
+                </p>
+                <button class="btn btn-success submit">ثبت نام</button>
+            </form>
+        </div>
+    </header>
 
-    @play20.welcome(message, style = "Java")
+    <div class="container">
 
+    </div>
 }

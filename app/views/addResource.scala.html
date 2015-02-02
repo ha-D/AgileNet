@@ -1,0 +1,176 @@
+@(resourceForm: Form[models.Resource])
+@import helper._
+@implicitField = @{ FieldConstructor(myFieldConstructorTemplate.f) }
+
+@styles = {
+<link rel="stylesheet" href="@routes.Assets.at("stylesheets/login.css")" media="screen" type="text/css" />
+}
+
+@base(title="افزودن مرجع", styles=styles) {
+<div class="addResource container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <hr class="colorgraph">
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#book" role="tab" data-toggle="tab">کتاب</a></li>
+                <li role="presentation"><a href="#article" role="tab" data-toggle="tab">مقاله</a></li>
+                <li role="presentation"><a href="#website" role="tab" data-toggle="tab">وب‌سایت</a></li>
+                <li role="presentation"><a href="#video" role="tab" data-toggle="tab">ویدئو</a></li>
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="panel tab-pane active" id="book">
+                    <div class="panel-body">
+                        @form(routes.Accounts.addResource, 'method ->"POST", 'enctype -> "multipart/form-data", 'id -> "resourceForm") {
+                        <div class="row">
+                            <input class="hidden" type="text" name="resourceType" value="BOOK">
+                            </input>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                @inputText(resourceForm("name"))
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                @inputText(resourceForm("owner"))
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="">
+                                    <label for="content">محتوا</label>
+                                    <div class="input form-group">
+                                        <input type="file" id="content" name="content" value="" class="form-control large-input">
+                                        <span class="errors"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                @inputText(resourceForm("url"))
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                @inputText(resourceForm("description"), 'class -> "form-control large-input")
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-12"><input type="submit" value="افزودن کتاب" class="btn btn-primary btn-block btn-lg center-block" tabindex="9"></div>
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div role="tabpanel" class="panel tab-pane" id="article">
+                    <div class="panel-body">
+                        @form(routes.Accounts.addResource, 'method ->"POST", 'enctype -> "multipart/form-data", 'id -> "resourceForm") {
+                        <div class="row">
+
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                @inputText(resourceForm("name"))
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                @inputText(resourceForm("owner"))
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="">
+                                    <label for="content">محتوا</label>
+                                    <div class="input form-group">
+                                        <input type="file" name="content" value="" class="form-control large-input">
+                                        <span class="errors"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                @inputText(resourceForm("url"))
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                @inputText(resourceForm("description"), 'class -> "form-control large-input")
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-12"><input type="submit" value="افزودن مقاله" class="btn btn-primary btn-block btn-lg center-block" tabindex="9"></div>
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div role="tabpanel" class="panel tab-pane" id="website">
+                    <div class="panel-body">
+                        @form(routes.Accounts.addResource, 'method ->"POST", 'enctype -> "multipart/form-data", 'id -> "resourceForm") {
+                        <div class="row">
+                            <input class="hidden" type="text" name="resourceType" value="BOOK">
+                            </input>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                @inputText(resourceForm("name"))
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                @inputText(resourceForm("owner"))
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                @inputText(resourceForm("url"))
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                @inputText(resourceForm("description"), 'class -> "form-control large-input")
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-12"><input type="submit" value="افزودن وب‌سایت" class="btn btn-primary btn-block btn-lg center-block" tabindex="9"></div>
+                        </div>
+                        }
+                    </div>
+                </div>
+                <div role="tabpanel" class="panel tab-pane" id="video">
+                    <div class="panel-body">
+                        @form(routes.Accounts.addResource, 'method ->"POST", 'enctype -> "multipart/form-data", 'id -> "resourceForm") {
+                        <div class="row">
+
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                @inputText(resourceForm("name"))
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                @inputText(resourceForm("owner"))
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                <div class="">
+                                    <label for="content">محتوا</label>
+                                    <div class="input form-group">
+                                        <input type="file" name="content" value="" class="form-control large-input">
+                                        <span class="errors"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                @inputText(resourceForm("url"))
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                @inputText(resourceForm("description"), 'class -> "form-control large-input")
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 col-md-12"><input type="submit" value="افزودن ویدئو" class="btn btn-primary btn-block btn-lg center-block" tabindex="9"></div>
+                        </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <hr class="colorgraph">
+        </div>
+
+    </div>
+</div>
+}

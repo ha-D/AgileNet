@@ -8,3 +8,30 @@
     background-image: -o-linear-gradient(left, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
     background-image: linear-gradient(to right, #c4e17f, #c4e17f 12.5%, #f7fdca 12.5%, #f7fdca 25%, #fecf71 25%, #fecf71 37.5%, #f0776c 37.5%, #f0776c 50%, #db9dbe 50%, #db9dbe 62.5%, #c49cde 62.5%, #c49cde 75%, #669ae1 75%, #669ae1 87.5%, #62c2e4 87.5%, #62c2e4);
 }
+
+.login.container {
+    margin-top: 70px;
+}
+
+.signup.container {
+    margin-top: 10px;
+}
+
+.signup .modal-content {
+    direction: rtl;
+    padding: 20px;
+}
+
+.tab-pane{
+border-bottom: rgb(221, 221, 221) solid 1px;
+border-left: rgb(221, 221, 221) solid 1px;
+border-right: rgb(221, 221, 221) solid 1px;
+border-top-right-radius : 0px;
+border-top-left-radius : 0px;
+}
+
+.addResource.container{
+    margin-top: 10px;
+    width: 70%;
+}
+

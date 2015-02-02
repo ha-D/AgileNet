@@ -1,0 +1,63 @@
+@(myForm: Form[models.User])
+@import helper._
+@implicitField = @{helper.FieldConstructor(myFieldConstructorTemplate.f) }
+
+<!DOCTYPE html >
+<html dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>
+        صفحه‌ی شخصی
+    </title>
+
+    <link rel='stylesheet prefetch' href='@routes.Assets.at("stylesheets/bootstrap.min.css")'>
+    <!-- Bootstrap RTL Theme -->
+
+    <link rel="stylesheet" href='@routes.Assets.at("stylesheets/login.css")' media="screen" type="text/css" />
+
+</head>
+
+<body>
+
+<div class="container text-right">
+
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            <h2>نمایش و ویرایش اطلاعات شخصی</h2>
+            <hr class="colorgraph">
+            @form(routes.Accounts.updateProfile, 'id -> "signUpForm") {
+            <div class="row">
+
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    @inputText(myForm("firstName"))
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    @inputText(myForm("lastName"))
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    @inputText(myForm("nationalId"))
+                </div>
+                <div class="col-xs-6 col-sm-6 col-md-6">
+                    @inputText(myForm("contactPhone"))
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-md-12"><input type="submit" value="به‌روزرسانی مشخصات" class="btn btn-primary btn-block btn-lg center-block" tabindex="9"></div>
+            </div>
+            }
+            <hr class="colorgraph">
+        </div>
+    </div>
+</div>
+
+<script src='@routes.Assets.at("javascripts/jquery-2.1.3.min.js")'></script>
+
+</body>
+
+</html>

@@ -1,9 +1,12 @@
-package models;
+package dao;
 
 import dao.EBeanRoleDao;
 import dao.EBeanUserDao;
 import dao.RoleDao;
 import dao.UserDao;
+import models.Dependencies;
+import models.Role;
+import models.User;
 import org.junit.Test;
 import testutils.BaseTest;
 
@@ -15,8 +18,9 @@ public class RoleDaoTest extends BaseTest {
     @Test
     public void testCreateAndFindRole() {
         RoleDao roleDao = new EBeanRoleDao();
+        Dependencies.setRoleDao(roleDao);
 
-        Role role = new Role(roleDao);
+        Role role = new Role();
         roleDao.create("newrole");
 
         role = roleDao.findByName("newrole");
@@ -36,6 +40,9 @@ public class RoleDaoTest extends BaseTest {
     public void testRoleAssignment() {
         RoleDao roleDao = new EBeanRoleDao();
         UserDao userDao = new EBeanUserDao();
+
+        Dependencies.setUserDao(userDao);
+        Dependencies.setRoleDao(roleDao);
 
         Role role1 = roleDao.create("newrole");
         Role role2 = roleDao.create("anothernewrole");
