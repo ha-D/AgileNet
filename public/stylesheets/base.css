@@ -1,6 +1,6 @@
 @font-face {
     font-family: yekan;
-    src: url('/assets/fonts/yekan.ttf');
+    src: url('../fonts/yekan.ttf');
 }
 
 body {
@@ -18,7 +18,7 @@ body {
     margin: auto;
     display: block;
     clear: both;
-    width: 970px;
+    /*width: 970px;*/
     min-height: 55px;
 }
 
@@ -71,7 +71,7 @@ body {
     color: #428bca;
 }
 
-.header {
+.b-index .header {
     height: 300px;
     margin: auto;
     /*background-image: url('../images/agile1-blur.jpg');*/
@@ -84,7 +84,7 @@ body {
     background: #202021 url('/assets/images/background_icons.png') center repeat;
 }
 
-.header h1 {
+.b-index .header h1 {
     font-size: 48px;
     font-weight: bold;
     text-shadow: 0 0 12px rgba(0,0,0,.5),0 0 32px rgba(0,0,0,.25),0 1px rgba(0,0,0,.75);
@@ -92,12 +92,12 @@ body {
     direction: rtl;
 }
 
-.header .right-part {
+.b-index .header .right-part {
     float: right;
     display: block;
 }
 
-.header .left-part {
+.b-index .header .left-part {
     float: left;
     width: 350px;
     direction: rtl;
@@ -106,20 +106,20 @@ body {
     padding-left: 30px;
 }
 
-.header .left-part input{
+.b-index .header .left-part input{
     width: 100%;
     padding-top: 20px;
     padding-bottom: 20px;
     margin-bottom: 10px;
 }
 
-.header .left-part p {
+.b-index .header .left-part p {
     color: gray;
     margin-bottom: 20px;
     margin-top: 10px;
 }
 
-.header .left-part .submit {
+.b-index .header .left-part .submit {
     width: 100%;
     height: 45px;
 }

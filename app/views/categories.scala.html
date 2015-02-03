@@ -1,0 +1,66 @@
+@(cats: String)
+
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>مدیریت عناوین</title>
+    <link rel='stylesheet prefetch' href='@routes.Assets.at("stylesheets/bootstrap.min.css")'>
+    <link rel='stylesheet prefetch' href='@routes.Assets.at("stylesheets/main.css")'>
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/categories.css")" media="screen" type="text/css" />
+
+    <script type="application/javascript">
+    cats=@Html(cats);
+    </script>
+    <script src='@routes.Assets.at("javascripts/jquery-2.1.3.min.js")'></script>
+    <script src='@routes.Assets.at("javascripts/jquery-ui.min.js")'></script>
+    <script src='@routes.Assets.at("javascripts/bootstrap.min.js")'></script>
+    <script src='@routes.Assets.at("javascripts/categories.js")'></script>
+  </head>
+
+  <body dir="rtl">
+    <div class="" id="cats">
+
+    </div>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">حذف</h4>
+          </div>
+          <div class="modal-body">
+            آیا مطمئنید که می‌خواهید عنوان
+            '
+            <span id="deleteModalCatName"></span>
+            '
+            را حذف نمایید؟
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="removeCat()">بله</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">خیر</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">افزودن عنوان</h4>
+          </div>
+          <div class="modal-body">
+            نام:
+            <input id="catName">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" onclick="addCat()">ثبت</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">انصراف</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
