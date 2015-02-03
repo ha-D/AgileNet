@@ -1,11 +1,13 @@
 package dao.stubs;
 
 import dao.ResourceDao;
+import dao.ResourceSearchCriteria;
 import models.Category;
 import models.Resource;
 import models.ResourceType;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -26,5 +28,10 @@ public class StubResourceDao extends StubDao<Resource> implements ResourceDao {
         resource.categories = categories;
         resource.description = description;
         return create(resource);
+    }
+
+    @Override
+    public List<Resource> findByCriteria(ResourceSearchCriteria criteria) {
+        throw new StubNotImplementedException();
     }
 }

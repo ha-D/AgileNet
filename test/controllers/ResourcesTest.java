@@ -1,96 +1,132 @@
 package controllers;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.ImmutableMap;
 import dao.CategoryDao;
 import dao.ResourceDao;
+import dao.ResourceSearchCriteria;
 import dao.stubs.StubCategoryDao;
-import dao.stubs.StubResourceDao;
 import models.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
-import play.libs.Json;
-import play.mvc.BodyParser;
 import play.mvc.Result;
+import testutils.BaseTest;
 
 import java.util.*;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static play.test.Helpers.*;
 
-public class ResourcesTest {
-    Resource[] resourceList;
-    User user;
+public class ResourcesTest extends BaseTest {
+    private static Resource[] resourceList;
+    private static ResourceDao resourceDao;
 
-    @Before
-    public void setUp() {
-        ResourceDao resourceDao = new StubResourceDao();
+    @BeforeClass
+    public static void setUp() {
+        resourceDao = mock(ResourceDao.class);
         CategoryDao categoryDao = new StubCategoryDao();
         Dependencies.setResourceDao(resourceDao);
         Dependencies.setCategoryDao(categoryDao);
 
-        user = new User();
-        user.firstName = "Hadi";
-        user.lastName = "Zolfaghari";
-        user.id = 1;
-
         resourceList = new Resource[3];
-        resourceList[0] = resourceDao.create(ResourceType.ARTICLE, "resource1",
-                new HashSet<Category>(), "resource 1 description");
-        resourceList[1] = resourceDao.create(ResourceType.BOOK, "resource2",
-                new HashSet<Category>(), "resource 2 description");
-        resourceList[2] = resourceDao.create(ResourceType.VIDEO, "resource3",
-                new HashSet<Category>(), "resource 3 description");
-
-        for (Resource resource : resourceList) {
-            resourceDao.create(resource);
-        }
+        resourceList[0] = new Resource();
+        resourceList[0].resourceType = ResourceType.ARTICLE;
+        resourceList[0].name = "resource 0";
+        resourceList[0].description = "resource 0 description";
+        resourceList[1] = new Resource();
+        resourceList[1].resourceType = ResourceType.BOOK;
+        resourceList[1].name = "resource 1";
+        resourceList[1].description = "resource 1 description";
+        resourceList[2] = new Resource();
+        resourceList[2].resourceType = ResourceType.VIDEO;
+        resourceList[2].name = "resource 2";
+        resourceList[2].description = "resource 2 description";
     }
 
     @Test
-    public void testResourceSearch() {
-        try {
-            Result result = makeRequest();
-            assertResults(result, resourceList[0], resourceList[1], resourceList[2]);
+    public void testSimpleSearch() throws JSONException {
+        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        when(resourceDao.findByCriteria(criteria)).thenReturn(Arrays.asList(resourceList));
 
-            // Test pagination
-
-            result = makeRequest(ImmutableMap.of(
-                "page_size", 2,
-                "page_count", 0
-            ));
-            List<Resource> firstPage = parseResources(result);
-
-            result = makeRequest(ImmutableMap.of(
-                    "page_size", 2,
-                    "page_count", 1
-            ));
-            List<Resource> secondPage = parseResources(result);
-
-            assertEquals("No more than page_size results should be returned", 2, firstPage.size());
-            assertEquals("No more than page_size results should be returned", 1, secondPage.size());
-            assertFalse("Different pages should not contain duplicate results",
-                    firstPage.contains(secondPage.get(0)));
-
-            result = makeRequest(ImmutableMap.of(
-                    "page_size", 10,
-                    "page_count", 0,
-                    "query", "something",
-                    "resource_type","book,video",
-                    "category", 2
-            ));
-            assertResults(result);
-
-        } catch(JSONException e) {
-            fail("Invalid JSON response received");
-        }
+        Result result = makeRequest();
+        assertResults(result, resourceList);
     }
 
-    private void assertResults(Result result, Resource... resources) throws JSONException {
+    @Test
+    public void testPagination() throws JSONException {
+        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        criteria.setPageSize(2);
+        criteria.setPageNumber(0);
+        when(resourceDao.findByCriteria(criteria)).thenReturn(select(0, 1));
+
+        Result result = makeRequest(ImmutableMap.of(
+            "page_size", "2",
+            "page", "0"
+        ));
+        assertResults(result, select(0, 1));
+
+
+        criteria.setPageNumber(1);
+        when(resourceDao.findByCriteria(criteria)).thenReturn(select(2));
+
+        result = makeRequest(ImmutableMap.of(
+            "page_size", "2",
+            "page", "1"
+        ));
+        assertResults(result, select(2));
+    }
+
+    @Test
+    public void testSearchResourceType() throws JSONException {
+        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        criteria.addResourceType(ResourceType.BOOK);
+        when(resourceDao.findByCriteria(criteria)).thenReturn(select(1));
+
+        Result result = makeRequest(ImmutableMap.of(
+            "resource_type", "book"
+        ));
+        assertResults(result, select(1));
+    }
+
+    @Test
+    public void testSearchCategory() throws JSONException {
+        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        criteria.setCategory(1);
+        when(resourceDao.findByCriteria(criteria)).thenReturn(select(0, 2));
+
+        Result result = makeRequest(ImmutableMap.of(
+            "category", "1"
+        ));
+        assertResults(result, select(0, 2));
+    }
+
+    @Test
+    public void testSearchQuery() throws JSONException {
+        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        criteria.setQuery("this is a query");
+        when(resourceDao.findByCriteria(criteria)).thenReturn(select(1));
+
+        Result result = makeRequest(ImmutableMap.of(
+            "query", "this is a query"
+        ));
+        assertResults(result, select(1));
+    }
+
+    @Test
+    public void testSearchEmpty() throws JSONException {
+        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        when(resourceDao.findByCriteria(criteria)).thenReturn(select());
+
+        Result result = makeRequest();
+        assertResults(result, select());
+    }
+
+    private void assertResults(Result result, List<Resource> resources) throws JSONException {
         assertSuccess("Search request should return valid response with no parameters", result);
         assertThat(contentType(result)).isEqualTo("application/json");
 
@@ -100,8 +136,8 @@ public class ResourcesTest {
         int count = json.getInt("resultCount");
         JSONArray results = json.getJSONArray("results");
 
-        assertEquals("resultCount must match number of results", count, resources.length);
-        assertEquals(resources.length, results.length());
+        assertEquals("resultCount must match number of results", resources.size(), count);
+        assertEquals(resources.size(), results.length());
 
         for (Resource resource : resources) {
             int j = 0;
@@ -111,7 +147,7 @@ public class ResourcesTest {
                 if (jsonResult.getString("name").equals(resource.name)) {
                     assertEquals(resource.description, jsonResult .getString("description"));
                     assertEquals(resource.resourceType.toString().toLowerCase(),
-                            jsonResult .getString("resourceType"));
+                            jsonResult.getString("resourceType"));
                     //TODO: assertEquals(user.firstName + " " + user.lastName, result.getString("user"));
                     //TODO: assertEquals(resource.date, result.getString("date"));
                     //TODO: assertEquals(resource.rating, result.getString("rating"));
@@ -123,21 +159,8 @@ public class ResourcesTest {
         }
     }
 
-    private List<Resource> parseResources(Result result) throws JSONException {
-        String content =  contentAsString(result);
-        JSONObject json = new JSONObject(content);
-
-        List<Resource> resources = new ArrayList<Resource>();
-        for (int i = 0; i < json.getInt("resultCount"); i++) {
-            String name = json.getJSONArray("results").getJSONObject(i).getString("name");
-            for (Resource resource : resourceList) {
-                if (resource.name.equals(name)) {
-                    resources.add(resource);
-                }
-            }
-        }
-
-        return resources;
+    private void assertResults(Result result, Resource[] resources) throws JSONException {
+        assertResults(result, Arrays.asList(resources));
     }
 
     private Result makeRequest(Map params) {
@@ -157,5 +180,13 @@ public class ResourcesTest {
     private void assertSuccess(String message, Result result) {
         int status = status(result);
         assertTrue(message, status == 200);
+    }
+
+    private List<Resource> select(int... resourceIndices) {
+        List<Resource> list = new ArrayList<Resource>();
+        for (int index : resourceIndices) {
+            list.add(resourceList[index]);
+        }
+        return list;
     }
 }

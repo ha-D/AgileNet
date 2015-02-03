@@ -1,12 +1,15 @@
 package dao;
 
 import com.avaje.ebean.Ebean;
+import com.avaje.ebean.Expr;
+import com.avaje.ebean.ExpressionList;
+import com.avaje.ebean.Query;
 import models.Category;
 import models.Resource;
 import models.ResourceType;
 import play.db.ebean.Model;
-import views.html.resource;
 
+import java.util.List;
 import java.util.Set;
 
 public class EBeanResourceDao implements ResourceDao {
@@ -40,5 +43,28 @@ public class EBeanResourceDao implements ResourceDao {
     @Override
     public Resource findById(int id){
         return find.where().eq("id", id).findUnique();
+    }
+
+    @Override
+    public List<Resource> findByCriteria(ResourceSearchCriteria criteria) {
+        ExpressionList<Resource> query = find.where();
+
+        if (!criteria.getResourceTypes().isEmpty()) {
+            query = query.where().in("resourceType", criteria.getResourceTypes());
+        }
+
+        if (criteria.getCategory() != null) {
+            query = query.eq("categories.id", criteria.getCategory());
+        }
+
+        if (criteria.getQuery() != null) {
+            query = query.or(
+                Expr.contains("name", criteria.getQuery()),
+                Expr.contains("description", criteria.getQuery())
+            );
+        }
+
+       return  query.findPagingList(criteria.getPageSize())
+                .getPage(criteria.getPageNumber()).getList();
     }
 }

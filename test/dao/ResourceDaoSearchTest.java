@@ -1,15 +1,12 @@
-package services;
+package dao;
 
-import dao.CategoryDao;
-import dao.ResourceDao;
-import dao.stubs.StubCategoryDao;
-import dao.stubs.StubResourceDao;
 import models.Category;
 import models.Dependencies;
 import models.Resource;
 import models.ResourceType;
 import org.junit.Before;
 import org.junit.Test;
+import testutils.BaseTest;
 
 import java.util.List;
 
@@ -17,18 +14,18 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-public class ResourceSearcherTest {
+public class ResourceDaoSearchTest extends BaseTest {
     Category category1, category2, category3;
     Resource book1, book2, book3;
     Resource article1, article2, article3;
     Resource video1, video2, video3;
     Resource site1, site2, site3;
-    ResourceSearcher searcher;
+    ResourceDao resourceDao;
 
     @Before
     public void setUp() {
-        ResourceDao resourceDao = new StubResourceDao();
-        CategoryDao categoryDao = new StubCategoryDao();
+        resourceDao = new EBeanResourceDao();
+        CategoryDao categoryDao = new EBeanCategoryDao();
         Dependencies.setResourceDao(resourceDao);
         Dependencies.setCategoryDao(categoryDao);
 
@@ -72,8 +69,6 @@ public class ResourceSearcherTest {
         resourceDao.create(site1);
         resourceDao.create(site2);
         resourceDao.create(site3);
-
-        searcher = new ResourceSearcher();
     }
 
     @Test
@@ -100,10 +95,10 @@ public class ResourceSearcherTest {
         criteria = new ResourceSearchCriteria(null, null, null);
         criteria.setPageNumber(0);
         criteria.setPageSize(5);
-        List<Resource> firstPage = searcher.retrieveResources(criteria);
+        List<Resource> firstPage = resourceDao.findByCriteria(criteria);
 
         criteria.setPageNumber(1);
-        List<Resource> secondPage = searcher.retrieveResources(criteria);
+        List<Resource> secondPage = resourceDao.findByCriteria(criteria);
 
         assertEquals("Search should return #'pageNumber' results", 5, firstPage.size());
         assertEquals("Search should return #'pageNumber' results", 5, secondPage.size());
@@ -113,7 +108,7 @@ public class ResourceSearcherTest {
     }
 
     private void assertSearch(ResourceSearchCriteria criteria, Resource... resources) {
-        List<Resource> resourceList = searcher.retrieveResources(criteria);
+        List<Resource> resourceList = resourceDao.findByCriteria(criteria);
         assertEquals(resources.length, resourceList.size());
         for (Resource resource : resources) {
             assertTrue(resourceList.contains(resource));

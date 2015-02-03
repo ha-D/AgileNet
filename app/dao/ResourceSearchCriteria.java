@@ -1,4 +1,4 @@
-package services;
+package dao;
 
 import models.ResourceType;
 
@@ -13,7 +13,7 @@ public class ResourceSearchCriteria {
     private int pageNumber;
 
     public ResourceSearchCriteria() {
-        resourceTypes = new HashSet<ResourceType>();
+        this.resourceTypes = new HashSet<ResourceType>();
         this.pageSize = 20;
         this.pageNumber = 0;
     }
@@ -22,8 +22,11 @@ public class ResourceSearchCriteria {
         this();
         this.query = query;
         this.category = category;
-        for (ResourceType resourceType : resourceTypes) {
-            addResourceType(resourceType);
+
+        if (resourceTypes != null) {
+            for (ResourceType resourceType : resourceTypes) {
+                addResourceType(resourceType);
+            }
         }
     }
 
@@ -65,5 +68,20 @@ public class ResourceSearchCriteria {
 
     public int getPageNumber() {
         return pageNumber;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null || !(obj instanceof ResourceSearchCriteria)) {
+            return false;
+        }
+        ResourceSearchCriteria criteria = (ResourceSearchCriteria) obj;
+        return resourceTypes.equals(criteria.resourceTypes) &&
+                ((category == null && criteria.category == null) ||
+                    (category != null && category.equals(criteria.category))) &&
+                pageNumber == criteria.pageNumber &&
+                pageSize == criteria.pageSize &&
+                ((query == null && criteria.query == null) ||
+                    (query != null && query.equals(criteria.query)));
     }
 }
