@@ -3,25 +3,26 @@
 # ~~~~
 
 # Home page
-GET         /                          controllers.Application.index()
-GET         /signup                    controllers.Accounts.signup()
-POST        /signup                    controllers.Accounts.signupSubmit()
-GET         /login                     controllers.Accounts.login()
-POST        /login                     controllers.Accounts.loginSubmit()
-GET         /logout                    controllers.Accounts.logout()
-GET         /categories                controllers.Categories.list()
-GET         /users                     controllers.Application.users()
-POST         /users/suspend/           controllers.Accounts.suspendUser()
-POST        /users/roles/add/          controllers.Roles.addRole()
-POST        /users/roles/remove/       controllers.Roles.removeRole()
+GET         /                           controllers.Application.index()
+GET         /signup                     controllers.Accounts.signup()
+POST        /signup                     controllers.Accounts.signupSubmit()
+GET         /login                      controllers.Accounts.login()
+POST        /login                      controllers.Accounts.loginSubmit()
+GET         /logout                     controllers.Accounts.logout()
+GET         /categories                 controllers.Categories.list()
+GET         /users                      controllers.Application.users()
+POST        /users/suspend/             controllers.Accounts.suspendUser()
+POST        /users/roles/add/           controllers.Roles.addRole()
+POST        /users/roles/remove/        controllers.Roles.removeRole()
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file              controllers.Assets.at(path="/public", file)
+GET         /assets/*file               controllers.Assets.at(path="/public", file)
 
-GET         /profile               controllers.Accounts.profile()
-POST        /profile               controllers.Accounts.updateProfile()
+GET         /profile                    controllers.Accounts.profile()
+POST        /profile                    controllers.Accounts.updateProfile()
 
 
-GET         /newResource               controllers.Accounts.newResource()
-POST        /addResource               controllers.Accounts.addResource()
+GET         /newResource                controllers.Accounts.newResource()
+POST        /addResource                controllers.Accounts.addResource()
 
 GET         /resource/:id               controllers.Accounts.resourceView(id: Integer)
+GET         /resources                  controllers.Resources.searchPage()
