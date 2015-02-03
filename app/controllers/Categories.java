@@ -1,10 +1,8 @@
 package controllers;
 
-import actions.Ajax;
 import play.mvc.Result;
-import utils.FormRequest;
+
 import static play.mvc.Results.ok;
-import static utils.FormRequest.formBody;
 
 public class Categories {
     public static Result list() {

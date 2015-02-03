@@ -9,9 +9,6 @@ import java.util.List;
 
 @Entity
 public class Category extends BaseModel<CategoryDao> {
-    @Id
-    public int id;
-
     @Constraints.Required
     @Column(unique = true, nullable = false)
     public String name;

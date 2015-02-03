@@ -1,4 +1,4 @@
-package utils;
+package utilities;
 
 import models.Dependencies;
 import models.Role;

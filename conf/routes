@@ -26,3 +26,4 @@ POST        /addResource                controllers.Accounts.addResource()
 
 GET         /resource/:id               controllers.Accounts.resourceView(id: Integer)
 GET         /resources                  controllers.Resources.searchPage()
+POST        /resources                  controllers.Resources.search()

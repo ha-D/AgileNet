@@ -26,7 +26,6 @@ public class Dependencies {
         Dependencies.userDao = userDao;
     }
 
-
     public static RoleDao getRoleDao() {
         return roleDao;
     }
@@ -46,6 +45,7 @@ public class Dependencies {
     public static ResourceDao getResourceDao() {
         return resourceDao;
     }
+
     public static void setResourceDao(ResourceDao resourceDao) {
         Dependencies.resourceDao = resourceDao;
     }
