@@ -16,11 +16,11 @@ POST        /users/roles/remove/       controllers.Roles.removeRole()
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file              controllers.Assets.at(path="/public", file)
 
-GET         /profile               controllers.Accounts.profile()
-POST        /profile               controllers.Accounts.updateProfile()
+GET         /profile                   controllers.Accounts.profile()
+POST        /profile                   controllers.Accounts.updateProfile()
 
 
-GET         /newResource               controllers.Accounts.newResource()
-POST        /addResource               controllers.Accounts.addResource()
+GET         /newResource               controllers.Resources.newResource()
+POST        /addResource               controllers.Resources.addResource()
 
-GET         /resource/:id               controllers.Accounts.resourceView(id: Integer)
+GET         /resource/:id               controllers.Resource.resourceView(id: Integer)

@@ -1,9 +1,7 @@
 package dao;
 
 import com.avaje.ebean.Ebean;
-import models.Category;
-import models.Resource;
-import models.ResourceType;
+import models.*;
 import org.junit.Test;
 import play.libs.Yaml;
 import testutils.BaseTest;
@@ -18,11 +16,14 @@ public class ResourceDaoTest extends BaseTest {
     @Test
     public void testResourceCreation() {
         List<Category> categoryList =(List) Yaml.load("test-data/categories.yml");
+        List<User> userList =(List) Yaml.load("test-data/users.yml");
         Ebean.save(categoryList);
+        Ebean.save(userList);
 
         EBeanResourceDao resourceDao = new EBeanResourceDao();
 
-        resourceDao.create(ResourceType.BOOK, "my resource", null, "resource without categories");
+        User user = Dependencies.getUserDao().findById(1);
+        resourceDao.create(ResourceType.BOOK, "my resource", null, "resource without categories", user );
 
         Resource resource = new Resource();
         resource.resourceType = ResourceType.ARTICLE;
@@ -39,6 +40,7 @@ public class ResourceDaoTest extends BaseTest {
         assertThat(resource.resourceType).isEqualTo(ResourceType.BOOK);
 
         resource = resourceDao.findById(2);
+        assertThat(resource.user).isEqualTo(user);
         assertThat(resource.owner).isEqualTo("some guy");
         assertThat(resource.resourceType).isEqualTo(ResourceType.ARTICLE);
         assertThat(resource.categories.size()).isEqualTo(2);

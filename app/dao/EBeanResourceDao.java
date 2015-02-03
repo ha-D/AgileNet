@@ -4,9 +4,11 @@ import com.avaje.ebean.Ebean;
 import models.Category;
 import models.Resource;
 import models.ResourceType;
+import models.User;
 import play.db.ebean.Model;
 import views.html.resource;
 
+import java.util.Date;
 import java.util.Set;
 
 public class EBeanResourceDao implements ResourceDao {
@@ -16,12 +18,13 @@ public class EBeanResourceDao implements ResourceDao {
     );
 
     @Override
-    public Resource create(ResourceType resourceType, String name, Set<Category> categories, String description){
+    public Resource create(ResourceType resourceType, String name, Set<Category> categories, String description, User user){
         Resource resource = new Resource();
         resource.resourceType = resourceType;
         resource.name = name;
         resource.categories = categories;
         resource.description = description;
+        resource.date = new Date();
         Ebean.save(resource);
         return resource;
     }
@@ -39,6 +42,6 @@ public class EBeanResourceDao implements ResourceDao {
 
     @Override
     public Resource findById(int id){
-        return find.where().eq("id", id).findUnique();
+        return find.byId(id);
     }
 }

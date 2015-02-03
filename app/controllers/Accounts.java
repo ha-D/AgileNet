@@ -167,39 +167,4 @@ public class Accounts extends Controller {
         Dependencies.getUserDao().update(user);
     }
 
-    @Authorized({})
-    public static Result newResource() {
-        Form<Resource> resourceForm = Form.form(Resource.class);
-        return ok(views.html.addResource.render(resourceForm));
-    }
-
-    @Authorized({})
-    public static Result addResource() {
-        Form<Resource> form = Form.form(Resource.class).bindFromRequest();
-        if(form.hasErrors())
-            return badRequest(views.html.addResource.render(form));
-        Resource r = form.get();
-        MultipartFormData body = request().body().asMultipartFormData();
-        MultipartFormData.FilePart part = body.getFile("content");
-        if(r.resourceType!=ResourceType.WEBSITE && part!=null){
-            File file = part.getFile();
-            System.out.println(file.getName());
-            try {
-                File newFile = new File("public/resources/" + r.id, file.getName());
-                FileUtils.moveFile(file, newFile);
-                r.url=newFile.getPath();
-            } catch (IOException ioe) {
-                System.out.println("Problem operating on filesystem");
-            }
-        }
-        Dependencies.getResourceDao().create(r);
-//        return redirect(routes.Accounts.resourceView(r.id));
-        return ok(views.html.index.render());
-    }
-
-    @Authorized({})
-    public static Result resourceView(Integer id) {
-        Resource resource = Dependencies.getResourceDao().findById(id);
-        return ok(views.html.resource.render(resource));
-    }
 }

@@ -5,6 +5,8 @@ import play.data.validation.Constraints;
 
 import javax.persistence.*;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -21,9 +23,21 @@ public final class Resource extends BaseModel<ResourceDao>{
 
     @Column
     public String description;
-
     public String url;
     public String owner;
+
+    @ManyToOne
+    public User user;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    public List<Comment> comments;
+
+    @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL)
+    public List<RateResource> rates;
+
+
+    @Column(nullable = false)
+    public Date date;
 
     public ResourceType resourceType;
 
@@ -37,5 +51,12 @@ public final class Resource extends BaseModel<ResourceDao>{
     }
 
     public Resource(){}
+
+    public double getRate(){
+        double sum = 0;
+        for(RateResource rateResource: rates)
+            sum+= rateResource.rate;
+        return sum/rates.size();
+    }
 
 }
