@@ -193,8 +193,8 @@ public class Accounts extends Controller {
             }
         }
         Dependencies.getResourceDao().create(r);
-//        return redirect(routes.Accounts.resourceView(r.id));
-        return ok(views.html.index.render());
+        return redirect(routes.Accounts.resourceView(r.id));
+//        return ok(views.html.index.render());
     }
 
     @Authorized({})

@@ -30,8 +30,12 @@ border-top-right-radius : 0px;
 border-top-left-radius : 0px;
 }
 
-.addResource.container{
+.top-margin{
     margin-top: 10px;
-    width: 70%;
+    /*width: 70%;*/
+}
+
+.right-margin{
+    margin-right: 10px;
 }
 
