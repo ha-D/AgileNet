@@ -1,0 +1,108 @@
+@scripts = {
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/search.js")"></script>
+}
+@styles = {
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/search.css")" media="screen" type="text/css" />
+}
+
+@base(title="چابکنت‌|‌مراجع", styles=styles, scripts=scripts) {
+    <div class="b-resource">
+        <div class="container">
+            <div class="row">
+                    <!-- SIDEBAR -->
+                <div class="hidden-sm col-md-3">
+                    <div class="sidebar-container">
+                        <div class="search-box">
+                            <div class="input-group">
+                                <input type="text" class="form-control" placeholder="جستجو...">
+                                <span class="input-group-btn">
+                                    <button class="search btn btn-default" type="button">
+                                        <span class="glyphicon glyphicon-search"></span>
+                                    </button>
+                                </span>
+                            </div><!-- /input-group -->
+                        </div>
+                        <div class="filter-container type-container">
+                            <h3>
+                                                                        نوع مرجع
+                            </h3>
+                            <div class="type filter-list-wrapper">
+                                <ul class="filter-list">
+                                    <li class="type filter">
+                                                                                کتاب
+                                    </li>
+                                    <li class="type filter selected">
+                                                                                مقاله
+                                    </li>
+                                    <li class="type filter">
+                                                                                فیلم
+                                    </li>
+                                    <li class="type filter">
+                                                                                وبسایت
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="filter-container topic-container">
+                            <h3>
+                                                                موضوع
+                            </h3>
+                            <div class="topic filter-history-list">
+                                <script id="filter-history-item-template" type="text/x-handlebars-template">
+                                    <div data-selection="{{selection}}" class="topic filter-history item {{order}}">
+                                        <div class="main">
+                                            {{name}}
+                                        </div>
+                                        <div class="arrow">
+                                        </div>
+                                    </div>
+                                </script>
+                            </div>
+                            <div class="topic filter-list-wrapper">
+                                <ul class="topic filter-list">
+                                    <li class="topic filter">
+                                                                        اسم یک موضوع
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <!-- /SIDEBAR -->
+
+                <div class="col-sm-12 col-md-9">
+                    <div class="search-result-container">
+                        <script id="search-result-template" type="text/x-handlebars-template">
+                            <div class="search result item">
+                                <img class="search result image" src={{image}}>
+                                </img>
+                                <div class="search result details">
+                                    <div class="header">
+                                        <a class="title">ا{{name}}</a>
+                                        <span class="date">{{date}}</span>
+                                        <div class="uploader">
+                                            <span class="label">
+                                        از
+                                            </span>
+                                            <a class="name">
+                                                {{user}}
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="description">
+                                        {{description}}
+                                    </div>
+                                </div>
+
+                                <div class="search result extra">
+                                    <div class="rating"></div>
+                                </div>
+                            </div>
+                        </script>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

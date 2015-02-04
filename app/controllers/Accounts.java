@@ -2,7 +2,7 @@ package controllers;
 
 import static play.mvc.Controller.session;
 import static play.data.validation.Constraints.*;
-import static utils.FormRequest.formBody;
+import static utilities.FormRequest.formBody;
 
 import actions.Ajax;
 import dao.UserDao;
@@ -15,7 +15,7 @@ import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Http.*;
 import play.mvc.Result;
-import utils.FormRequest;
+import utilities.FormRequest;
 
 import java.io.File;
 import java.io.IOException;

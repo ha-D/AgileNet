@@ -1,4 +1,4 @@
-package utils;
+package utilities;
 
 import dao.RoleDao;
 import dao.UserDao;

@@ -3,6 +3,7 @@ package dao;
 import com.avaje.ebean.Ebean;
 import models.Category;
 import play.db.ebean.Model;
+import java.util.List;
 
 public class EBeanCategoryDao implements CategoryDao {
     public Model.Finder<Integer,Category> find = new Model.Finder<Integer,Category>(
@@ -53,6 +54,11 @@ public class EBeanCategoryDao implements CategoryDao {
             deleteCategory(cat.id);
         }
         category.delete();
+    }
+
+    @Override
+    public List<Category> getRootCategories(){
+        return find.where().eq("parent", null).findList();
     }
 
     @Override

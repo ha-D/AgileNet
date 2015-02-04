@@ -55,6 +55,7 @@ public class Dependencies {
     public static ResourceDao getResourceDao() {
         return resourceDao;
     }
+
     public static void setResourceDao(ResourceDao resourceDao) {
         Dependencies.resourceDao = resourceDao;
     }

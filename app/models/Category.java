@@ -9,9 +9,6 @@ import java.util.List;
 
 @Entity
 public class Category extends BaseModel<CategoryDao> {
-    @Id
-    public int id;
-
     @Constraints.Required
     @Column(unique = true, nullable = false)
     public String name;
@@ -35,5 +32,13 @@ public class Category extends BaseModel<CategoryDao> {
             return name.equals(c.name);
         }
         return false;
+    }
+
+    public String getJson(){
+        String children = "[";
+        for(Category c: this.children)
+            children+=c.getJson()+", ";
+        children+="]";
+        return "{id: "+this.id+", name: '"+this.name+"', children: "+children+"}";
     }
 }

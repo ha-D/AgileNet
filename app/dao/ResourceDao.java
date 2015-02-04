@@ -5,13 +5,13 @@ import models.Resource;
 import models.ResourceType;
 import models.User;
 
+import java.util.List;
 import java.util.Set;
-/**
- * Created by Phoenix on 28/01/2015.
- */
+
 public interface ResourceDao extends BaseDao<Resource> {
     void update(Resource resource);
     Resource create(Resource resource);
     Resource create(ResourceType resourceType, String name, Set<Category> categories, String description, User user);
     Resource findById(int id);
+    List<Resource> findByCriteria(ResourceSearchCriteria criteria);
 }

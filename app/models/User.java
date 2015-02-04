@@ -16,9 +16,6 @@ import static play.mvc.Controller.session;
 
 @Entity
 public class User extends BaseModel<UserDao> {
-    @Id
-    public int id;
-
     @Column(nullable = false)
     public String firstName;
     @Column(nullable = false)

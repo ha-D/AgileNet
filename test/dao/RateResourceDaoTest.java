@@ -38,33 +38,10 @@ public class RateResourceDaoTest extends BaseTest {
 
         rateResource.user = user;
         rr = Dependencies.getRateResourceDao().create(rateResource);
+        rr = Dependencies.getRateResourceDao().findById(rr.id);
         assertThat(rr.rate).isEqualTo(5);
         assertThat(rr.user).isEqualTo(user);
         assertThat(rr.resource).isEqualTo(resource);
 
-    }
-
-    @Test
-    public void testRateResourceUpdate(){
-        User user = Dependencies.getUserDao().findById(1);
-        Resource resource=Dependencies.getResourceDao().create(ResourceType.BOOK, "my resource", null, "resource without categories", user );
-        System.out.println(resource.resourceType);
-        RateResource rateResource = new RateResource();
-        rateResource.rate = 7;
-        rateResource.resource = resource;
-        rateResource.user = user;
-        System.out.println(rateResource.resource.resourceType);
-
-        Dependencies.getRateResourceDao().create(rateResource);
-
-        RateResource rr = Dependencies.getRateResourceDao().findById(1);
-        rr.rate = -3;
-        user = Dependencies.getUserDao().findById(2);
-        rr.user = user;
-        Dependencies.getRateResourceDao().update(rr);
-
-        assertThat(rr.rate).isEqualTo(0);
-        assertThat(rr.user).isEqualTo(user);
-        assertThat(rr.resource).isEqualTo(resource);
     }
 }
