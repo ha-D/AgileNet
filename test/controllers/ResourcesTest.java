@@ -25,6 +25,7 @@ import static play.test.Helpers.*;
 public class ResourcesTest extends BaseTest {
     private static Resource[] resourceList;
     private static ResourceDao resourceDao;
+    private static Category category;
 
     @BeforeClass
     public static void setUp() {
@@ -32,6 +33,10 @@ public class ResourcesTest extends BaseTest {
         CategoryDao categoryDao = new StubCategoryDao();
         Dependencies.setResourceDao(resourceDao);
         Dependencies.setCategoryDao(categoryDao);
+
+        category = new Category();
+        category.id = 1;
+        categoryDao.create(category);
 
         resourceList = new Resource[3];
         resourceList[0] = new Resource();
@@ -65,7 +70,7 @@ public class ResourcesTest extends BaseTest {
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(0, 1));
 
         Result result = makeRequest(ImmutableMap.of(
-            "page_size", "2",
+            "pageSize", "2",
             "page", "0"
         ));
         assertResults(result, select(0, 1));
@@ -75,7 +80,7 @@ public class ResourcesTest extends BaseTest {
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(2));
 
         result = makeRequest(ImmutableMap.of(
-            "page_size", "2",
+            "pageSize", "2",
             "page", "1"
         ));
         assertResults(result, select(2));
@@ -88,7 +93,7 @@ public class ResourcesTest extends BaseTest {
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(1));
 
         Result result = makeRequest(ImmutableMap.of(
-            "resource_type", "book"
+            "resourceType[]", "book"
         ));
         assertResults(result, select(1));
     }
@@ -96,7 +101,7 @@ public class ResourcesTest extends BaseTest {
     @Test
     public void testSearchCategory() throws JSONException {
         ResourceSearchCriteria criteria = new ResourceSearchCriteria();
-        criteria.setCategory(1);
+        criteria.setCategory(category);
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(0, 2));
 
         Result result = makeRequest(ImmutableMap.of(
@@ -136,8 +141,8 @@ public class ResourcesTest extends BaseTest {
         int count = json.getInt("resultCount");
         JSONArray results = json.getJSONArray("results");
 
-        assertEquals("resultCount must match number of results", resources.size(), count);
-        assertEquals(resources.size(), results.length());
+        assertEquals("Incorrect number of search results", resources.size(), count);
+        assertEquals("Incorrect number of search results", resources.size(), results.length());
 
         for (Resource resource : resources) {
             int j = 0;

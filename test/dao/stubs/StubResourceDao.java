@@ -12,14 +12,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class StubResourceDao extends StubDao<Resource> implements ResourceDao {
-    private int nextId;
-    private Map<Integer, Resource> resources;
-
-    public StubResourceDao() {
-        resources = new HashMap<Integer, Resource>();
-        nextId = 1;
-    }
-
     @Override
     public Resource create(ResourceType resourceType, String name, Set<Category> categories, String description) {
         Resource resource = new Resource();

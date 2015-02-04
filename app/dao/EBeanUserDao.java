@@ -40,7 +40,7 @@ public class EBeanUserDao implements UserDao {
     }
 
     @Override
-    public List<User> getAllUsers(){
+    public List<User> findAll(){
         return find.all();
     }
 

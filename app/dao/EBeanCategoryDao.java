@@ -4,6 +4,9 @@ import com.avaje.ebean.Ebean;
 import models.Category;
 import play.db.ebean.Model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EBeanCategoryDao implements CategoryDao {
     public Model.Finder<Integer,Category> find = new Model.Finder<Integer,Category>(
             Integer.class, Category.class
@@ -56,7 +59,18 @@ public class EBeanCategoryDao implements CategoryDao {
     }
 
     @Override
+    public List<Category> findRootCategories() {
+        return find.where().eq("parent", null).findList();
+    }
+
+    @Override
     public Category findById(int id) {
         return find.byId(id);
     }
+
+    @Override
+    public List<Category> findAll() {
+        return find.all();
+    }
+
 }

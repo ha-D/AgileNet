@@ -1,4 +1,19 @@
 @scripts = {
+    <script type="text/javascript">
+        function initialize(AGS) {
+            AGS.resourceTypeImages = {
+                'book': '@routes.Assets.at("images/resources/book.png")',
+                'article': '@routes.Assets.at("images/resources/article.png")',
+                'website': '@routes.Assets.at("images/resources/website.png")',
+                'video': '@routes.Assets.at("images/resources/video.png")'
+            };
+
+            AGS.imagePath = '@routes.Assets.at("images/")';
+            AGS.loadCategoryURL = '@routes.Categories.listCategories';
+            AGS.searchURL = '@routes.Resources.search';
+        }
+
+    </script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/search.js")"></script>
 }
 @styles = {
@@ -9,18 +24,20 @@
     <div class="b-resource">
         <div class="container">
             <div class="row">
-                    <!-- SIDEBAR -->
+                <!-- SIDEBAR -->
                 <div class="hidden-sm col-md-3">
                     <div class="sidebar-container">
                         <div class="search-box">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="جستجو...">
-                                <span class="input-group-btn">
-                                    <button class="search btn btn-default" type="button">
-                                        <span class="glyphicon glyphicon-search"></span>
-                                    </button>
-                                </span>
-                            </div><!-- /input-group -->
+                            <form id="search-form" method="post">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="جستجو...">
+                                    <span class="input-group-btn">
+                                        <button class="search btn btn-default" type="button">
+                                            <span class="glyphicon glyphicon-search"></span>
+                                        </button>
+                                    </span>
+                                </div><!-- /input-group -->
+                            </form>
                         </div>
                         <div class="filter-container type-container">
                             <h3>
@@ -28,16 +45,16 @@
                             </h3>
                             <div class="type filter-list-wrapper">
                                 <ul class="filter-list">
-                                    <li class="type filter">
+                                    <li data-val='book' class="type filter">
                                                                                 کتاب
                                     </li>
-                                    <li class="type filter selected">
+                                    <li data-val='article' class="type filter">
                                                                                 مقاله
                                     </li>
-                                    <li class="type filter">
+                                    <li data-val='video' class="type filter">
                                                                                 فیلم
                                     </li>
-                                    <li class="type filter">
+                                    <li data-val='website' class="type filter">
                                                                                 وبسایت
                                     </li>
                                 </ul>
@@ -68,7 +85,7 @@
                         </div>
                     </div>
                 </div>
-                    <!-- /SIDEBAR -->
+                <!-- /SIDEBAR -->
 
                 <div class="col-sm-12 col-md-9">
                     <div class="search-result-container">
@@ -78,11 +95,13 @@
                                 </img>
                                 <div class="search result details">
                                     <div class="header">
-                                        <a class="title">ا{{name}}</a>
+                                        <a class="title" href="/resource/{{id}}">{{name}}</a>
                                         <span class="date">{{date}}</span>
                                         <div class="uploader">
                                             <span class="label">
-                                        از
+                                            {{#if user}}
+                                            از
+                                            {{/if}}
                                             </span>
                                             <a class="name">
                                                 {{user}}

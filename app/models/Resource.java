@@ -16,7 +16,7 @@ public final class Resource extends BaseModel<ResourceDao>{
     @ManyToMany(cascade= CascadeType.ALL)
     public Set<Category> categories;
 
-    @Column
+    @Column(columnDefinition = "TEXT")
     public String description;
 
     public String url;

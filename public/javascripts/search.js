@@ -1,62 +1,16 @@
-AGS = {}
+AGS = {};
 AGS.selection = "";
 AGS.resourceTypeImages = {
 	'book': '/assets/images/resources/book.png',
 	'article': '/assets/images/resources/article.png',
 	'website': '/assets/images/resources/website.png',
 	'video': '/assets/images/resources/video.png'
-}
+};
 AGS.topicData = {
-	1: {
-		name: 'یک موضوع',
-		subtopics: {
-			4: {
-				name: 'یک موضوع داخلی'
-			},
-			5: {
-				name: 'هم خوب است'
-			},
-			6: {
-				name: 'بد نیست',
-				subtopics: {
-					11: {
-						name: 'نمی‌دپنم یچی'
-					},
-					12: {
-						name: 'سکریفایس'
-					},
-					13: {
-						name: 'آی دنس ترو د شدوز'
-					}
-				}
-			},
-			7: {
-				name: 'چرن و پرت'
-			},
-			8: {
-				name: 'نمی‌دپنم یچی'
-			},
-			9: {
-				name: 'سکریفایس'
-			},
-			10: {
-				name: 'آی دنس ترو د شدوز'
-			},
-		}
-	},
-	2: {
-		name: 'چرن و پرت'
-	},
-	3: {
-		name: 'نمی‌دپنم یچی'
-	},
-	14: {
-		name: 'سکریفایس'
-	},
-	15: {
-		name: 'آی دنس ترو د شدوز'
-	}
-}
+
+};
+
+AGS.selectedCategory = null;
 
 var testSearchResult = [
 	{
@@ -100,14 +54,14 @@ function setTopicFilters(selection, animate) {
 			var mainLi = $("<span>").addClass('filter-main').text(items[item].name)
 			li.attr('data-item', selection + " " + item);
 			li.append(mainLi);
-			if (items[item].subtopics !== undefined) {
+			if (items[item].subcategories !== undefined) {
 				var nextBtn = $("<span>")
 				.addClass("filter-next glyphicon glyphicon-chevron-right");
-				li.append(nextBtn);	
+				li.append(nextBtn);
 			}
 			uiList.append(li);
 
-		
+
 		});
 
 		if (animate == 'forward') {
@@ -122,7 +76,7 @@ function setTopicFilters(selection, animate) {
 				oldUiList.css('width', (100 - x) + "%");
 				x = x + 5;
 			}, 10);
-			
+
 		} else if (animate == "back") {
 			wrapper.prepend(uiList);
 			var x = 0;
@@ -157,9 +111,9 @@ function setTopicFilters(selection, animate) {
 		historyList.append(historyItem);
 
 		var revList = [];
-		while (selectionList.length > 0) {			
+		while (selectionList.length > 0) {
 			var next = parseInt(selectionList.pop());
-			
+
 			revList.push(next);
 			var selection = revList.slice(0).join(' ');
 
@@ -170,22 +124,23 @@ function setTopicFilters(selection, animate) {
 			});
 
 			historyList.append(historyItem);
-			current = current[next].subtopics;
+			current = current[next].subcategories;
 		}
 	}
 
 	if (selection == "") {
 		intializeList(AGS.topicData);
 		setHistory([]);
+		AGS.selectedCategory = null;
 	} else {
 		var selectionList = selection.trim().split(' ');
 		selectionList.reverse();
+		AGS.selectedCategory = selectionList[0];
 		setHistory(selectionList.slice(0));
-
 		var current = AGS.topicData;
 		while (selectionList.length > 0) {
 			var next = parseInt(selectionList.pop());
-			current = current[next].subtopics;
+			current = current[next].subcategories;
 		}
 		intializeList(current);
 	}
@@ -196,14 +151,18 @@ function createResultElements(resultList) {
 		if (!result.image) {
 			result.image = AGS.resourceTypeImages[result.resourceType];
 		}
-			
+
+		if (result.description && result.description.length > 200) {
+			result.description = result.description.slice(0, 200) + "...";
+		}
+
 		var html = render(AGS.searchItemTemplate, result);
 		var div = $("<div>").html(html).contents();
 		var rating = div.find('.search.result > .rating');
 		rating.raty({
 			number: 5,
 			score: result.rating,
-			path: '/assets/images/',
+			path: AGS.imagePath,
 			halfShow    : true,
 			readOnly    : true
 		});
@@ -211,7 +170,72 @@ function createResultElements(resultList) {
 	});
 }
 
+function setSearchResults(results, clear) {
+	if (clear) {
+		$(".search-result-container").html("");
+	}
+
+	var elements = createResultElements(results);
+	$(".search-result-container").append(elements);
+}
+
+function loadCategories() {
+	$.ajax({
+		url: AGS.loadCategoryURL,
+		type: 'get',
+		dataType: 'json',
+		success: function(result) {
+			AGS.topicData = result;
+			setTopicFilters("");
+		}
+	})
+}
+
+
+
+function createQuery() {
+	var request = {};
+
+	var resourceTypes = [];
+	$('.filter.type').each(function(index) {
+		if ($(this).hasClass('selected')) {
+			resourceTypes.push($(this).attr('data-val'));
+		}
+	});
+
+	if (resourceTypes.length > 0) {
+		request.resourceType = resourceTypes;
+	}
+
+	if (AGS.selectedCategory) {
+		request.category = AGS.selectedCategory;
+	}
+
+	var query = $('.search-box input').val();
+	if (query) {
+		request.query = query;
+	}
+
+	return request;
+}
+
+function loadResults(clear) {
+	var request = createQuery();
+
+	$.ajax({
+		url: AGS.searchURL,
+		type: 'post',
+		dataType: 'json',
+		data: request,
+		success: function(result) {
+			setSearchResults(result.results, clear);
+		}
+	})
+}
+
 $(function() {
+	initialize(AGS);
+
 	var source = $("#search-result-template").html();
 	AGS.searchItemTemplate = Handlebars.compile(source);
 
@@ -224,7 +248,9 @@ $(function() {
 		} else {
 			$(this).addClass('selected');
 		}
- 	})
+		loadResults(true);
+ 	});
+
 	$(".topic-container").on('click', 
 		'.filter.topic .filter-next', function() {
  		var selection = $(this).parent().attr('data-item').trim();
@@ -236,10 +262,22 @@ $(function() {
 	 		setTopicFilters(selection, 'back');
 	 		AGS.selection = selection;
  		}
- 	});
+ 	}).on('click', '.topic.filter .filter-main', function() {
+		$('.topic.filter.selected').removeClass('selected');
+		$(this).parent().addClass('selected');
+		var items = $(this).parent().attr('data-item').split(' ');
+		AGS.selectedCategory = items[items.length - 1];
+		loadResults(true);
+	});
 
-	setTopicFilters("", "forward");
 
-	var elements = createResultElements(testSearchResult);
-	$(".search-result-container").append(elements);
+	$("#search-form").submit(function(){
+		loadResults(true);
+		console.log("HEY")
+		return false;
+	});
+	//setSearchResults(testSearchResult, true);
+
+	loadCategories();
+	loadResults(true);
 });

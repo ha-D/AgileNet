@@ -38,6 +38,11 @@ public class EBeanRoleDao implements RoleDao {
     }
 
     @Override
+    public List<Role> findAll() {
+        return find.all();
+    }
+
+    @Override
     public void update(Role object) {
         Ebean.save(object);
     }

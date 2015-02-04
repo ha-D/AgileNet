@@ -1,5 +1,6 @@
 package dao;
 
+import com.avaje.ebean.Ebean;
 import dao.CategoryDao;
 import dao.EBeanCategoryDao;
 import junit.framework.Assert;
@@ -7,11 +8,15 @@ import junit.framework.TestCase;
 import models.Category;
 import models.Dependencies;
 import org.junit.Test;
+import play.libs.Yaml;
 import testutils.BaseTest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static junit.framework.Assert.*;
-import static junit.framework.TestCase.assertNull;
-import static junit.framework.TestCase.fail;
+import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertTrue;
 
 public class CategoryDaoTest extends BaseTest {
     @Test
@@ -42,5 +47,29 @@ public class CategoryDaoTest extends BaseTest {
         categorydao.deleteCategory(parent.id);
         assertNull("parent should be deleted",categorydao.findById(parent.id));
         assertNull("child should be deleted", categorydao.findById(category.id));
+    }
+
+    @Test
+    public void testFindRootCategories() {
+        CategoryDao categoryDao = new EBeanCategoryDao();
+        Dependencies.setCategoryDao(categoryDao);
+
+        List<Category> categoryList =(List) Yaml.load("test-data/categories.yml");
+        Ebean.save(categoryList);
+
+        List<Category> rootCategories = categoryDao.findRootCategories();
+
+        assertNotSame(categoryList.size(), rootCategories.size());
+
+        for(Category category : categoryList) {
+            if (category.parent == null) {
+                assertTrue("A category with no parents should be retrieved in root categories",
+                        rootCategories.contains(category));
+            }
+        }
+
+        for(Category category : rootCategories) {
+                assertNull("A category with parents should not be retrieved in root categories", category.parent);
+        }
     }
 }

@@ -9,6 +9,7 @@ import models.Resource;
 import models.ResourceType;
 import play.db.ebean.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -46,6 +47,11 @@ public class EBeanResourceDao implements ResourceDao {
     }
 
     @Override
+    public List<Resource> findAll() {
+        return find.all();
+    }
+
+    @Override
     public List<Resource> findByCriteria(ResourceSearchCriteria criteria) {
         ExpressionList<Resource> query = find.where();
 
@@ -54,7 +60,7 @@ public class EBeanResourceDao implements ResourceDao {
         }
 
         if (criteria.getCategory() != null) {
-            query = query.eq("categories.id", criteria.getCategory());
+            query = query.in("categories.id", getCategoryDescendantIds(criteria.getCategory()));
         }
 
         if (criteria.getQuery() != null) {
@@ -67,4 +73,14 @@ public class EBeanResourceDao implements ResourceDao {
        return  query.findPagingList(criteria.getPageSize())
                 .getPage(criteria.getPageNumber()).getList();
     }
+
+    private List<Integer> getCategoryDescendantIds(Category category) {
+        List<Integer> list = new ArrayList<Integer>();
+        for (Category desc : category.getDescendants()) {
+            list.add(desc.id);
+        }
+        list.add(category.id);
+        return list;
+    }
+
 }

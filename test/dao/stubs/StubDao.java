@@ -2,7 +2,9 @@ package dao.stubs;
 
 import models.BaseModel;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class StubDao<T extends BaseModel> {
@@ -19,13 +21,19 @@ public class StubDao<T extends BaseModel> {
     }
 
     public T create(T t) {
-        t.id = nextId;
-        map.put(nextId, t);
-        nextId += 1;
+        if (t.id == 0) {
+            t.id = nextId;
+            nextId += 1;
+        }
+        map.put(t.id, t);
         return t;
     }
 
     public T findById(int id) {
         return map.get(id);
+    }
+
+    public List<T> findAll() {
+        return new ArrayList<T>(map.values());
     }
 }

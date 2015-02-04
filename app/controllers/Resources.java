@@ -4,6 +4,7 @@ import actions.Ajax;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dao.ResourceSearchCriteria;
+import models.Category;
 import models.Dependencies;
 import models.Resource;
 import models.ResourceType;
@@ -26,15 +27,20 @@ public class Resources {
         FormRequest request = formBody();
         ResourceSearchCriteria criteria = new ResourceSearchCriteria();
 
-        criteria.setCategory(request.getInt("category"));
+        Integer categoryId = request.getInt("category");
+        if (categoryId != null) {
+            Category category = Dependencies.getCategoryDao().findById(categoryId);
+            criteria.setCategory(category);
+        }
+
         criteria.setQuery(request.get("query"));
-        List<String> resourceTypes = request.getList("resource_type");
+        List<String> resourceTypes = request.getList("resourceType[]");
         if (resourceTypes != null) {
             for (String resourceType : resourceTypes) {
                 criteria.addResourceType(ResourceType.fromString(resourceType));
             }
         }
-        criteria.setPageSize(request.getInt("page_size", criteria.getPageSize()));
+        criteria.setPageSize(request.getInt("pageSize", criteria.getPageSize()));
         criteria.setPageNumber(request.getInt("page", criteria.getPageNumber()));
 
         List<Resource> resources = Dependencies.getResourceDao().findByCriteria(criteria);
@@ -48,10 +54,13 @@ public class Resources {
 
         for (Resource resource : resources) {
             ObjectNode json = jsonList.addObject();
+            json.put("id", resource.id);
             json.put("name", resource.name);
             json.put("description", resource.description);
             json.put("resourceType", resource.resourceType.toString());
-            // TODO: json.put("user", ...)
+            if (resource.owner != null && !resource.owner.isEmpty()) {
+                json.put("user", resource.owner);
+            }
             // TODO: json.put("date", ...)
             // TODO: json.put("rating", ...)
         }

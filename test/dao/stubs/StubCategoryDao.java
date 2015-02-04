@@ -4,12 +4,10 @@ import dao.CategoryDao;
 import models.Category;
 import models.Resource;
 
+import java.util.List;
 import java.util.Map;
 
 public class StubCategoryDao extends StubDao<Category> implements CategoryDao {
-    private int nextId;
-    private Map<Integer, Resource> resources;
-
     @Override
     public Category create(String name) {
         Category category = new Category();
@@ -24,6 +22,11 @@ public class StubCategoryDao extends StubDao<Category> implements CategoryDao {
 
     @Override
     public void deleteCategory(int id) {
+        throw new StubNotImplementedException();
+    }
+
+    @Override
+    public List<Category> findRootCategories() {
         throw new StubNotImplementedException();
     }
 }

@@ -1,5 +1,6 @@
 package dao;
 
+import models.Category;
 import models.ResourceType;
 
 import java.util.HashSet;
@@ -7,7 +8,7 @@ import java.util.Set;
 
 public class ResourceSearchCriteria {
     private Set<ResourceType> resourceTypes;
-    private Integer category;
+    private Category category;
     private String query;
     private int pageSize;
     private int pageNumber;
@@ -18,7 +19,7 @@ public class ResourceSearchCriteria {
         this.pageNumber = 0;
     }
 
-    public ResourceSearchCriteria(String query, Integer category, ResourceType... resourceTypes) {
+    public ResourceSearchCriteria(String query, Category category, ResourceType... resourceTypes) {
         this();
         this.query = query;
         this.category = category;
@@ -38,11 +39,11 @@ public class ResourceSearchCriteria {
         return resourceTypes;
     }
 
-    public void setCategory(Integer category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 
-    public Integer getCategory() {
+    public Category getCategory() {
         return category;
     }
 
