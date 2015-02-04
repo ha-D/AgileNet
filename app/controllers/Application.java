@@ -1,7 +1,7 @@
 package controllers;
 
 import actions.Authorized;
-import models.Dependencies;
+import utilities.Dependencies;
 import play.mvc.*;
 
 import views.html.*;

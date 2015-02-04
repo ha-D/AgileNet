@@ -2,7 +2,6 @@ package utilities;
 
 import dao.RoleDao;
 import dao.UserDao;
-import models.Dependencies;
 import models.Role;
 import models.User;
 import org.junit.Test;

@@ -2,7 +2,7 @@ package controllers;
 
 import com.google.common.collect.ImmutableMap;
 import dao.UserDao;
-import models.Dependencies;
+import utilities.Dependencies;
 import models.User;
 import org.junit.Before;
 import org.junit.Test;

@@ -2,13 +2,10 @@ package controllers;
 
 import com.google.common.collect.ImmutableMap;
 import dao.UserDao;
-import models.Dependencies;
+import utilities.Dependencies;
 import models.User;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
-import play.api.mvc.Session;
-import play.mvc.Http;
 import play.mvc.Result;
 import testutils.BaseTest;
 

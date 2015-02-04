@@ -1,10 +1,6 @@
 package dao;
 
-import dao.EBeanRoleDao;
-import dao.EBeanUserDao;
-import dao.RoleDao;
-import dao.UserDao;
-import models.Dependencies;
+import utilities.Dependencies;
 import models.Role;
 import models.User;
 import org.junit.Test;

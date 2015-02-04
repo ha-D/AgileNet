@@ -1,20 +1,14 @@
 package dao;
 
 import com.avaje.ebean.Ebean;
-import dao.CategoryDao;
-import dao.EBeanCategoryDao;
-import junit.framework.Assert;
-import junit.framework.TestCase;
 import models.Category;
-import models.Dependencies;
+import utilities.Dependencies;
 import org.junit.Test;
 import play.libs.Yaml;
 import testutils.BaseTest;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.Assert.*;
 import static junit.framework.TestCase.*;
 import static junit.framework.TestCase.assertTrue;
 

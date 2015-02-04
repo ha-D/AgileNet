@@ -3,13 +3,13 @@ package dao;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
 import com.avaje.ebean.ExpressionList;
-import com.avaje.ebean.Query;
 import models.Category;
 import models.Resource;
 import models.ResourceType;
+import models.User;
 import play.db.ebean.Model;
-
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -20,18 +20,22 @@ public class EBeanResourceDao implements ResourceDao {
     );
 
     @Override
-    public Resource create(ResourceType resourceType, String name, Set<Category> categories, String description){
+    public Resource create(ResourceType resourceType, String name, Set<Category> categories, String description, User user){
         Resource resource = new Resource();
         resource.resourceType = resourceType;
         resource.name = name;
         resource.categories = categories;
         resource.description = description;
+        resource.date = new Date();
         Ebean.save(resource);
         return resource;
     }
 
     @Override
     public Resource create(Resource resource){
+        if (resource.date == null) {
+            resource.date = new Date();
+        }
         Ebean.save(resource);
         return resource;
     }
@@ -43,7 +47,7 @@ public class EBeanResourceDao implements ResourceDao {
 
     @Override
     public Resource findById(int id){
-        return find.where().eq("id", id).findUnique();
+        return find.byId(id);
     }
 
     @Override

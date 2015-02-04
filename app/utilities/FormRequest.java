@@ -1,6 +1,5 @@
 package utilities;
 
-import models.Dependencies;
 import models.Role;
 import models.User;
 
@@ -19,7 +18,7 @@ public class FormRequest {
         }
     }
 
-    private String getSingleElement(String tokenName) {
+    public String getSingleElement(String tokenName) {
         String[] parts = body.get(tokenName);
         if (parts == null || parts.length == 0 || parts[0] == null || parts[0].isEmpty()) {
             throw new RequestParseException("Missing parameter [" + tokenName + "]");

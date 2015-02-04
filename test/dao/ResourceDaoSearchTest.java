@@ -2,11 +2,10 @@ package dao;
 
 import com.avaje.ebean.Ebean;
 import models.Category;
-import models.Dependencies;
+import utilities.Dependencies;
 import models.Resource;
 import models.ResourceType;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import testutils.BaseTest;
 
@@ -106,7 +105,7 @@ public class ResourceDaoSearchTest extends BaseTest {
 
     @Test
     public void testPages() {
-        ResourceSearchCriteria criteria = new ResourceSearchCriteria(null, null, null);
+        ResourceSearchCriteria criteria = new ResourceSearchCriteria(null, null);
         criteria.setPageNumber(0);
         criteria.setPageSize(5);
         List<Resource> firstPage = resourceDao.findByCriteria(criteria);
@@ -123,7 +122,7 @@ public class ResourceDaoSearchTest extends BaseTest {
 
     @Test
     public void testParentCategory() {
-        ResourceSearchCriteria criteria = new ResourceSearchCriteria(null, parentCategory, null);
+        ResourceSearchCriteria criteria = new ResourceSearchCriteria(null, parentCategory);
         assertSearch("Searching with parent category should return results for child categories as well",
                 criteria, book1, article1, article2, video3, site1, site2);
     }

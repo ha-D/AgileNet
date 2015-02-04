@@ -51,4 +51,12 @@ public class Category extends BaseModel<CategoryDao> {
         }
         return false;
     }
+
+    public String getJson(){
+        String children = "[";
+        for(Category c: this.children)
+            children+=c.getJson()+", ";
+        children+="]";
+        return "{id: "+this.id+", name: '"+this.name+"', children: "+children+"}";
+    }
 }

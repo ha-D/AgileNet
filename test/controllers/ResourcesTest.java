@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import play.mvc.Result;
 import testutils.BaseTest;
+import utilities.Dependencies;
 
 import java.util.*;
 
