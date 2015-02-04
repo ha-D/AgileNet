@@ -5,6 +5,7 @@ import play.data.validation.Constraints;
 
 import javax.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -18,6 +19,13 @@ public final class Resource extends BaseModel<ResourceDao>{
     @Column(nullable = false)
     public String name;
 
+    public List<Comment> getComments() {
+        List<Comment> ret = new ArrayList<>();
+        for(Comment comment: comments)
+            ret.add(Dependencies.getCommentDao().findById(comment.id));
+        return ret;
+    }
+
     @ManyToMany(cascade= CascadeType.ALL)
     public Set<Category> categories;
 
@@ -29,7 +37,7 @@ public final class Resource extends BaseModel<ResourceDao>{
     @ManyToOne
     public User user;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "parResource", cascade = CascadeType.ALL)
     public List<Comment> comments;
 
     @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL)
