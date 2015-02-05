@@ -1,43 +1,10 @@
 AGS = {};
 AGS.selection = "";
-AGS.resourceTypeImages = {
-	'book': '/assets/images/resources/book.png',
-	'article': '/assets/images/resources/article.png',
-	'website': '/assets/images/resources/website.png',
-	'video': '/assets/images/resources/video.png'
-};
-AGS.topicData = {
 
+AGS.topicData = {
 };
 
 AGS.selectedCategory = null;
-
-var testSearchResult = [
-	{
-		name: 'اصول چابک بودن',
-		user: 'محمد طاهری',
-		description: 'یک کتبا بسیار خوب درباره‌ی چابک و فلان و یه سری توضیحات دیگه که هیلی مهمن یکم دیگه فکر کنم بس باشه',
-		date: '۱۱ شهریور، ۱۳۹۱',
-		resourceType: 'book',
-		rating: 3
-	},
-	{
-		name: 'فیلم آموزش tfs',
-		user: 'اصغر اکبری',
-		description: 'در این فیلم شما با نحوه‌ی اسفتاده از tfs آشنا می‌شوید و می‌بینید چقد مزخرفه',
-		date: '۲۳ مهر ۱۳۹۳',
-		resourceType: 'video',
-		rating: 2
-	},
-	{
-		name: 'سایت چابک‌نت',
-		user: 'عطیه اشعری',
-		description: 'یک سایت بسیار داقون در رابطه با همین',
-		date: '۵ فروردین ۱۳۹۱',
-		resourceType: 'website',
-		rating: 4.5
-	}
-]
 
 function render(template, data) {
 	return $("<div>").html(template(data)).contents();
@@ -56,7 +23,7 @@ function setTopicFilters(selection, animate) {
 			li.append(mainLi);
 			if (items[item].subcategories !== undefined) {
 				var nextBtn = $("<span>")
-				.addClass("filter-next glyphicon glyphicon-chevron-right");
+					.addClass("filter-next glyphicon glyphicon-chevron-right");
 				li.append(nextBtn);
 			}
 			uiList.append(li);
@@ -65,15 +32,20 @@ function setTopicFilters(selection, animate) {
 		});
 
 		if (animate == 'forward') {
-			wrapper.append(uiList);
 			var x = 0;
 			var interval = setInterval(function() {
+				if (x == 0) {
+					wrapper.append(uiList);
+				}
+
 				if (x == 100) {
 					clearInterval(interval);
 					oldUiList.remove();
 				}
+
 				uiList.css('width', (x) + "%");
 				oldUiList.css('width', (100 - x) + "%");
+
 				x = x + 5;
 			}, 10);
 
@@ -96,15 +68,17 @@ function setTopicFilters(selection, animate) {
 	}
 
 	function setHistory(selectionList) {
-		var historyList = $(".topic-container .filter-history-list");
+		var historyList = $(".filter-history-list");
 		historyList.html("");
 		var current = AGS.topicData;
 
-		var classList = ['first', 'second', 'third', 'fourth', 'fifth'].reverse();
+		var classList = ['first', 'second', 'third', 'fourth']
+		classList = classList.concat('fifth').concat(classList.reverse())
+		var count = 0;
 
 		var historyItem = render(AGS.filterHistoryItemTemplate, {
 			order: classList.pop(),
-			name: "*",
+			name: "",
 			selection: ""
 		});
 
@@ -117,8 +91,13 @@ function setTopicFilters(selection, animate) {
 			revList.push(next);
 			var selection = revList.slice(0).join(' ');
 
+			var classOrder = classList[count++];
+			if (selectionList.length == 0) {
+				classOrder += " last";
+			}
+
 			var historyItem = render(AGS.filterHistoryItemTemplate, {
-				order: classList.pop(),
+				order: classOrder,
 				name: current[next].name,
 				selection: selection
 			});
@@ -142,7 +121,11 @@ function setTopicFilters(selection, animate) {
 			var next = parseInt(selectionList.pop());
 			current = current[next].subcategories;
 		}
-		intializeList(current);
+		if (current) {
+			intializeList(current);
+		} else {
+			AGS.noBackAnim = true;
+		}
 	}
 }
 
@@ -190,8 +173,6 @@ function loadCategories() {
 		}
 	})
 }
-
-
 
 function createQuery() {
 	var request = {};
@@ -249,35 +230,53 @@ $(function() {
 			$(this).addClass('selected');
 		}
 		loadResults(true);
- 	});
+	});
 
-	$(".topic-container").on('click', 
-		'.filter.topic .filter-next', function() {
- 		var selection = $(this).parent().attr('data-item').trim();
- 		setTopicFilters(selection, 'forward');
- 		AGS.selection = selection;
- 	}).on('click', '.topic.filter-history.item', function() {
- 		var selection = $(this).attr('data-selection').trim();
- 		if (selection != AGS.selection) {
-	 		setTopicFilters(selection, 'back');
-	 		AGS.selection = selection;
- 		}
- 	}).on('click', '.topic.filter .filter-main', function() {
+	function categoryClick() {
+
 		$('.topic.filter.selected').removeClass('selected');
 		$(this).parent().addClass('selected');
 		var items = $(this).parent().attr('data-item').split(' ');
+
 		AGS.selectedCategory = items[items.length - 1];
+
+		var selection = $(this).parent().attr('data-item').trim();
+
+		setTopicFilters(selection, 'forward');
+		AGS.selection = selection;
+
 		loadResults(true);
-	});
+	}
+
+	$(".b-resource")
+		.on('click', '.filter.topic .filter-next', categoryClick)
+		.on('click', '.topic.filter .filter-main', categoryClick)
+		.on('click', '.topic.filter-history.item', function() {
+			var selection = $(this).attr('data-selection').trim();
+			var animation = "back";
+
+			var part = AGS.selection.slice(0, AGS.selection.lastIndexOf(' '));
+			if (selection == part && AGS.noBackAnim) {
+				animation = "";
+				AGS.noBackAnim = false;
+			}
+
+			if (selection != AGS.selection) {
+				setTopicFilters(selection, animation);
+				AGS.selection = selection;
+			}
+
+			loadResults(true);
+		});
 
 
 	$("#search-form").submit(function(){
 		loadResults(true);
-		console.log("HEY")
 		return false;
 	});
-	//setSearchResults(testSearchResult, true);
 
+	//setSearchResults(testSearchResult, true);
+	//setTopicFilters("");
 	loadCategories();
 	loadResults(true);
 });

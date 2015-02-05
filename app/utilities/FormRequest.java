@@ -18,6 +18,7 @@ public class FormRequest {
         }
     }
 
+    //TODO:you should use resource file to define exception message
     public String getSingleElement(String tokenName) {
         String[] parts = body.get(tokenName);
         if (parts == null || parts.length == 0 || parts[0] == null || parts[0].isEmpty()) {
@@ -47,6 +48,7 @@ public class FormRequest {
         return user;
     }
 
+    //TODO: "static final String" use to define column name
     public User parseUser() {
         return parseUser("user");
     }
