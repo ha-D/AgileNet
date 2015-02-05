@@ -1,9 +1,8 @@
 package controllers;
 
 import actions.Authorized;
+import models.*;
 import utilities.Dependencies;
-import models.Resource;
-import models.ResourceType;
 import org.apache.commons.io.FileUtils;
 import play.data.Form;
 import play.mvc.Http;
@@ -20,7 +19,6 @@ import actions.Ajax;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dao.ResourceSearchCriteria;
-import models.Category;
 import play.libs.Json;
 import utilities.FormRequest;
 
@@ -116,5 +114,23 @@ public class Resources {
     public static Result resourceView(Integer id) {
         Resource resource = Dependencies.getResourceDao().findById(id);
         return ok(views.html.resource.render(resource));
+    }
+
+    @Authorized({})
+    public static Result rateResource() {
+        //form with two fields: rate and resourceId
+
+        User user = Dependencies.getUserDao().findByEmail(session().get("email"));
+        int rate = Integer.parseInt(Form.form().bindFromRequest().get("rate"));
+        int resourceId = Integer.parseInt(Form.form().bindFromRequest().get("resource"));
+        System.out.println(resourceId);
+        Resource resource = Dependencies.getResourceDao().findById(resourceId);
+        RateResource rateResource = Dependencies.getRateResourceDao().create(rate, resource, user);
+
+        ObjectNode rootJson = Json.newObject();
+        rootJson.put("id", rateResource.id);
+
+        //Result result = ok(rootJson);
+        return ok(rootJson);
     }
 }

@@ -32,3 +32,5 @@ POST        /addResource                controllers.Resources.addResource()
 GET         /resource/:id               controllers.Resources.resourceView(id: Integer)
 GET         /resources                  controllers.Resources.searchPage()
 POST        /resources                  controllers.Resources.search()
+
+POST        /rateResource               controllers.Resources.rateResource()
