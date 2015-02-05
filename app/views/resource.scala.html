@@ -2,57 +2,71 @@
 @import helper._
 @implicitField = @{ FieldConstructor(myFieldConstructorTemplate.f) }
 
+@scripts = {
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/resource.js")"></script>
+}
 @styles = {
     <link rel="stylesheet" href="@routes.Assets.at("stylesheets/login.css")" media="screen" type="text/css" />
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/resource.css")" media="screen" type="text/css" />
 }
 
-@base(title="مشاهده‌ی مرجع", styles=styles) {
+@base(title="مشاهده‌ی مرجع", styles=styles, scripts = scripts) {
 
-    <div class="panel panel-default col-md-8 col-md-offset-2 no-padding top-margin" id="atiye-product-description">
-        <div class="panel-heading">
-            <h1 class="text-center">@resource.name</h1>
-        </div>
-        <div class="panel-body row col-md-8">
-            <div class="col-md-6"></div>
+    <div class="b-resource container">
+        <div class="row margin-top-40">
+            <div class="col-md-3">
 
-            <table class="table table-striped col-md-4 col-md-offset-6">
-                <tr>
-                    <td >نوع مرجع</td>
-                    <td >@resource.resourceType</td>
-                </tr>
-                <tr>
-                    <td >پدیدآورنده</td>
-                    <td >@resource.owner</td>
-                </tr>
-                <tr>
-                    <td >آدرس</td>
-                    <td >@resource.url</td>
-                </tr>
-                <tr>
-                    <td >محتوا</td>
-                    <td >@resource.description</td>
-                </tr>
-                <tr>
-                    <td >توضیحات</td>
-                    <td >@resource.description</td>
-                </tr>
-                <tr>
-                    <td >موضوعات</td>
-                    <td>
-
-                        <span class="label label-primary right-margin"></span>
-
-                    </td>
-                </tr>
-
-            </table>
-
-            <div class="col-md-12 col-md-offset-6">
-            <p class="top-margin">نظر دهید:</p>
-                <textarea class="form-control" rows="3"></textarea>
-                <button type="button" class="btn btn-primary top-margin" data-loading-text="در حال ارسال" id="comment-submit">ارسال</button>
+                <img class="center-block" @if(resource.resourceType == ResourceType.BOOK){src="@routes.Assets.at("/images/resources/book.png")"}
+                    @if(resource.resourceType == ResourceType.ARTICLE){src="@routes.Assets.at("/images/resources/book.png")"}
+                    @if(resource.resourceType == ResourceType.VIDEO){src="@routes.Assets.at("/images/resources/video.png")"}
+                    @if(resource.resourceType == ResourceType.WEBSITE){src="@routes.Assets.at("/images/resources/website.png")"}
+                >
+                <div id="resource-user-rate" class="ltr margin-top-10 float right center-block"></div>
             </div>
+            <div class="col-md-7 margin-top-30">
+                <h1>@resource.name</h1>
 
+                <div>
+                    <div id="resource-rate" class="resource rate float right ltr"></div>
+                </div>
+                <div class="resource download float left">
+                @if(true) {
+                    <button class="btn btn-primary btn-lg download-button">دانلود</button>
+                }
+                </div>
+
+                <div class="disp-block">
+                    <h5> از
+                    @resource.owner
+                    </h5>
+
+                    <h5></h5>
+                </div>
+
+                <div>
+                    @for(c <- resource.categories) {
+                        <div class="category-tag">@c.name</div>
+                    }
+                    <div class="category-tag">hello</div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row margin-top-30 padding-top-20 top-border">
+            <div class="col-md-12">@resource.description</div>
+        </div>
+
+        <div>
+            <p class="margin-top-30">نظر دهید:</p>
+            <textarea class="form-control" rows="3"></textarea>
+            <button type="button" class="btn btn-primary margin-top-10" data-loading-text="در حال ارسال" id="comment-submit">ارسال</button>
+        </div>
+
+        <div class="row margin-top-30 padding-top-20 top-border">
+            <div class="col-md-12">
+                <h4>نظرات</h4>
+            </div>
         </div>
     </div>
+
 }

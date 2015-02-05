@@ -1,0 +1,99 @@
+.b-resource.container {
+    padding-right: 10%;
+}
+
+.b-resource .float.right {
+    float: right;
+}
+
+.b-resource .float.left {
+    float: left;
+}
+
+.b-resource .resource.rate {
+    float: right;
+    display: inline
+}
+
+.b-resource .download-button{
+    padding-left: 30%;
+    padding-right: 30%;
+}
+
+.b-resource .owner-name{
+    display: inline;
+    /*float: right;*/
+    /*margin: 5px 0px 5px;*/
+}
+
+.b-resource .disp-block{
+    display: block;
+    clear: both;
+}
+
+.b-resource #resource-user-rate{
+    margin-right: 30%;
+}
+
+.category-tag:before{
+    /*padding: 10px 30px 10px;*/
+    /*width: 40px;*/
+    /*text-align: center;*/
+    /*background-color: ;*/
+    position: absolute;
+    -webkit-transform: translateY(-50%) translateX(50%) rotate(-45deg);
+    -ms-transform: translateY(-50%) translateX(50%) rotate(-45deg);
+    transform: translateY(-50%) translateX(50%) rotate(-45deg);
+    top: 50%;
+    right: 100%;
+    content: '';
+    background-color: #e8e8e8;
+    background-image: none;
+    width: 1.56em;
+    height: 1.56em;
+    -webkit-transition: background .2s ease;
+    transition: background .2s ease;
+}
+
+.category-tag{
+    margin-left: 1em;
+    position: relative;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    border-radius: 0 .2857rem .2857rem 0;
+    display: inline-block;
+    vertical-align: baseline;
+    line-height: 1;
+    margin: 0 .125em;
+    background-color: #e8e8e8;
+    border-color: #e8e8e8;
+    background-image: none;
+    padding: .6em .8em;
+    color: rgba(0,0,0,.6);
+    text-transform: none;
+    font-weight: 700;
+    border-radius: .2857rem;
+    box-sizing: border-box;
+    -webkit-transition: background .2s ease;
+    transition: background .2s ease;
+    margin: 0 .5em .75em 0;
+    padding-left: 20px;
+    margin-left: 15px;
+}
+
+.category-tag:after{
+    position: absolute;
+    content: '';
+    top: 50%;
+    left: -.25em;
+    margin-top: -.25em;
+    background-color: #fff!important;
+    width: .5em;
+    height: .5em;
+    box-shadow: 0 -1px 1px 0 rgba(0,0,0,.3);
+    border-radius: 500rem;
+}
+
+.top-border {
+    border-top: 1px solid #eeeeee;
+}

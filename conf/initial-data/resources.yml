@@ -1,5 +1,7 @@
-- !!models.Resource
-  name: resource1
+#- !!models.Resource
+#  name: resource1
+#  resourceType: 'B'
 #  category: *category1
-- !!models.Resource
-  name: resource2
+#- !!models.Resource
+#  name: resource2
+#  resourceType: 'V'
