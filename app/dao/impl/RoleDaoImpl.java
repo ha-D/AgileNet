@@ -1,12 +1,13 @@
-package dao;
+package dao.impl;
 
 import com.avaje.ebean.Ebean;
+import dao.RoleDao;
 import models.Role;
 import play.db.ebean.Model;
 
 import java.util.List;
 
-public class EBeanRoleDao implements RoleDao {
+public class RoleDaoImpl implements dao.RoleDao {
     public Role create(String name) {
         Role role = new Role(name);
         Ebean.save(role);

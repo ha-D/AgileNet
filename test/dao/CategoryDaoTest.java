@@ -1,6 +1,7 @@
 package dao;
 
 import com.avaje.ebean.Ebean;
+import dao.impl.CategoryDaoImpl;
 import models.Category;
 import utilities.Dependencies;
 import org.junit.Test;
@@ -15,7 +16,7 @@ import static junit.framework.TestCase.assertTrue;
 public class CategoryDaoTest extends BaseTest {
     @Test
     public void testCategoryCreation(){
-        CategoryDao categorydao = new EBeanCategoryDao();
+        dao.CategoryDao categorydao = new CategoryDaoImpl();
         Dependencies.setCategoryDao(categorydao);
 
         Category category = new Category();
@@ -45,7 +46,7 @@ public class CategoryDaoTest extends BaseTest {
 
     @Test
     public void testFindRootCategories() {
-        CategoryDao categoryDao = new EBeanCategoryDao();
+        dao.CategoryDao categoryDao = new CategoryDaoImpl();
         Dependencies.setCategoryDao(categoryDao);
 
         List<Category> categoryList =(List) Yaml.load("test-data/categories.yml");

@@ -1,6 +1,8 @@
 package dao;
 
 import com.avaje.ebean.Ebean;
+import dao.impl.CategoryDaoImpl;
+import dao.impl.ResourceDaoImpl;
 import models.Category;
 import utilities.Dependencies;
 import models.Resource;
@@ -21,12 +23,12 @@ public class ResourceDaoSearchTest extends BaseTest {
     Resource article1, article2, article3;
     Resource video1, video2, video3;
     Resource site1, site2, site3;
-    ResourceDao resourceDao;
+    dao.ResourceDao resourceDao;
 
     @Before
     public void setUp() {
-        resourceDao = new EBeanResourceDao();
-        CategoryDao categoryDao = new EBeanCategoryDao();
+        resourceDao = new ResourceDaoImpl();
+        dao.CategoryDao categoryDao = new CategoryDaoImpl();
         Dependencies.setResourceDao(resourceDao);
         Dependencies.setCategoryDao(categoryDao);
 

@@ -1,13 +1,7 @@
 package models;
 
-import com.avaje.ebean.Ebean;
-import dao.CategoryDao;
-import dao.EBeanCategoryDao;
-import junit.framework.TestCase;
 import org.junit.Test;
-import testutils.BaseTest;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;

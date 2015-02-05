@@ -1,6 +1,7 @@
 package dao;
 
 import com.avaje.ebean.Ebean;
+import dao.impl.ResourceDaoImpl;
 import models.*;
 import org.junit.Test;
 import play.libs.Yaml;
@@ -20,7 +21,7 @@ public class ResourceDaoTest extends BaseTest {
         Ebean.save(categoryList);
         Ebean.save(userList);
 
-        EBeanResourceDao resourceDao = new EBeanResourceDao();
+        ResourceDaoImpl resourceDao = new ResourceDaoImpl();
 
         User user = Ebean.find(User.class, 1);
         resourceDao.create(ResourceType.BOOK, "my resource", null, "resource without categories", user );

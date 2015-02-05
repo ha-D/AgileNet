@@ -1,8 +1,10 @@
-package dao;
+package dao.impl;
 
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
 import com.avaje.ebean.ExpressionList;
+import dao.ResourceDao;
+import dao.ResourceSearchCriteria;
 import models.Category;
 import models.Resource;
 import models.ResourceType;
@@ -13,7 +15,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-public class EBeanResourceDao implements ResourceDao {
+public class ResourceDaoImpl implements dao.ResourceDao {
 
     public Model.Finder<Integer,Resource> find = new Model.Finder<Integer,Resource>(
             Integer.class, Resource.class

@@ -1,5 +1,11 @@
 package dao;
 
+import dao.impl.CategoryDaoImpl;
+import dao.impl.CommentDaoImpl;
+import dao.impl.RateResourceDaoImpl;
+import dao.impl.ResourceDaoImpl;
+import dao.impl.RoleDaoImpl;
+import dao.impl.UserDaoImpl;
 import models.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,13 +20,13 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import java.util.List;
 
-public class CommentDaoTest extends BaseTest{
+public class CommentDaoImplTest extends BaseTest{
     @Before
     public void before(){
         List<Category> categoryList =(List) Yaml.load("test-data/categories.yml");
         List<User> userList =(List) Yaml.load("test-data/users.yml");
 
-        Dependencies.initialize(new EBeanUserDao(), new EBeanRoleDao(), new EBeanCategoryDao(), new EBeanResourceDao(), new EBeanCommentDao(), new EBeanRateResourceDao());
+        Dependencies.initialize(new UserDaoImpl(), new RoleDaoImpl(), new CategoryDaoImpl(), new ResourceDaoImpl(), new CommentDaoImpl(), new RateResourceDaoImpl());
 
         for (User user : userList) {
             Dependencies.getUserDao().create(user);

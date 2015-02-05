@@ -1,13 +1,14 @@
-package dao;
+package dao.impl;
 
 import com.avaje.ebean.Ebean;
+import dao.RateResourceDao;
 import models.*;
 import play.db.ebean.Model;
 import utilities.Dependencies;
 
 import java.util.List;
 
-public class EBeanRateResourceDao implements RateResourceDao {
+public class RateResourceDaoImpl implements dao.RateResourceDao {
 
     public Model.Finder<Integer, RateResource> find = new Model.Finder<Integer,RateResource>(
             Integer.class, RateResource.class

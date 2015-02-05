@@ -1,5 +1,7 @@
 package dao;
 
+import dao.impl.RoleDaoImpl;
+import dao.impl.UserDaoImpl;
 import utilities.Dependencies;
 import models.Role;
 import models.User;
@@ -13,7 +15,7 @@ import static org.junit.Assert.assertTrue;
 public class RoleDaoTest extends BaseTest {
     @Test
     public void testCreateAndFindRole() {
-        RoleDao roleDao = new EBeanRoleDao();
+        dao.RoleDao roleDao = new RoleDaoImpl();
         Dependencies.setRoleDao(roleDao);
 
         Role role = new Role();
@@ -34,8 +36,8 @@ public class RoleDaoTest extends BaseTest {
 
     @Test
     public void testRoleAssignment() {
-        RoleDao roleDao = new EBeanRoleDao();
-        UserDao userDao = new EBeanUserDao();
+        dao.RoleDao roleDao = new RoleDaoImpl();
+        dao.UserDao userDao = new UserDaoImpl();
 
         Dependencies.setUserDao(userDao);
         Dependencies.setRoleDao(roleDao);

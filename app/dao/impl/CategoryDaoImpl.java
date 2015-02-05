@@ -1,6 +1,7 @@
-package dao;
+package dao.impl;
 
 import com.avaje.ebean.Ebean;
+import dao.CategoryDao;
 import models.Category;
 import play.db.ebean.Model;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EBeanCategoryDao implements CategoryDao {
+public class CategoryDaoImpl implements dao.CategoryDao {
     public Model.Finder<Integer,Category> find = new Model.Finder<Integer,Category>(
             Integer.class, Category.class
     );

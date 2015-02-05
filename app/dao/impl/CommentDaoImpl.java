@@ -1,6 +1,7 @@
-package dao;
+package dao.impl;
 
 import com.avaje.ebean.Ebean;
+import dao.CommentDao;
 import models.*;
 import play.db.ebean.Model;
 import utilities.Dependencies;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class EBeanCommentDao implements CommentDao {
+public class CommentDaoImpl implements dao.CommentDao {
     public Model.Finder<Integer,Comment> find = new Model.Finder<Integer,Comment>(
             Integer.class, Comment.class
     );
