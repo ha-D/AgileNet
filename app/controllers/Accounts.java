@@ -161,4 +161,9 @@ public class Accounts extends Controller {
         Dependencies.getUserDao().update(user);
     }
 
+    @Authorized({})
+    public static Result admin(){
+        return ok(views.html.admin.render());
+    }
+
 }

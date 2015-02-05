@@ -39,3 +39,5 @@ POST        /rateComment                controllers.Comments.rateComment()
 POST        /addComment                 controllers.Comments.addComment()
 POST        /filterComment              controllers.Comments.filterComment()
 POST        /undoFilterComment          controllers.Comments.undoFilterComment()
+
+GET         /admin                      controllers.Accounts.admin()
