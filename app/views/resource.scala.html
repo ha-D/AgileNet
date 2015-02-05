@@ -1,20 +1,86 @@
-@(resource: models.Resource)
+@(resource: models.Resource, userRate: Integer)
 @import helper._
 @implicitField = @{ FieldConstructor(myFieldConstructorTemplate.f) }
 
+@scripts = {
+    <script type="text/javascript">
+        var rate = @resource.getRate();
+        var userRate = @userRate;
+        console.log(userRate);
+        var resourceId = @resource.id;
+    </script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/resource.js")"></script>
+}
 @styles = {
-<link rel="stylesheet" href="@routes.Assets.at("stylesheets/login.css")" media="screen" type="text/css" />
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/login.css")" media="screen" type="text/css" />
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/resource.css")" media="screen" type="text/css" />
 }
 
-@base(title="افزودن مرجع", styles=styles) {
-<div class="addResource container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <hr class="colorgraph">
-            <div>@resource.name</div>
-            <hr class="colorgraph">
+@base(title="مشاهده‌ی مرجع", styles=styles, scripts = scripts) {
+
+    <div class="b-resource container">
+        <div class="row margin-top-40">
+            <div class="col-md-3">
+
+                <img class="center-block" @if(resource.resourceType == ResourceType.BOOK){src="@routes.Assets.at("/images/resources/book.png")"}
+                    @if(resource.resourceType == ResourceType.ARTICLE){src="@routes.Assets.at("/images/resources/book.png")"}
+                    @if(resource.resourceType == ResourceType.VIDEO){src="@routes.Assets.at("/images/resources/video.png")"}
+                    @if(resource.resourceType == ResourceType.WEBSITE){src="@routes.Assets.at("/images/resources/website.png")"}
+                >
+                <div id="resource-user-rate" class="ltr margin-top-10 float right center-block"></div>
+            </div>
+            <div class="col-md-7 margin-top-30">
+                <h1>@resource.name</h1>
+                <div>
+                    <div id="resource-rate" class="resource rate float right ltr"></div>
+                </div>
+                <div class="resource download float left">
+                @if(resource.fileUrl != null && !resource.fileUrl.equals("")) {
+                    <a href="@routes.Assets.at(resource.fileUrl)" class="btn btn-primary btn-lg download-button">دانلود</a>
+                }
+                </div>
+
+                <div class="disp-block">
+                    @if(resource.owner != null && !resource.owner.equals("")) {
+                        <h5>
+                            از
+                            @resource.owner
+                        </h5>
+                    }
+                    @if(resource.url != null && !resource.url.equals("")){
+                        <div class="margin-top-40">
+                            <a href="@resource.url">
+                                پیوند
+                            </a>
+                        </div>
+                    }
+                </div>
+
+                <div>
+                @for(c <- resource.categories) {
+                    <div class="category-tag">@c.name</div>
+                }
+                </div>
+
+            </div>
+        </div>
+        @if(resource.description != null && !resource.description.equals("")) {
+            <div class="row margin-top-30 padding-top-20 top-border">
+                <div class="col-md-12">@resource.description</div>
+            </div>
+        }
+
+        <div>
+            <p class="margin-top-30">نظر دهید:</p>
+            <textarea class="form-control" rows="3"></textarea>
+            <button type="button" class="btn btn-primary margin-top-10" data-loading-text="در حال ارسال" id="comment-submit">ارسال</button>
         </div>
 
+        <div class="row margin-top-30 padding-top-20 top-border">
+            <div class="col-md-12">
+                <h4>نظرات</h4>
+            </div>
+        </div>
     </div>
-</div>
+
 }

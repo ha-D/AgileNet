@@ -18,6 +18,7 @@
 
     </script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/search.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/searchmodal.js")"></script>
 }
 @styles = {
     <link rel="stylesheet" href="@routes.Assets.at("stylesheets/search.css")" media="screen" type="text/css" />
@@ -105,7 +106,9 @@
                     <!-- /SIDEBAR -->
 
                 <div class="col-sm-12 col-md-9">
-
+                    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#addModal">
+                        اضافه‌ی مرجع
+                    </button>
                     <div class="search-result-container">
                         <script id="search-result-template" type="text/x-handlebars-template">
                         <div class="search result item">
@@ -136,6 +139,40 @@
                         </div>
                         </script>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="b-search-modal modal" id="addModal" tabindex="-1" role="dialog" aria-labelledby="mysModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">اضافه کردن مرجع</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="modal-search" class="form-control modal-search-input" placeholder="">
+                    <div class="result-list">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>نام مرجع</th>
+                                    <th>نوع مرجع</th>
+                                    <th>تاریخ اضافه شدن</th>
+                                    <th>امتیاز</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">انصراف</button>
+                    <button type="button" class="btn btn-primary">ثبت</button>
                 </div>
             </div>
         </div>

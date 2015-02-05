@@ -160,5 +160,4 @@ public class Accounts extends Controller {
         user.contactPhone = form.get().contactPhone;
         Dependencies.getUserDao().update(user);
     }
-
 }

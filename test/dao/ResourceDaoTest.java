@@ -24,7 +24,7 @@ public class ResourceDaoTest extends BaseTest {
         ResourceDaoImpl resourceDao = new ResourceDaoImpl();
 
         User user = Ebean.find(User.class, 1);
-        resourceDao.create(ResourceType.BOOK, "my resource", null, "resource without categories", user );
+        resourceDao.create(ResourceType.BOOK, "my resource", null, "resource without categories", user,"","","" );
 
         Resource resource = new Resource();
         resource.resourceType = ResourceType.ARTICLE;

@@ -371,3 +371,26 @@
 	color: yellow;
 	margin-top: 30%;
 }
+
+
+.b-search-modal {
+
+}
+
+.b-search-modal .modal-search-input {
+	width: 100%;
+}
+
+.b-search-modal .result-list {
+	height: 400px;
+	overflow-y: scroll;
+}
+
+.b-search-modal .result-list table tr {
+	font-size: 14px;
+}
+
+.b-search-modal .result-list table tr:hover{
+	background-color: #eeeeee;
+	cursor: pointer;
+}

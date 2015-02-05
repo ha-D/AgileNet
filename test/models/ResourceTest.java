@@ -7,6 +7,7 @@ import testutils.BaseTest;
 import utilities.Dependencies;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
@@ -51,7 +52,7 @@ public class ResourceTest extends BaseTest {
     @Test
     public void testGetRate(){
         Resource resource = new Resource();
-        resource.rates = new ArrayList<RateResource>();
+        resource.rates = new HashSet<>();
         for(int i=0; i<=5; ++i) {
             RateResource rr = new RateResource();
             rr.rate = i;

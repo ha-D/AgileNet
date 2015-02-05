@@ -35,7 +35,7 @@ public class CommentDaoImplTest extends BaseTest{
             Dependencies.getCategoryDao().create(category);
         }
 
-        Dependencies.getResourceDao().create(ResourceType.ARTICLE, "salam", null, "", Dependencies.getUserDao().findById(1));
+        Dependencies.getResourceDao().create(ResourceType.ARTICLE, "salam", null, "", Dependencies.getUserDao().findById(1), "","","");
     }
 
     @Test

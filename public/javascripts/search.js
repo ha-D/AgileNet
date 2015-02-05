@@ -141,7 +141,10 @@ function setTopicFilters(selection, animate) {
 }
 
 function createResultElements(resultList) {
+	AGS.resultIds = [];
 	return _.map(resultList, function(result) {
+		AGS.resultIds.push(result.id);
+
 		if (!result.image) {
 			result.image = AGS.resourceTypeImages[result.resourceType];
 		}
@@ -223,6 +226,7 @@ function loadResults(clear) {
 			setSearchResults(result.results, clear);
 		}
 	})
+	return false;
 }
 
 function addNewCategory() {
@@ -246,7 +250,7 @@ function addNewCategory() {
 			AGS.topicData = result.categories;
 		}
 	});
-
+	return false;
 }
 
 $(function() {
@@ -310,10 +314,7 @@ $(function() {
 		return false;
 	});
 
-	$("#newcat-form").submit(function(){
-		addNewCategory();
-		return false;
-	});
+	$("#newcat-form").submit(addNewCategory);
 
 	//setSearchResults(testSearchResult, true);
 	//setTopicFilters("");

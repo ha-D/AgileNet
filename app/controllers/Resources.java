@@ -22,6 +22,7 @@ import play.libs.Json;
 import utilities.FormRequest;
 import utilities.UserUtils;
 
+import java.sql.DriverManager;
 import java.util.List;
 
 import static play.mvc.Results.*;
@@ -44,21 +45,22 @@ public class Resources {
         Resource r = form.get();
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart part = body.getFile("content");
+        r = Dependencies.getResourceDao().create(r);
         if (r.resourceType != ResourceType.WEBSITE && part != null) {
             File file = part.getFile();
             System.out.println(file.getName());
             try {
-                File newFile = new File("public/resources/" + r.id, file.getName());
+                File newFile = new File("public/resources/" + r.id, part.getFilename());
                 FileUtils.moveFile(file, newFile);
-                r.url = newFile.getPath();
+                r.fileUrl = "resources/" + newFile.getName(); // newFile.getPath();
+                System.out.println(r.fileUrl);
             } catch (IOException ioe) {
                 System.out.println("Problem operating on filesystem");
             }
         }
         r.user = Dependencies.getUserDao().findByEmail(session().get("email"));
-        Dependencies.getResourceDao().create(r);
-//        return redirect(routes.Accounts.resourceView(r.id));
-        return ok(views.html.index.render());
+        Dependencies.getResourceDao().update(r);
+        return redirect(routes.Resources.resourceView(r.id));
     }
 
     public static Result searchPage() {
@@ -114,7 +116,9 @@ public class Resources {
     @Authorized({})
     public static Result resourceView(Integer id) {
         Resource resource = Dependencies.getResourceDao().findById(id);
-        return ok(views.html.resource.render(resource));
+        User user = Dependencies.getUserDao().findByEmail(session().get("email"));
+        int userRate = Dependencies.getRateResourceDao().getRate(user, resource);
+        return ok(views.html.resource.render(resource, userRate));
     }
 
     @Authorized({})
@@ -129,9 +133,9 @@ public class Resources {
         RateResource rateResource = Dependencies.getRateResourceDao().create(rate, resource, user);
 
         ObjectNode rootJson = Json.newObject();
-        rootJson.put("id", rateResource.id);
+        rootJson.put("rate", resource.getRate());
 
-        //Result result = ok(rootJson);
         return ok(rootJson);
     }
+
 }
