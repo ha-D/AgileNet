@@ -70,18 +70,18 @@ public class ResourceDaoSearchTest extends BaseTest {
         video1.description = "felan felan desc_query felan felan";
         site3.description = "felan felan desc_query felan felan";
 
-        resourceDao.create(book1);
-        resourceDao.create(book2);
-        resourceDao.create(book3);
-        resourceDao.create(article1);
-        resourceDao.create(article2);
-        resourceDao.create(article3);
-        resourceDao.create(video1);
-        resourceDao.create(video2);
-        resourceDao.create(video3);
-        resourceDao.create(site1);
-        resourceDao.create(site2);
-        resourceDao.create(site3);
+        book1 = resourceDao.create(book1);
+        book2 =  resourceDao.create(book2);
+        book3 = resourceDao.create(book3);
+        article1 = resourceDao.create(article1);
+        article2 = resourceDao.create(article2);
+        article3 = resourceDao.create(article3);
+        video1 = resourceDao.create(video1);
+        video2 = resourceDao.create(video2);
+        video3 = resourceDao.create(video3);
+        site1 = resourceDao.create(site1);
+        site2 = resourceDao.create(site2);
+        site3 = resourceDao.create(site3);
     }
 
     @Test

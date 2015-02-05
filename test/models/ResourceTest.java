@@ -1,5 +1,6 @@
 package models;
 
+import dao.RateResourceDao;
 import dao.UserDao;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,6 +59,8 @@ public class ResourceTest extends BaseTest {
             rr.rate = i;
             resource.rates.add(rr);
         }
+
+
 
         assertTrue("GetRate should be equal to average of rates", resource.getRate()-((0.0+1+2+3+4+5)/6)<0.000001);
 

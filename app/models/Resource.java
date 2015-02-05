@@ -33,7 +33,7 @@ public final class Resource extends BaseModel<ResourceDao>{
     public String url;
     public String owner;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
     public User user;
 
     @OneToMany(mappedBy = "parResource", cascade = CascadeType.ALL)
@@ -62,7 +62,7 @@ public final class Resource extends BaseModel<ResourceDao>{
     public double getRate(){
         double sum = 0;
         for(RateResource rateResource: rates)
-            sum+= Dependencies.getRateResourceDao().findById(rateResource.id).rate;
+            sum += rateResource.rate;
         return sum/Math.max(rates.size(), 1);
     }
 

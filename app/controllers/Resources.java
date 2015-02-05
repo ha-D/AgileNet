@@ -23,7 +23,9 @@ import utilities.FormRequest;
 import utilities.UserUtils;
 
 import java.sql.DriverManager;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import static play.mvc.Results.*;
 import static utilities.FormRequest.formBody;
@@ -97,6 +99,7 @@ public class Resources {
         rootJson.put("resultCount", resources.size());
         ArrayNode jsonList = rootJson.putArray("results");
 
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy", Locale.forLanguageTag("ir"));
         for (Resource resource : resources) {
             ObjectNode json = jsonList.addObject();
             json.put("id", resource.id);
@@ -106,7 +109,7 @@ public class Resources {
             if (resource.owner != null && !resource.owner.isEmpty()) {
                 json.put("user", resource.owner);
             }
-            // TODO: json.put("date", ...)
+            json.put("date", dateFormat.format(resource.date));
             // TODO: json.put("rating", ...)
         }
 

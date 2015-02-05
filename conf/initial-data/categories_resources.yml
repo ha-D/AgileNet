@@ -1,5 +1,4 @@
 - !!models.Category &catHistory
-<<<<<<< HEAD
     name: "تاریخ چابک"
     children:
         - !!models.Category &catPeople
