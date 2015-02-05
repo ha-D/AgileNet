@@ -44,14 +44,17 @@ public class ResourcesTest extends BaseTest {
         resourceList[0].resourceType = ResourceType.ARTICLE;
         resourceList[0].name = "resource 0";
         resourceList[0].description = "resource 0 description";
+        resourceList[0].date = new Date();
         resourceList[1] = new Resource();
         resourceList[1].resourceType = ResourceType.BOOK;
         resourceList[1].name = "resource 1";
         resourceList[1].description = "resource 1 description";
+        resourceList[1].date = new Date();
         resourceList[2] = new Resource();
         resourceList[2].resourceType = ResourceType.VIDEO;
         resourceList[2].name = "resource 2";
         resourceList[2].description = "resource 2 description";
+        resourceList[2].date = new Date();
     }
 
     @Test
