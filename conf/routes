@@ -32,3 +32,10 @@ POST        /addResource                controllers.Resources.addResource()
 GET         /resource/:id               controllers.Resources.resourceView(id: Integer)
 GET         /resources                  controllers.Resources.searchPage()
 POST        /resources                  controllers.Resources.search()
+POST        /rateResource               controllers.Resources.rateResource()
+
+
+POST        /rateComment                controllers.Comments.rateComment()
+POST        /addComment                 controllers.Comments.addComment()
+POST        /filterComment              controllers.Comments.filterComment()
+POST        /undoFilterComment          controllers.Comments.undoFilterComment()
