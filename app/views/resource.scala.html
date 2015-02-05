@@ -35,12 +35,12 @@
                 </div>
 
                 <div class="disp-block">
-                    <h5>
-                        از
+                    @if(resource.owner != null) {
+                        <h5>
+                            از
                             @resource.owner
-                    </h5>
-
-                    <h5></h5>
+                        </h5>
+                    }
                 </div>
 
                 <div>
