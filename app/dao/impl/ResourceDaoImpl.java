@@ -22,13 +22,17 @@ public class ResourceDaoImpl implements dao.ResourceDao {
     );
 
     @Override
-    public Resource create(ResourceType resourceType, String name, Set<Category> categories, String description, User user){
+    public Resource create(ResourceType resourceType, String name, Set<Category> categories, String description,
+                           User user, String fileUrl, String url, String owner){
         Resource resource = new Resource();
         resource.resourceType = resourceType;
         resource.name = name;
         resource.categories = categories;
         resource.description = description;
         resource.date = new Date();
+        resource.fileUrl = fileUrl;
+        resource.url = url;
+        resource.owner = owner;
         Ebean.save(resource);
         return resource;
     }
@@ -38,8 +42,10 @@ public class ResourceDaoImpl implements dao.ResourceDao {
         if (resource.date == null) {
             resource.date = new Date();
         }
-        Ebean.save(resource);
-        return resource;
+        return create(resource.resourceType, resource.name, resource.categories, resource.description, resource.user,
+                resource.fileUrl, resource.url, resource.owner);
+
+//        Ebean.save(resource);
     }
 
     @Override

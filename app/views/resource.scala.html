@@ -25,19 +25,19 @@
             </div>
             <div class="col-md-7 margin-top-30">
                 <h1>@resource.name</h1>
-
                 <div>
                     <div id="resource-rate" class="resource rate float right ltr"></div>
                 </div>
                 <div class="resource download float left">
-                @if(true) {
-                    <button class="btn btn-primary btn-lg download-button">دانلود</button>
+                @if(resource.fileUrl != null) {
+                    <a href="@routes.Assets.at(resource.fileUrl)" class="btn btn-primary btn-lg download-button">دانلود</a>
                 }
                 </div>
 
                 <div class="disp-block">
-                    <h5> از
-                    @resource.owner
+                    <h5>
+                        از
+                            @resource.owner
                     </h5>
 
                     <h5></h5>
@@ -47,7 +47,6 @@
                     @for(c <- resource.categories) {
                         <div class="category-tag">@c.name</div>
                     }
-                    <div class="category-tag">hello</div>
                 </div>
 
             </div>

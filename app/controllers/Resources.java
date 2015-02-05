@@ -13,8 +13,7 @@ import java.io.IOException;
 
 import static play.mvc.Controller.request;
 import static play.mvc.Controller.session;
-import static play.mvc.Results.badRequest;
-import static play.mvc.Results.ok;
+
 import actions.Ajax;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -22,9 +21,10 @@ import dao.ResourceSearchCriteria;
 import play.libs.Json;
 import utilities.FormRequest;
 
+import java.sql.DriverManager;
 import java.util.List;
 
-import static play.mvc.Results.ok;
+import static play.mvc.Results.*;
 import static utilities.FormRequest.formBody;
 
 
@@ -43,21 +43,22 @@ public class Resources {
         Resource r = form.get();
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart part = body.getFile("content");
+        r = Dependencies.getResourceDao().create(r);
         if (r.resourceType != ResourceType.WEBSITE && part != null) {
             File file = part.getFile();
             System.out.println(file.getName());
             try {
-                File newFile = new File("public/resources/" + r.id, file.getName());
+                File newFile = new File("public/resources/" + r.id, part.getFilename());
                 FileUtils.moveFile(file, newFile);
-                r.url = newFile.getPath();
+                r.fileUrl = "resources/" + newFile.getName(); // newFile.getPath();
+                System.out.println(r.fileUrl);
             } catch (IOException ioe) {
                 System.out.println("Problem operating on filesystem");
             }
         }
         r.user = Dependencies.getUserDao().findByEmail(session().get("email"));
-        Dependencies.getResourceDao().create(r);
-//        return redirect(routes.Accounts.resourceView(r.id));
-        return ok(views.html.index.render());
+        Dependencies.getResourceDao().update(r);
+        return redirect(routes.Resources.resourceView(r.id));
     }
 
     public static Result searchPage() {
@@ -131,6 +132,17 @@ public class Resources {
         rootJson.put("id", rateResource.id);
 
         //Result result = ok(rootJson);
+        return ok();
+    }
+
+    @Authorized({})
+    public static Result getResourceRate() {
+        int resourceId = Integer.parseInt(Form.form().bindFromRequest().get("resource"));
+        ObjectNode rootJson = Json.newObject();
+        rootJson.put("rate", Dependencies.getResourceDao().findById(resourceId).getRate());
+
+        //Result result = ok(rootJson);
         return ok(rootJson);
+
     }
 }

@@ -29,6 +29,7 @@ public final class Resource extends BaseModel<ResourceDao>{
 
     @Column(columnDefinition = "TEXT")
     public String description;
+    public String fileUrl;
     public String url;
     public String owner;
 
@@ -61,7 +62,7 @@ public final class Resource extends BaseModel<ResourceDao>{
     public double getRate(){
         double sum = 0;
         for(RateResource rateResource: rates)
-            sum+= rateResource.rate;
+            sum+= Dependencies.getRateResourceDao().findById(rateResource.id).rate;
         return sum/rates.size();
     }
 
