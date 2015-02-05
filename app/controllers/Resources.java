@@ -114,7 +114,9 @@ public class Resources {
     @Authorized({})
     public static Result resourceView(Integer id) {
         Resource resource = Dependencies.getResourceDao().findById(id);
-        return ok(views.html.resource.render(resource));
+        User user = Dependencies.getUserDao().findByEmail(session().get("email"));
+        int userRate = Dependencies.getRateResourceDao().getRate(user, resource);
+        return ok(views.html.resource.render(resource, userRate));
     }
 
     @Authorized({})
@@ -129,20 +131,9 @@ public class Resources {
         RateResource rateResource = Dependencies.getRateResourceDao().create(rate, resource, user);
 
         ObjectNode rootJson = Json.newObject();
-        rootJson.put("id", rateResource.id);
+        rootJson.put("rate", resource.getRate());
 
-        //Result result = ok(rootJson);
-        return ok();
-    }
-
-    @Authorized({})
-    public static Result getResourceRate() {
-        int resourceId = Integer.parseInt(Form.form().bindFromRequest().get("resource"));
-        ObjectNode rootJson = Json.newObject();
-        rootJson.put("rate", Dependencies.getResourceDao().findById(resourceId).getRate());
-
-        //Result result = ok(rootJson);
         return ok(rootJson);
-
     }
+
 }

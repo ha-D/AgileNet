@@ -40,7 +40,7 @@ public final class Resource extends BaseModel<ResourceDao>{
     public List<Comment> comments;
 
     @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL)
-    public List<RateResource> rates;
+    public Set<RateResource> rates;
 
 
     @Column(nullable = false)
@@ -63,7 +63,7 @@ public final class Resource extends BaseModel<ResourceDao>{
         double sum = 0;
         for(RateResource rateResource: rates)
             sum+= Dependencies.getRateResourceDao().findById(rateResource.id).rate;
-        return sum/rates.size();
+        return sum/Math.max(rates.size(), 1);
     }
 
 }

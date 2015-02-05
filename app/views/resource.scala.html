@@ -1,8 +1,14 @@
-@(resource: models.Resource)
+@(resource: models.Resource, userRate: Integer)
 @import helper._
 @implicitField = @{ FieldConstructor(myFieldConstructorTemplate.f) }
 
 @scripts = {
+    <script type="text/javascript">
+        var rate = @resource.getRate();
+        var userRate = @userRate;
+        console.log(userRate);
+        var resourceId = @resource.id;
+    </script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/resource.js")"></script>
 }
 @styles = {
@@ -29,31 +35,40 @@
                     <div id="resource-rate" class="resource rate float right ltr"></div>
                 </div>
                 <div class="resource download float left">
-                @if(resource.fileUrl != null) {
+                @if(resource.fileUrl != null && !resource.fileUrl.equals("")) {
                     <a href="@routes.Assets.at(resource.fileUrl)" class="btn btn-primary btn-lg download-button">دانلود</a>
                 }
                 </div>
 
                 <div class="disp-block">
-                    @if(resource.owner != null) {
+                    @if(resource.owner != null && !resource.owner.equals("")) {
                         <h5>
                             از
                             @resource.owner
                         </h5>
                     }
+                    @if(resource.url != null && !resource.url.equals("")){
+                        <div class="margin-top-40">
+                            <a href="@resource.url">
+                                پیوند
+                            </a>
+                        </div>
+                    }
                 </div>
 
                 <div>
-                    @for(c <- resource.categories) {
-                        <div class="category-tag">@c.name</div>
-                    }
+                @for(c <- resource.categories) {
+                    <div class="category-tag">@c.name</div>
+                }
                 </div>
 
             </div>
         </div>
-        <div class="row margin-top-30 padding-top-20 top-border">
-            <div class="col-md-12">@resource.description</div>
-        </div>
+        @if(resource.description != null && !resource.description.equals("")) {
+            <div class="row margin-top-30 padding-top-20 top-border">
+                <div class="col-md-12">@resource.description</div>
+            </div>
+        }
 
         <div>
             <p class="margin-top-30">نظر دهید:</p>
