@@ -10,26 +10,37 @@ function render(template, data) {
 	return $("<div>").html(template(data)).contents();
 }
 
+function createPlusFilter() {
+	$("<li>").addClass("topic filter add")
+}
+
+function createTopicFilterElement(selection, itemId, itemName, subcategories) {
+	var li = $('<li>').addClass('topic filter');
+	var mainLi = $("<span>").addClass('filter-main').text(itemName)
+	li.attr('data-item', selection + " " + itemId);
+	li.append(mainLi);
+	//if (subcategories) {
+		var nextBtn = $("<span>")
+			.addClass("filter-next glyphicon glyphicon-chevron-right");
+		li.append(nextBtn);
+	//}
+	return li;
+}
+
 function setTopicFilters(selection, animate) {
 	function intializeList(items) {
 		var wrapper = $(".topic.filter-list-wrapper");
 		var oldUiList = $(".topic.filter-list");
 		var uiList = $("<ul>").addClass("topic filter-list");
 
-		_.each(_.keys(items), function(item) {
-			var li = $('<li>').addClass('topic filter');
-			var mainLi = $("<span>").addClass('filter-main').text(items[item].name)
-			li.attr('data-item', selection + " " + item);
-			li.append(mainLi);
-			if (items[item].subcategories !== undefined) {
-				var nextBtn = $("<span>")
-					.addClass("filter-next glyphicon glyphicon-chevron-right");
-				li.append(nextBtn);
-			}
+		if (_.keys(items).length > 0) {
+			_.each(_.keys(items), function(item) {
+				uiList.append(createTopicFilterElement(selection, item, items[item].name, items[item].subcategories));
+			});
+		} else {
+			var li = $('<li>').addClass('topic filter empty').text("دسته‌ای وجود ندارد");
 			uiList.append(li);
-
-
-		});
+		}
 
 		if (animate == 'forward') {
 			var x = 0;
@@ -77,7 +88,7 @@ function setTopicFilters(selection, animate) {
 		var count = 0;
 
 		var historyItem = render(AGS.filterHistoryItemTemplate, {
-			order: classList.pop(),
+			order: classList[count++],
 			name: "",
 			selection: ""
 		});
@@ -121,11 +132,11 @@ function setTopicFilters(selection, animate) {
 			var next = parseInt(selectionList.pop());
 			current = current[next].subcategories;
 		}
-		if (current) {
+		//if (current) {
 			intializeList(current);
-		} else {
-			AGS.noBackAnim = true;
-		}
+		//} else {
+		//	AGS.noBackAnim = true;
+		//}
 	}
 }
 
@@ -192,7 +203,7 @@ function createQuery() {
 		request.category = AGS.selectedCategory;
 	}
 
-	var query = $('.search-box input').val();
+	var query = $('#search-form input').val();
 	if (query) {
 		request.query = query;
 	}
@@ -212,6 +223,30 @@ function loadResults(clear) {
 			setSearchResults(result.results, clear);
 		}
 	})
+}
+
+function addNewCategory() {
+	var category = $('#newcat-form input').val();
+	$('#newcat-form input').val("");
+
+	$.ajax({
+		url: AGS.addCategoryURL,
+		type: 'post',
+		dataType: 'json',
+		data: {
+			parent: AGS.selectedCategory,
+			name: category
+		},
+		success: function(result) {
+			var uiList = $(".topic .filter-list");
+			if (uiList.find('.empty')) {
+				uiList.html("");
+			}
+			uiList.append(createTopicFilterElement(AGS.selection, result.id, category));
+			AGS.topicData = result.categories;
+		}
+	});
+
 }
 
 $(function() {
@@ -272,6 +307,11 @@ $(function() {
 
 	$("#search-form").submit(function(){
 		loadResults(true);
+		return false;
+	});
+
+	$("#newcat-form").submit(function(){
+		addNewCategory();
 		return false;
 	});
 

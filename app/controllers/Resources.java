@@ -20,11 +20,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dao.ResourceSearchCriteria;
 import play.libs.Json;
 import utilities.FormRequest;
+import utilities.UserUtils;
 
 import java.util.List;
 
 import static play.mvc.Results.*;
 import static utilities.FormRequest.formBody;
+import static utilities.UserUtils.sessionUser;
 
 
 public class Resources {
@@ -60,7 +62,7 @@ public class Resources {
     }
 
     public static Result searchPage() {
-        return ok(views.html.resourceSearch.render());
+        return ok(views.html.resourceSearch.render(sessionUser()));
     }
 
     @Ajax

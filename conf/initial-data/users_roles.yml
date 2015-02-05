@@ -1,3 +1,22 @@
+- !!models.Role &admin
+    name:       admin
+- !!models.Role &expert
+    name:       expert
+
+- !!models.User
+    firstName:  admin
+    lastName:   admini
+    email:      admin@admin.com
+    password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
+    roles:
+        - *admin
+- !!models.User
+    firstName:  expert
+    lastName:   experti
+    email:      expert@expert.com
+    password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
+    roles:
+        - *expert
 - !!models.User
     firstName:   asghar
     lastName:   akbari

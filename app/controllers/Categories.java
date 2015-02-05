@@ -1,7 +1,10 @@
 package controllers;
 
 import actions.Ajax;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.Category;
+import play.libs.Json;
 import utilities.Dependencies;
 import play.mvc.Result;
 import utilities.CategorySerializer;
@@ -39,12 +42,20 @@ public class Categories {
         }catch (Exception e){
             cat = Dependencies.getCategoryDao().create(request.getSingleElement("name"));
         }
-        return ok(cat.id+"");
+
+        ObjectNode json = Json.newObject();
+        json.put("id", cat.id);
+        json.put("categories", getCategoryMap());
+        return ok(json);
     }
 
     @Ajax
     public static Result listCategoriesAsMap() {
+        return ok(getCategoryMap());
+    }
+
+    private static JsonNode getCategoryMap() {
         List<Category> categories = Dependencies.getCategoryDao().findRootCategories();
-        return ok(CategorySerializer.serialize(categories));
+        return CategorySerializer.serialize(categories);
     }
 }

@@ -1,45 +1,32 @@
 - !!models.Category &catHistory
-    id: 1
     name: "تاریخ چابک"
     children:
         - !!models.Category &catPeople
-            id: 4
             name: "آدم‌های تاثیر گذار"
 - !!models.Category &catPrinciples
-    id: 2
     name: "اصول چابک"
 - !!models.Category &catMethodologies
-    id: 3
     name: "متودولوژی‌های"
     children:
         - !!models.Category &catScrum
-            id: 5
             name: "اسکرام"
             children:
                 - !!models.Category
-                    id: 9
                     name: "اسکرام مستر"
                 - !!models.Category
-                    id: 10
                     name: "اسپرینت"
                 - !!models.Category &catMeetings
-                    id: 11
                     name: "جلسه‌ها"
         - !!models.Category
-            id: 6
             name: "اکس‌پی"
         - !!models.Category
-            id: 7
             name: "کریستال کلیر"
         - !!models.Category
-            id: 8
             name: "AUP"
 - !!models.Category &catTools
-    id: 12
     name: "ابزارهای چابک"
     children:
         - !!models.Category &catToolOnline
-            id: 13
             name: "ابزار آنلاین"
 
 - !!models.Resource
