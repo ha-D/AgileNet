@@ -55,7 +55,6 @@ public class Resources {
                 File newFile = new File("public/resources/" + r.id, part.getFilename());
                 FileUtils.moveFile(file, newFile);
                 r.fileUrl = "resources/" + newFile.getName(); // newFile.getPath();
-                System.out.println(r.fileUrl);
             } catch (IOException ioe) {
                 System.out.println("Problem operating on filesystem");
             }
@@ -74,14 +73,14 @@ public class Resources {
         FormRequest request = formBody();
         ResourceSearchCriteria criteria = new ResourceSearchCriteria();
 
-        Integer categoryId = request.getInt("category");
+        Integer categoryId = request.getInt("category", null);
         if (categoryId != null) {
             Category category = Dependencies.getCategoryDao().findById(categoryId);
             criteria.setCategory(category);
         }
 
-        criteria.setQuery(request.get("query"));
-        List<String> resourceTypes = request.getList("resourceType[]");
+        criteria.setQuery(request.get("query", null));
+        List<String> resourceTypes = request.getList("resourceType[]", null);
         if (resourceTypes != null) {
             for (String resourceType : resourceTypes) {
                 criteria.addResourceType(ResourceType.fromString(resourceType));
@@ -110,7 +109,11 @@ public class Resources {
                 json.put("user", resource.owner);
             }
             json.put("date", dateFormat.format(resource.date));
-            // TODO: json.put("rating", ...)
+            json.put("rating", resource.getRate());
+            ArrayNode cats = json.putArray("categories");
+            for (Category category : resource.categories) {
+                cats.add(category.id);
+            }
         }
 
         return rootJson;
@@ -141,4 +144,43 @@ public class Resources {
         return ok(rootJson);
     }
 
+    @Ajax
+    public static Result addCategory() {
+        FormRequest request = formBody();
+        int categoryId = request.getInt("category");
+        int resourceId = request.getInt("resource");
+
+        Resource resource = Dependencies.getResourceDao().findById(resourceId);
+        Category category = Dependencies.getCategoryDao().findById(categoryId);
+        if (resource == null) {
+            return badRequest("No resource with id " + resourceId);
+        }
+        if (category == null) {
+            return badRequest("No category with id " + categoryId);
+        }
+
+        resource.categories.add(category);
+        Dependencies.getResourceDao().update(resource);
+        return ok();
+    }
+
+    @Ajax
+    public static Result removeCategory() {
+        FormRequest request = formBody();
+        int categoryId = request.getInt("category");
+        int resourceId = request.getInt("resource");
+
+        Resource resource = Dependencies.getResourceDao().findById(resourceId);
+        Category category = Dependencies.getCategoryDao().findById(categoryId);
+        if (resource == null) {
+            return badRequest("No resource with id " + resourceId);
+        }
+        if (category == null) {
+            return badRequest("No category with id " + categoryId);
+        }
+
+        resource.categories.remove(category);
+        Dependencies.getResourceDao().update(resource);
+        return ok();
+    }
 }

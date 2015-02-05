@@ -83,7 +83,7 @@ public class ResourceDaoImpl implements dao.ResourceDao {
             );
         }
 
-       return  query.findPagingList(criteria.getPageSize())
+        return  query.findPagingList(criteria.getPageSize())
                 .getPage(criteria.getPageNumber()).getList();
     }
 

@@ -10,11 +10,12 @@ function createTableRow(item) {
         .append($("<td>").html(resourceTypes[item.resourceType]))
         .append($("<td>").html(item.date))
         .append($("<td>").html(item.rating));
-    if (item.id in AGS.resultIds) {
+    if (AGS.selectedCategory == null || item.categories.indexOf(parseInt(AGS.selectedCategory)) >= 0 ) {
         tr.addClass('success')
     } else {
-        tr.addClass('error')
+        tr.addClass('danger')
     }
+    tr.attr('data-id', item.id);
     return tr;
 }
 
@@ -38,6 +39,39 @@ function modalSearch() {
     });
 }
 
+function change(stat, id, success) {
+    var url = null;
+    if (stat == 'add') {
+        url = AGS.addResourceCategoryURL;
+    } else {
+        url = AGS.removeResourceCategoryURL
+    }
+
+    $.ajax({
+        url: url,
+        data: {
+            category: AGS.selectedCategory,
+            resource: id
+        },
+        type: "post",
+        success: success
+    })
+}
+
 $(function() {
     $(document).on('input',"#modal-search", modalSearch);
+    $(document).on('click', '.b-search-modal .result-list table tbody tr', function() {
+        var self = $(this);
+        if (self.hasClass('success')) {
+            change('remove', self.attr('data-id'), function() {
+                self.removeClass('success');
+                self.addClass('danger');
+            });
+        } else if (self.hasClass('danger')) {
+            change('add', self.attr('data-id'), function() {
+                self.addClass('success');
+                self.removeClass('danger');
+            });
+        }
+    });
 });

@@ -372,6 +372,12 @@
 	margin-top: 30%;
 }
 
+.b-resource .addmodal.btn {
+	float: left;
+	margin-top: 10px;
+	margin-bottom: -15px;
+	margin-left: 0px;
+}
 
 .b-search-modal {
 
@@ -388,9 +394,6 @@
 
 .b-search-modal .result-list table tr {
 	font-size: 14px;
-}
-
-.b-search-modal .result-list table tr:hover{
-	background-color: #eeeeee;
 	cursor: pointer;
 }
+
