@@ -1,12 +1,13 @@
-package dao;
+package dao.impl;
 
 import com.avaje.ebean.Ebean;
+import dao.UserDao;
 import models.User;
 import play.db.ebean.Model;
 
 import java.util.List;
 
-public class EBeanUserDao implements UserDao {
+public class UserDaoImpl implements dao.UserDao {
     @Override
     public User findByEmail(String email) {
         return find.where().eq("email", email).findUnique();
@@ -40,7 +41,7 @@ public class EBeanUserDao implements UserDao {
     }
 
     @Override
-    public List<User> getAllUsers(){
+    public List<User> findAll(){
         return find.all();
     }
 

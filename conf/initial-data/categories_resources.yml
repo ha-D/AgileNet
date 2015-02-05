@@ -1,0 +1,158 @@
+- !!models.Category &catHistory
+    id: 1
+    name: "تاریخ چابک"
+    children:
+        - !!models.Category &catPeople
+            id: 4
+            name: "آدم‌های تاثیر گذار"
+- !!models.Category &catPrinciples
+    id: 2
+    name: "اصول چابک"
+- !!models.Category &catMethodologies
+    id: 3
+    name: "متودولوژی‌های"
+    children:
+        - !!models.Category &catScrum
+            id: 5
+            name: "اسکرام"
+            children:
+                - !!models.Category
+                    id: 9
+                    name: "اسکرام مستر"
+                - !!models.Category
+                    id: 10
+                    name: "اسپرینت"
+                - !!models.Category &catMeetings
+                    id: 11
+                    name: "جلسه‌ها"
+        - !!models.Category
+            id: 6
+            name: "اکس‌پی"
+        - !!models.Category
+            id: 7
+            name: "کریستال کلیر"
+        - !!models.Category
+            id: 8
+            name: "AUP"
+- !!models.Category &catTools
+    id: 12
+    name: "ابزارهای چابک"
+    children:
+        - !!models.Category &catToolOnline
+            id: 13
+            name: "ابزار آنلاین"
+
+- !!models.Resource
+    id: 1
+    name: "مستند تاریخ چابک"
+    resourceType: VIDEO
+    owner: هادی ذوالفقاری
+    date: "2014-11-11"
+    description: "در این مستند از آغاز متودولوژی‌های چابک شروع می‌شود و توضیح داده می‌شود و شما خوابتون می‌بره و وقتی بیدار می‌شوید می‌بینید که چهار ساعت از عمر خود را تلف کرده‌اید و نباید این فیلم را نگاه می‌کردید ولی دیگر دیر شده است و این زمان را شما نمی‌توانید پس بگیرید و تا آخر عمر حسرت آن را خواهید خرد"
+    categories:
+        - *catToolOnline
+
+- !!models.Resource
+    id: 2
+    date: "2014-11-11"
+    name: "Agile"
+    resourceType: BOOK
+    owner: "Sasha Mobley"
+    url: "http://www.amazon.com/Agile-Half-Assed-Creating-Anything-Scratch-ebook/dp/B00R0QHV3G/"
+    description: "آنطور که از اسم کتاب بر‌می‌اید گویا راجب چابک است و در آن خیلی چیز‌ها یاد خواهید گرفت"
+    #imageUrl: "http://ecx.images-amazon.com/images/I/410HTuOfikL._AA160_.jpg"
+    categories:
+        - *catMethodologies
+        - *catPrinciples
+
+- !!models.Resource
+    id: 3
+    date: "2014-11-11"
+    name: "Essential Scrum"
+    resourceType: BOOK
+    owner: "Chris Sims"
+    url: "http://www.amazon.com/Essential-Scrum-Practical-Addison-Wesley-Signature/dp/0137043295/"
+    description: " یک کتاب خیلی مفید درباره‌ی اسکرام که در آن درباره‌ی اسکرام توضیح داده شده. با خواندن آن یک اسکرام مستر حرفه‌ای شوید."
+    #imageUrl: "http://ecx.images-amazon.com/images/I/51CICLfmf-L._AA160_.jpg"
+    categories:
+        - *catScrum
+        - *catPrinciples
+
+- !!models.Resource
+    id: 4
+    date: "2014-11-11"
+    name: "Taichi Agile Fist"
+    resourceType: VIDEO
+    owner: "Yuan Zhangguo"
+    url: "http://www.amazon.com/Taichi-Agile-Fist-English-Subtitled/dp/B0050AJSNA"
+    description: "در این فیلم شما با هنر‌های رزمی به سبک agile آشنا خواهید شد. به خصوص تکنیک مشت چابکین (agile fist) را یاد خواهید گرفت که با استفاده از آن قادر خواهید بود هر حریفی را زمین بزنید"
+    #imageUrl: "http://ecx.images-amazon.com/images/I/51YYIdJJ2AL._PI_PJStripe-Prime-Only-500px,TopLeft,0,0_AA160_.jpg"
+
+- !!models.Resource
+    id: 5
+    date: "2014-11-11"
+    name: "Agile Manifesto"
+    resourceType: WEBSITE
+    url: "http://www.agilemanifesto.com"
+    description: "سایت منیفستو چابک که در آن منیفستو چابک است و سایت خوب است"
+    categories:
+        - *catHistory
+        - *catPrinciples
+        - *catMethodologies
+        - *catTools
+
+- !!models.Resource
+    id: 6
+    date: "2014-11-11"
+    name: "Learning Agile"
+    resourceType: BOOK
+    owner: "Andrew Stellman"
+    url: "http://www.amazon.com/Learning-Agile-Understanding-Scrum-Kanban/dp/1449331920/"
+    description: "در این کتاب به توضیح متودولوژی‌های مختلف چابک پرداخته می‌شود. از جمله متودولوژی‌های مورد بررسی می‌توان به اسکرام، xp، کان‌بان و Lean اشاره کرد"
+    #imageUrl: "http://ecx.images-amazon.com/images/I/51iUIv3an0L._AA160_.jpg"
+    categories:
+        - *catMethodologies
+
+- !!models.Resource
+    id: 7
+    date: "2014-11-11"
+    name: "آموزش استفاده از Jira"
+    owner: "محمد طاهری"
+    resourceType: VIDEO
+    description: "در این ویدیو شما نحوه‌ی استفاده‌ی درست و بهینه از سامانه‌ی jira را یاد خواهید گرفت و خواهید دید که چقدر خوب است ولی نخواهید تنوانست از آن استفاده کیند چرا که پولی است و پول ندارید بدهید که از یک سامانه استفاده کنید پس در نهایت می‌روید از tfs استفاده می‌کنید اون هم نسخه‌ی مجانی، پس بهتر است که وقت خود را تلف نکرده و این فیلم را مشاهده نکنید"
+    categories:
+        - *catTools
+        - *catToolOnline
+
+- !!models.Resource
+    id: 8
+    date: "2014-11-11"
+    name: "تاریخ اجایل از دید یک مگس"
+    owner: "یک مگس"
+    resourceType: ARTICLE
+    description: "این مقاله که توسط یک مگس نوشته شده است شما را با دید جدیدی نسبت به تاریخ چابک آشنا خواهد کرد. با خواندن آن می‌بنینید که داستان آنطور که فکر می‌کردید نبوده."
+    categories:
+        - *catHistory
+        - *catPeople
+
+- !!models.Resource
+    id: 9
+    date: "2014-11-11"
+    name: "Nightly Scrum"
+    owner: "قلی اکبری"
+    resourceType: ARTICLE
+    description: "برای آن‌هایی که تا بعد از ظهر خواب هستند و نمی‌توانند جلسات روزانه‌ی Daily Scrum برگزار کنند، این مقاله روش جدیدی از اسکرام ارایه می‌دهد که در آن جلسات نصفه شب برگزار می‌شوند"
+    categories:
+        - *catScrum
+        - *catMeetings
+
+- !!models.Resource
+    id: 10
+    date: "2014-11-11"
+    name: "Agile Alliance"
+    resourceType: WEBSITE
+    url: "http://www.agilealliance.com"
+    description: "گروه متحدین چابک. ما معتقدیم که فقط چابک. هر کس چابک نباشد در این دنیا از بین می‌رود. برنده‌ی واقعی چابک است"
+    categories:
+        - *catHistory
+        - *catPrinciples

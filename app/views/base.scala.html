@@ -6,6 +6,7 @@
         <script src='@routes.Assets.at("javascripts/bootstrap.min.js")'></script>
         <script src='@routes.Assets.at("javascripts/underscore-min.js")'></script>
         <script src='@routes.Assets.at("javascripts/jquery-ui.min.js")'></script>
+        <script src='@routes.Assets.at("javascripts/jquery-form.min.js")'></script>
         <script src='@routes.Assets.at("javascripts/handlebars.min.js")'></script>
         <script src='@routes.Assets.at("javascripts/jquery.raty.js")'></script>
         @scripts
@@ -29,7 +30,9 @@
                     </div>
                     <div class="items">
                         <ul>
-                            <li><a>مراجع</a></li>
+                            <li><a href="@routes.Resources.searchPage()">
+                                مراجع
+                            </a></li>
                             <li><a>رخداد‌ها</a></li>
                             <li><a href="/signup">ثبت‌نام</a></li>
                             <li><a href="/login">ورود</a></li>

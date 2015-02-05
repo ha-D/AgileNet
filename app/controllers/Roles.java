@@ -4,9 +4,9 @@ import actions.Ajax;
 import models.Role;
 import models.User;
 import play.mvc.Result;
-import utils.FormRequest;
+import utilities.FormRequest;
 import static play.mvc.Results.ok;
-import static utils.FormRequest.formBody;
+import static utilities.FormRequest.formBody;
 
 public class Roles {
     @Ajax

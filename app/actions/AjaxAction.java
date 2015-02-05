@@ -4,7 +4,7 @@ import play.libs.F;
 import play.mvc.Action;
 import play.mvc.Http;
 import play.mvc.Result;
-import utils.RequestParseException;
+import utilities.RequestParseException;
 
 public class AjaxAction extends Action<Ajax> {
     @Override

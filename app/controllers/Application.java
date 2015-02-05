@@ -1,15 +1,12 @@
 package controllers;
 
 import actions.Authorized;
-import models.Dependencies;
-import play.*;
-import play.data.Form;
+import utilities.Dependencies;
 import play.mvc.*;
 
 import views.html.*;
 
 import static play.data.Form.form;
-import models.User;
 
 
 public class Application extends Controller {
@@ -20,7 +17,7 @@ public class Application extends Controller {
 
     @Authorized({})
     public static Result users() {
-        return ok(users.render(Dependencies.getUserDao().getAllUsers()));
+        return ok(users.render(Dependencies.getUserDao().findAll()));
     }
 
 }

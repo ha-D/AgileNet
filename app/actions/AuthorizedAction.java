@@ -1,8 +1,7 @@
 package actions;
 
-import controllers.Accounts;
 import controllers.routes;
-import models.Dependencies;
+import utilities.Dependencies;
 import models.Role;
 import models.User;
 import play.libs.F;

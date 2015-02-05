@@ -8,8 +8,6 @@ import javax.persistence.*;
 
 @Entity
 public class Role extends BaseModel<RoleDao> {
-    @Id
-    public int id;
     @Column(nullable = false, unique = true)
     public String name;
 

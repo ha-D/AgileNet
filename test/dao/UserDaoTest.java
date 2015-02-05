@@ -1,8 +1,7 @@
 package dao;
 
 import com.avaje.ebean.Ebean;
-import dao.EBeanUserDao;
-import dao.UserDao;
+import dao.impl.UserDaoImpl;
 import models.User;
 import org.junit.Test;
 import play.libs.Yaml;
@@ -16,7 +15,7 @@ import static org.junit.Assert.*;
 public class UserDaoTest extends BaseTest {
     @Test
     public void testUserCreation() {
-        UserDao userDao = new EBeanUserDao();
+        dao.UserDao userDao = new UserDaoImpl();
 
         User user = new User();
         user.firstName = "Hadi";
@@ -56,7 +55,7 @@ public class UserDaoTest extends BaseTest {
     public void testUserFindById() {
         Ebean.save((List) Yaml.load("test-data/users.yml"));
 
-        UserDao userDao = new EBeanUserDao();
+        dao.UserDao userDao = new UserDaoImpl();
         User user = userDao.findById(1);
         assertNotNull("User findById should retrieve a user", user);
         assertEquals("Invalid user id on retrieved user from findById", 1, user.id);
@@ -64,7 +63,7 @@ public class UserDaoTest extends BaseTest {
 
     @Test
     public void testPasswordAndAuthentication() {
-        UserDao userDao = new EBeanUserDao();
+        dao.UserDao userDao = new UserDaoImpl();
 
         User user = userDao.create(
                 "Hadi",

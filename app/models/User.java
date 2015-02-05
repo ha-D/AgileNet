@@ -1,24 +1,18 @@
 package models;
 
-import com.avaje.ebean.Ebean;
 import dao.UserDao;
 import play.data.validation.Constraints;
 import org.mindrot.jbcrypt.BCrypt;
-import play.db.ebean.Model;
+import utilities.Dependencies;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import static play.mvc.Controller.session;
 
 @Entity
 public class User extends BaseModel<UserDao> {
-    @Id
-    public int id;
-
     @Column(nullable = false)
     public String firstName;
     @Column(nullable = false)
