@@ -28,6 +28,8 @@ public class Comment extends BaseModel<CommentDao> {
     @OneToMany(cascade = CascadeType.ALL)
     public List<Comment> comments;
 
+    public boolean filtered = false;
+
     public Resource getParResource() {
         return Dependencies.getResourceDao().findById(parResource.id);
     }
