@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class StubResourceDao extends StubDao<Resource> implements ResourceDao {
-    @Override
     public Resource create(ResourceType resourceType, String name, Set<Category> categories, String description, User user) {
         Resource resource = new Resource();
         resource.resourceType = resourceType;
@@ -22,6 +21,11 @@ public class StubResourceDao extends StubDao<Resource> implements ResourceDao {
         resource.description = description;
         resource.user = user;
         return create(resource);
+    }
+
+    @Override
+    public Resource create(ResourceType resourceType, String name, Set<Category> categories, String description, User user, String fileUrl, String url, String owner) {
+        return null;
     }
 
     @Override

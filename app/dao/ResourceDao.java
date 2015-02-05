@@ -11,7 +11,7 @@ import java.util.Set;
 public interface ResourceDao extends BaseDao<Resource> {
     void update(Resource resource);
     Resource create(Resource resource);
-    Resource create(ResourceType resourceType, String name, Set<Category> categories, String description, User user);
+    Resource create(ResourceType resourceType, String name, Set<Category> categories, String description, User user, String fileUrl, String url, String owner);
     Resource findById(int id);
     List<Resource> findByCriteria(ResourceSearchCriteria criteria);
 }

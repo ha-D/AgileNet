@@ -37,7 +37,7 @@ public class RateResourceDaoTest extends BaseTest {
     public void testRateResourceCreation() {
 
         User user = Dependencies.getUserDao().findById(1);
-        Resource resource=Dependencies.getResourceDao().create(ResourceType.BOOK, "my resource", null, "resource without categories", user );
+        Resource resource=Dependencies.getResourceDao().create(ResourceType.BOOK, "my resource", null, "resource without categories", user ,"","","");
 
         RateResource rateResource = new RateResource();
         rateResource.rate = 7;

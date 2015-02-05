@@ -15,6 +15,7 @@ public class Global extends GlobalSettings {
         if (Dependencies.getRoleDao().getRoleCount() == 0) {
             Ebean.save((List) Yaml.load("initial-data/roles.yml"));
             Ebean.save((List) Yaml.load("initial-data/users.yml"));
+//            Ebean.save((List) Yaml.load("initial-data/resources.yml"));
             Ebean.save((List) Yaml.load("initial-data/categories_resources.yml"));
         }
     }

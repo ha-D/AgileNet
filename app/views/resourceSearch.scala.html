@@ -24,9 +24,34 @@
     <div class="b-resource">
         <div class="container">
             <div class="row">
-                <!-- SIDEBAR -->
+                <div class="col-md-12 filter-history-list-wrapper">
+                    <div class="topic filter-history-list">
+                        <script id="filter-history-item-template" type="text/x-handlebars-template">
+                        <div data-selection="{{selection}}" class="topic filter-history item {{order}}">
+                        <div class="main">
+                        {{name}}
+                        </div>
+                        <div class="arrow">
+                        </div>
+                        </div>
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                    <!-- SIDEBAR -->
                 <div class="hidden-sm col-md-3">
                     <div class="sidebar-container">
+                        <div class="filter-container topic-container">
+
+                            <div class="topic filter-list-wrapper">
+                                <ul class="topic filter-list">
+                                    <li class="topic filter">
+                                        اسم یک موضوع
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                         <div class="search-box">
                             <form id="search-form" method="post">
                                 <div class="input-group">
@@ -40,85 +65,58 @@
                             </form>
                         </div>
                         <div class="filter-container type-container">
-                            <h3>
-                                                                        نوع مرجع
-                            </h3>
                             <div class="type filter-list-wrapper">
                                 <ul class="filter-list">
                                     <li data-val='book' class="type filter">
-                                                                                کتاب
+                                        کتاب
                                     </li>
                                     <li data-val='article' class="type filter">
-                                                                                مقاله
+                                        مقاله
                                     </li>
                                     <li data-val='video' class="type filter">
-                                                                                فیلم
+                                        فیلم
                                     </li>
                                     <li data-val='website' class="type filter">
-                                                                                وبسایت
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="filter-container topic-container">
-                            <h3>
-                                                                موضوع
-                            </h3>
-                            <div class="topic filter-history-list">
-                                <script id="filter-history-item-template" type="text/x-handlebars-template">
-                                    <div data-selection="{{selection}}" class="topic filter-history item {{order}}">
-                                        <div class="main">
-                                            {{name}}
-                                        </div>
-                                        <div class="arrow">
-                                        </div>
-                                    </div>
-                                </script>
-                            </div>
-                            <div class="topic filter-list-wrapper">
-                                <ul class="topic filter-list">
-                                    <li class="topic filter">
-                                                                        اسم یک موضوع
+                                        وبسایت
                                     </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- /SIDEBAR -->
+                    <!-- /SIDEBAR -->
 
                 <div class="col-sm-12 col-md-9">
+
                     <div class="search-result-container">
                         <script id="search-result-template" type="text/x-handlebars-template">
-                            <div class="search result item">
-                                <img class="search result image" src={{image}}>
-                                </img>
-                                <div class="search result details">
-                                    <div class="header">
-                                        <a class="title" href="/resource/{{id}}">{{name}}</a>
-                                        <span class="date">{{date}}</span>
-                                        <div class="uploader">
-                                            <span class="label">
-                                            {{#if user}}
-                                            از
-                                            {{/if}}
-                                            </span>
-                                            <a class="name">
-                                                {{user}}
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <div class="description">
-                                        {{description}}
-                                    </div>
-                                </div>
+                        <div class="search result item">
+                        <img class="search result image" src={{image}}>
+                        </img>
+                        <div class="search result details">
+                        <div class="header">
+                        <a class="title" href="/resource/{{id}}">{{name}}</a>
+                        <span class="date">{{date}}</span>
+                        <div class="uploader">
+                        <span class="label">
+                        {{#if user}}
+                        از
+                        {{/if}}
+                        </span>
+                        <a class="name">
+                        {{user}}
+                        </a>
+                        </div>
+                        </div>
+                        <div class="description">
+                        {{description}}
+                        </div>
+                        </div>
 
-                                <div class="search result extra">
-                                    <div class="rating"></div>
-                                </div>
-                            </div>
+                        <div class="search result extra"><div class="rating"></div>
+                        </div>
+                        </div>
                         </script>
-
                     </div>
                 </div>
             </div>

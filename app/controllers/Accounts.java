@@ -160,7 +160,7 @@ public class Accounts extends Controller {
         user.contactPhone = form.get().contactPhone;
         Dependencies.getUserDao().update(user);
     }
-
+    
     @Authorized({})
     public static Result admin(){
         return ok(views.html.admin.render());
