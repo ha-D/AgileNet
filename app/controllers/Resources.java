@@ -13,8 +13,7 @@ import java.io.IOException;
 
 import static play.mvc.Controller.request;
 import static play.mvc.Controller.session;
-import static play.mvc.Results.badRequest;
-import static play.mvc.Results.ok;
+
 import actions.Ajax;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -24,7 +23,7 @@ import utilities.FormRequest;
 
 import java.util.List;
 
-import static play.mvc.Results.ok;
+import static play.mvc.Results.*;
 import static utilities.FormRequest.formBody;
 
 
