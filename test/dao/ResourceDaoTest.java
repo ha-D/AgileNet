@@ -24,9 +24,13 @@ public class ResourceDaoTest extends BaseTest {
         ResourceDaoImpl resourceDao = new ResourceDaoImpl();
 
         User user = Ebean.find(User.class, 1);
-        resourceDao.create(ResourceType.BOOK, "my resource", null, "resource without categories", user,"","","" );
+        Resource resource = resourceDao.create(ResourceType.BOOK, "my resource", null, "resource without categories", user, "", "", "");
 
-        Resource resource = new Resource();
+        resource = resourceDao.findById(resource.id);
+        assertThat(resource.name).isEqualTo("my resource");
+        assertThat(resource.resourceType).isEqualTo(ResourceType.BOOK);
+
+        resource = new Resource();
         resource.resourceType = ResourceType.ARTICLE;
         resource.name = "other resource";
         resource.owner = "some guy";
@@ -35,13 +39,9 @@ public class ResourceDaoTest extends BaseTest {
         resource.categories.add(categoryList.get(0));
         resource.categories.add(categoryList.get(2));
         resource.user = user;
-        resourceDao.create(resource);
+        resource = resourceDao.create(resource);
 
-        resource = resourceDao.findById(1);
-        assertThat(resource.name).isEqualTo("my resource");
-        assertThat(resource.resourceType).isEqualTo(ResourceType.BOOK);
-
-        resource = resourceDao.findById(2);
+        resource = resourceDao.findById(resource.id);
         assertThat(resource.user).isEqualTo(user);
         assertThat(resource.owner).isEqualTo("some guy");
         assertThat(resource.resourceType).isEqualTo(ResourceType.ARTICLE);

@@ -44,14 +44,17 @@ public class ResourcesTest extends BaseTest {
         resourceList[0].resourceType = ResourceType.ARTICLE;
         resourceList[0].name = "resource 0";
         resourceList[0].description = "resource 0 description";
+        resourceList[0].date = new Date();
         resourceList[1] = new Resource();
         resourceList[1].resourceType = ResourceType.BOOK;
         resourceList[1].name = "resource 1";
         resourceList[1].description = "resource 1 description";
+        resourceList[1].date = new Date();
         resourceList[2] = new Resource();
         resourceList[2].resourceType = ResourceType.VIDEO;
         resourceList[2].name = "resource 2";
         resourceList[2].description = "resource 2 description";
+        resourceList[2].date = new Date();
     }
 
     @Test
@@ -59,7 +62,7 @@ public class ResourcesTest extends BaseTest {
         ResourceSearchCriteria criteria = new ResourceSearchCriteria();
         when(resourceDao.findByCriteria(criteria)).thenReturn(Arrays.asList(resourceList));
 
-        Result result = makeRequest();
+        Result result = makeSearchRequest();
         assertResults(result, resourceList);
     }
 
@@ -70,9 +73,9 @@ public class ResourcesTest extends BaseTest {
         criteria.setPageNumber(0);
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(0, 1));
 
-        Result result = makeRequest(ImmutableMap.of(
-            "pageSize", "2",
-            "page", "0"
+        Result result = makeSearchRequest(ImmutableMap.of(
+                "pageSize", "2",
+                "page", "0"
         ));
         assertResults(result, select(0, 1));
 
@@ -80,9 +83,9 @@ public class ResourcesTest extends BaseTest {
         criteria.setPageNumber(1);
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(2));
 
-        result = makeRequest(ImmutableMap.of(
-            "pageSize", "2",
-            "page", "1"
+        result = makeSearchRequest(ImmutableMap.of(
+                "pageSize", "2",
+                "page", "1"
         ));
         assertResults(result, select(2));
     }
@@ -93,8 +96,8 @@ public class ResourcesTest extends BaseTest {
         criteria.addResourceType(ResourceType.BOOK);
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(1));
 
-        Result result = makeRequest(ImmutableMap.of(
-            "resourceType[]", "book"
+        Result result = makeSearchRequest(ImmutableMap.of(
+                "resourceType[]", "book"
         ));
         assertResults(result, select(1));
     }
@@ -105,8 +108,8 @@ public class ResourcesTest extends BaseTest {
         criteria.setCategory(category);
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(0, 2));
 
-        Result result = makeRequest(ImmutableMap.of(
-            "category", "1"
+        Result result = makeSearchRequest(ImmutableMap.of(
+                "category", "1"
         ));
         assertResults(result, select(0, 2));
     }
@@ -117,8 +120,8 @@ public class ResourcesTest extends BaseTest {
         criteria.setQuery("this is a query");
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(1));
 
-        Result result = makeRequest(ImmutableMap.of(
-            "query", "this is a query"
+        Result result = makeSearchRequest(ImmutableMap.of(
+                "query", "this is a query"
         ));
         assertResults(result, select(1));
     }
@@ -128,8 +131,41 @@ public class ResourcesTest extends BaseTest {
         ResourceSearchCriteria criteria = new ResourceSearchCriteria();
         when(resourceDao.findByCriteria(criteria)).thenReturn(select());
 
-        Result result = makeRequest();
+        Result result = makeSearchRequest();
         assertResults(result, select());
+    }
+
+    @Test
+    public void testAddAndRemoveCateogry() {
+        Resource resource = new Resource();
+        Category category = new Category();
+        resource.id = 5;
+        category.id = 10;
+
+        CategoryDao categoryDao = mock(CategoryDao.class);
+        Dependencies.setCategoryDao(categoryDao);
+        when(resourceDao.findById(5)).thenReturn(resource);
+        when(categoryDao.findById(10)).thenReturn(category);
+
+        Result result =  callAction(
+            routes.ref.Resources.addCategory(),
+            fakeRequest().withFormUrlEncodedBody(ImmutableMap.of(
+                    "category", "10",
+                    "resource", "5"
+            ))
+        );
+        assertSuccess(result);
+        assertTrue(resource.categories.contains(category));
+
+        result =  callAction(
+                routes.ref.Resources.removeCategory(),
+                fakeRequest().withFormUrlEncodedBody(ImmutableMap.of(
+                        "category", "10",
+                        "resource", "5"
+                ))
+        );
+        assertSuccess(result);
+        assertFalse(resource.categories.contains(category));
     }
 
     private void assertResults(Result result, List<Resource> resources) throws JSONException {
@@ -169,14 +205,14 @@ public class ResourcesTest extends BaseTest {
         assertResults(result, Arrays.asList(resources));
     }
 
-    private Result makeRequest(Map params) {
+    private Result makeSearchRequest(Map params) {
         return callAction(
                 routes.ref.Resources.search(),
                 fakeRequest().withFormUrlEncodedBody(params)
         );
     }
 
-    private Result makeRequest() {
+    private Result makeSearchRequest() {
         return callAction(
                 routes.ref.Resources.search(),
                 fakeRequest()
@@ -185,7 +221,11 @@ public class ResourcesTest extends BaseTest {
 
     private void assertSuccess(String message, Result result) {
         int status = status(result);
-        assertTrue(message, status == 200);
+        assertEquals(message, 200, status);
+    }
+
+    private void assertSuccess(Result result) {
+        assertSuccess(null, result);
     }
 
     private List<Resource> select(int... resourceIndices) {

@@ -33,6 +33,7 @@ public class ResourceDaoImpl implements dao.ResourceDao {
         resource.fileUrl = fileUrl;
         resource.url = url;
         resource.owner = owner;
+        resource.user = user;
         Ebean.save(resource);
         return resource;
     }
@@ -82,7 +83,7 @@ public class ResourceDaoImpl implements dao.ResourceDao {
             );
         }
 
-       return  query.findPagingList(criteria.getPageSize())
+        return  query.findPagingList(criteria.getPageSize())
                 .getPage(criteria.getPageNumber()).getList();
     }
 

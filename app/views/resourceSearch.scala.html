@@ -1,3 +1,5 @@
+@(user: models.User)
+
 @scripts = {
     <script type="text/javascript">
         function initialize(AGS) {
@@ -11,10 +13,14 @@
             AGS.imagePath = '@routes.Assets.at("images/")';
             AGS.loadCategoryURL = '@routes.Categories.listCategoriesAsMap';
             AGS.searchURL = '@routes.Resources.search';
+            AGS.addCategoryURL = '@routes.Categories.addCategory';
+            AGS.addResourceCategoryURL = '@routes.Resources.addCategory';
+            AGS.removeResourceCategoryURL = '@routes.Resources.removeCategory';
         }
 
     </script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/search.js")"></script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/searchmodal.js")"></script>
 }
 @styles = {
     <link rel="stylesheet" href="@routes.Assets.at("stylesheets/search.css")" media="screen" type="text/css" />
@@ -50,7 +56,22 @@
                                         اسم یک موضوع
                                     </li>
                                 </ul>
+
                             </div>
+                            @if(user != null && (user.hasRole("expert") || user.hasRole("admin"))) {
+                                <div class="search-box">
+                                    <form id="newcat-form" method="post">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="دسته‌‌ی جدید...">
+                                            <span class="input-group-btn">
+                                                <button class="search btn btn-default" type="button">
+                                                    <span class="glyphicon glyphicon-plus"></span>
+                                                </button>
+                                            </span>
+                                        </div><!-- /input-group -->
+                                    </form>
+                                </div>
+                            }
                         </div>
                         <div class="search-box">
                             <form id="search-form" method="post">
@@ -87,7 +108,11 @@
                     <!-- /SIDEBAR -->
 
                 <div class="col-sm-12 col-md-9">
-
+                    @if(user != null && (user.hasRole("expert") || user.hasRole("admin"))) {
+                        <button type="button" class="addmodal btn btn-primary btn-sm" data-toggle="modal" data-target="#addModal">
+                            انتخاب مراجع دسته
+                        </button>
+                    }
                     <div class="search-result-container">
                         <script id="search-result-template" type="text/x-handlebars-template">
                         <div class="search result item">
@@ -118,6 +143,40 @@
                         </div>
                         </script>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="b-search-modal modal" id="addModal" tabindex="-1" role="dialog" aria-labelledby="mysModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">اضافه کردن مرجع</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="modal-search" class="form-control modal-search-input" placeholder="">
+                    <div class="result-list">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>نام مرجع</th>
+                                    <th>نوع مرجع</th>
+                                    <th>تاریخ اضافه شدن</th>
+                                    <th>امتیاز</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">انصراف</button>
+                    <button type="button" class="btn btn-primary">ثبت</button>
                 </div>
             </div>
         </div>

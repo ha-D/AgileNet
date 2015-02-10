@@ -82,7 +82,11 @@ public class FormRequest {
     }
 
     public String get(String name) {
-        return get(name, null);
+        String res =  get(name, null);
+        if (res == null) {
+            throw new RequestParseException("Missing parameter " + name);
+        }
+        return res;
     }
 
     public List<String> getList(String name,  List<String> defaultValue) {
@@ -103,11 +107,19 @@ public class FormRequest {
         if (value == null) {
             return defaultValue;
         }
-        return Integer.parseInt(value);
+        try {
+            return Integer.parseInt(value);
+        } catch(NumberFormatException e) {
+            throw new RequestParseException("Integer expected for '" + name + "' but got '" + value + "'");
+        }
     }
 
     public Integer getInt(String name) {
-        return getInt(name, null);
+        Integer val = getInt(name, null);
+        if (val == null) {
+            throw new RequestParseException("Missing parameter " + name);
+        }
+        return val;
     }
 
     public static FormRequest formBody() {

@@ -3,39 +3,43 @@
 # ~~~~
 
 # Home page
-GET         /                           controllers.Application.index()
-GET         /signup                     controllers.Accounts.signup()
-POST        /signup                     controllers.Accounts.signupSubmit()
-GET         /login                      controllers.Accounts.login()
-POST        /login                      controllers.Accounts.loginSubmit()
-GET         /logout                     controllers.Accounts.logout()
-GET         /categories                 controllers.Categories.list()
-POST        /categories/remove          controllers.Categories.removeCategory()
-POST        /categories/add             controllers.Categories.addCategory()
-GET         /categories/map             controllers.Categories.listCategoriesAsMap()
-GET         /users                      controllers.Application.users()
-POST        /users/suspend/             controllers.Accounts.suspendUser()
-POST        /users/roles/add/           controllers.Roles.addRole()
-POST        /users/roles/remove/        controllers.Roles.removeRole()
+GET         /                             controllers.Application.index()
+GET         /signup                       controllers.Accounts.signup()
+POST        /signup                       controllers.Accounts.signupSubmit()
+GET         /login                        controllers.Accounts.login()
+POST        /login                        controllers.Accounts.loginSubmit()
+GET         /logout                       controllers.Accounts.logout()
+GET         /categories                   controllers.Categories.list()
+POST        /categories/remove            controllers.Categories.removeCategory()
+POST        /categories/add               controllers.Categories.addCategory()
+GET         /categories/map               controllers.Categories.listCategoriesAsMap()
+GET         /users                        controllers.Application.users()
+POST        /users/suspend/               controllers.Accounts.suspendUser()
+POST        /users/roles/add/             controllers.Roles.addRole()
+POST        /users/roles/remove/          controllers.Roles.removeRole()
 
 # Map static resources from the /public folder to the /assets URL path
-GET         /assets/*file               controllers.Assets.at(path="/public", file)
+GET         /assets/*file                 controllers.Assets.at(path="/public", file)
 
-GET         /profile                    controllers.Accounts.profile()
-POST        /profile                    controllers.Accounts.updateProfile()
-
-
-GET         /newResource                controllers.Resources.newResource()
-POST        /addResource                controllers.Resources.addResource()
+GET         /profile                      controllers.Accounts.profile()
+POST        /profile                      controllers.Accounts.updateProfile()
 
 
-GET         /resource/:id               controllers.Resources.resourceView(id: Integer)
-GET         /resources                  controllers.Resources.searchPage()
-POST        /resources                  controllers.Resources.search()
-POST        /rateResource               controllers.Resources.rateResource()
+GET         /newResource                  controllers.Resources.newResource()
+POST        /addResource                  controllers.Resources.addResource()
 
 
-POST        /rateComment                controllers.Comments.rateComment()
-POST        /addComment                 controllers.Comments.addComment()
-POST        /filterComment              controllers.Comments.filterComment()
-POST        /undoFilterComment          controllers.Comments.undoFilterComment()
+GET         /resource/:id                 controllers.Resources.resourceView(id: Integer)
+GET         /resources                    controllers.Resources.searchPage()
+POST        /resources                    controllers.Resources.search()
+POST        /rateResource                 controllers.Resources.rateResource()
+POST        /resources/addcategory        controllers.Resources.addCategory()
+POST        /resources/removecategory     controllers.Resources.removeCategory()
+
+
+POST        /rateComment                  controllers.Comments.rateComment()
+POST        /addComment                   controllers.Comments.addComment()
+POST        /filterComment                controllers.Comments.filterComment()
+POST        /undoFilterComment            controllers.Comments.undoFilterComment()
+
+GET         /admin                        controllers.Accounts.admin()
