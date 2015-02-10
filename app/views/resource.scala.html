@@ -1,14 +1,15 @@
-@(resource: models.Resource, userRate: Integer)
+@(resource: models.Resource, userRate: Integer, user: models.User)
 @import helper._
 @implicitField = @{ FieldConstructor(myFieldConstructorTemplate.f) }
 
 @scripts = {
     <script type="text/javascript">
-        var rate = @resource.getRate();
-        var userRate = @userRate;
-        console.log(userRate);
-        var resourceId = @resource.id;
+    var rate = @resource.getRate();
+    var userRate = @userRate;
+    var resourceId = @resource.id;
+    var userName = "@user.firstName";
     </script>
+    <script type="text/javascript" src="@routes.Assets.at("javascripts/jdate.min.js")" charset="utf-8"></script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/resource.js")"></script>
 }
 @styles = {
@@ -32,7 +33,7 @@
             <div class="col-md-7 margin-top-30">
                 <h1>@resource.name</h1>
                 <div>
-                    <div id="resource-rate" class="resource rate float right ltr"></div>
+                    <div id="resource-rate" class="right-inline float right ltr"></div>
                 </div>
                 <div class="resource download float left">
                 @if(resource.fileUrl != null && !resource.fileUrl.equals("")) {
@@ -40,7 +41,7 @@
                 }
                 </div>
 
-                <div class="disp-block">
+                <div class="disp-block margin-top-40">
                     @if(resource.owner != null && !resource.owner.equals("")) {
                         <h5>
                             از
@@ -48,7 +49,7 @@
                         </h5>
                     }
                     @if(resource.url != null && !resource.url.equals("")){
-                        <div class="margin-top-40">
+                        <div class="margin-top-10">
                             <a href="@resource.url">
                                 پیوند
                             </a>
@@ -56,7 +57,7 @@
                     }
                 </div>
 
-                <div>
+                <div class="margin-top-10">
                 @for(c <- resource.categories) {
                     <div class="category-tag">@c.name</div>
                 }
@@ -72,13 +73,55 @@
 
         <div>
             <p class="margin-top-30">نظر دهید:</p>
-            <textarea class="form-control" rows="3"></textarea>
-            <button type="button" class="btn btn-primary margin-top-10" data-loading-text="در حال ارسال" id="comment-submit">ارسال</button>
+            <textarea class="form-control" id="comment-body" rows="3"></textarea>
+            <button type="button" id="submit-comment" class="btn btn-primary margin-top-10" data-loading-text="در حال ارسال" id="comment-submit">ارسال</button>
         </div>
 
         <div class="row margin-top-30 padding-top-20 top-border">
-            <div class="col-md-12">
-                <h4>نظرات</h4>
+            <h3>
+                نظرات
+            </h3>
+            <div id="comments-container">
+            @for(c <- resource.comments.reverse) {
+                <div id="comment-@c.id" class="panel panel-primary">
+                    <div class="panel-heading">
+                        <span class="margin-left-10">@c.user.firstName</span>
+                        <span class="datetime">@c.date</span>
+                        <span class="float left">
+                            <span id="comment-num-of-likes-@c.id" class="margin-left-10">@c.getRate</span>
+                            @if(c.getUpvotes.contains(user)) {
+                                <span id="dislike-@c.id" class="glyphicon glyphicon-thumbs-down clickable"></span>
+                            } else {
+                                <span id="like-@c.id" class="glyphicon glyphicon-thumbs-up clickable"></span>
+                            }
+                        </span>
+                    </div>
+                    <div class="panel-body">
+                        @c.body
+                    <div class="float left">
+                        <span id="comment-icon-@c.id" class="glyphicon glyphicon-comment clickable"></span>
+                    </div>
+                    </div>
+                </div>
+
+                @for(subc <- c.getComments){
+                    <div class="panel panel-info margin-right-40">
+                        <div class="panel-heading">
+                            <span class="margin-left-10">@subc.user.firstName</span>
+                            <span class="datetime">@subc.date</span>
+                            <span class="float left">
+                                <span id="comment-num-of-likes-@subc.id" class="margin-left-10">@subc.getRate</span>
+                                @if(subc.getUpvotes.contains(user)) {
+                                    <span id="dislike-@subc.id" class="glyphicon glyphicon-thumbs-down clickable"></span>
+                                } else {
+                                    <span id="like-@subc.id" class="glyphicon glyphicon-thumbs-up clickable"></span>
+                                }
+                            </span>
+                        </div>
+                        <div class="panel-body">@subc.body</div>
+                    </div>
+                }
+            }
             </div>
         </div>
     </div>

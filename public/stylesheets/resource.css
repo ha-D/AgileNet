@@ -1,5 +1,6 @@
 .b-resource.container {
     padding-right: 10%;
+    width: 70%;
 }
 
 .b-resource .float.right {
@@ -10,7 +11,7 @@
     float: left;
 }
 
-.b-resource .resource.rate {
+.b-resource .right-inline {
     float: right;
     display: inline
 }
@@ -96,4 +97,8 @@
 
 .top-border {
     border-top: 1px solid #eeeeee;
+}
+
+.clickable{
+    cursor: pointer;
 }

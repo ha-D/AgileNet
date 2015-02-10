@@ -151,6 +151,14 @@ body {
     margin-left: 15px;
 }
 
+.margin-right-40{
+    margin-right: 40px;
+}
+
 .padding-top-20 {
     padding-top: 20px;
+}
+
+.margin-bottom-20{
+    margin-bottom: 20px;
 }

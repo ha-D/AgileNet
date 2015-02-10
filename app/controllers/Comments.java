@@ -45,7 +45,9 @@ public class Comments {
                 Dependencies.getCommentDao().removeVote(comment, user);
                 break;
         }
-        return ok();
+        ObjectNode rootJson = Json.newObject();
+        rootJson.put("rate", comment.getRate());
+        return ok(rootJson);
     }
 
     @Authorized({})
@@ -55,22 +57,21 @@ public class Comments {
         int id = Integer.parseInt(Form.form().bindFromRequest().get("id"));
         String body = Form.form().bindFromRequest().get("body");
         Comment comment;
+        ObjectNode rootJson = Json.newObject();
         switch (type){
             case "on resource":
                 Resource parResource = Dependencies.getResourceDao().findById(id);
                 comment = Dependencies.getCommentDao().create(user, body, parResource);
-                parResource.getComments().add(comment);
-                Dependencies.getResourceDao().update(parResource);
+                rootJson.put("id", comment.id);
                 break;
             case "on comment":
                 Comment parComment = Dependencies.getCommentDao().findById(id);
                 comment = Dependencies.getCommentDao().create(user, body, parComment);
-                comment.getComments().add(comment);
-                Dependencies.getCommentDao().update(parComment);
+                rootJson.put("id", comment.id);
                 break;
 
         }
-        return ok();
+        return ok(rootJson);
     }
     @Authorized({"admin"})
     public static Result filterComment(){

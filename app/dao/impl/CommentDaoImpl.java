@@ -23,7 +23,7 @@ public class CommentDaoImpl implements dao.CommentDao {
         comment.body = body;
         comment.date = new Date();
         comment.parResource = parResource;
-        parResource.getComments().add(comment);
+        parResource.comments.add(comment);
         comment.save();
         Dependencies.getResourceDao().update(parResource);
         return comment;
@@ -37,7 +37,7 @@ public class CommentDaoImpl implements dao.CommentDao {
         comment.body = body;
         comment.date = new Date();
         comment.parComment = parComment;
-        parComment.getComments().add(comment);
+        parComment.comments.add(comment);
         comment.save();
         update(parComment);
         return comment;

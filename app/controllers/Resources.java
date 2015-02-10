@@ -116,7 +116,7 @@ public class Resources {
         Resource resource = Dependencies.getResourceDao().findById(id);
         User user = Dependencies.getUserDao().findByEmail(session().get("email"));
         int userRate = Dependencies.getRateResourceDao().getRate(user, resource);
-        return ok(views.html.resource.render(resource, userRate));
+        return ok(views.html.resource.render(resource, userRate, user));
     }
 
     @Authorized({})

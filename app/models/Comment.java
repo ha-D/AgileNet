@@ -25,7 +25,9 @@ public class Comment extends BaseModel<CommentDao> {
     @Column(nullable = false)
     public Date date;
 
-    @OneToMany(cascade = CascadeType.ALL)
+//    @OneToMany(cascade = CascadeType.ALL)
+//    @Column(nullable = false)
+    @OneToMany(mappedBy = "parComment", cascade = CascadeType.ALL)
     public List<Comment> comments;
 
     public boolean filtered = false;
@@ -40,8 +42,9 @@ public class Comment extends BaseModel<CommentDao> {
 
     public List<Comment> getComments() {
         List<Comment> ret = new ArrayList<>();
-        for(Comment comment: comments)
+        for(Comment comment: comments) {
             ret.add(Dependencies.getCommentDao().findById(comment.id));
+        }
         return ret;
     }
 
