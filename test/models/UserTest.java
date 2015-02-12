@@ -9,13 +9,13 @@ public class UserTest {
     @Test
     public void testUserEquals() {
         User user1 = new User();
-        user1.email = "hadi@zolfaghari.com";
+        user1.email = "some@guy.com";
 
         User user2 = new User();
-        user2.email = "hadi@zolfaghari.com";
+        user2.email = "some@guy.com";
 
         User user3 = new User();
-        user3.email = "nothadi@zolfaghari.com";
+        user3.email = "some@otherguy.com";
 
         User user4 = new User();
 
@@ -31,10 +31,10 @@ public class UserTest {
     @Test
     public void testAuthenticate() {
         User user = new User();
-        user.email = "hadi@zolfaghari";
+        user.email = "some@guy.com";
         user.setPassword("thepassword");
-        user.firstName = "hadi";
-        user.lastName = "zolfaghari";
+        user.firstName = "some";
+        user.lastName = "guy";
 
         Boolean result = user.authenticate("thepassword");
         assertTrue(result);

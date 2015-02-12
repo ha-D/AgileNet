@@ -19,58 +19,43 @@ import static play.test.Helpers.*;
 import static play.test.Helpers.session;
 
 public class ProfileTest extends BaseTest {
+    private final static String USER_EMAIL = "akbar@asghari.com";
 
     @Before
     public void before() {
         UserDao userDao = mock(UserDao.class);
 
         User user = new User();
-        user.email = "hadi@zolfaghari";
+        user.email = USER_EMAIL;
         user.setPassword("thepassword");
-        user.firstName = "hadi";
-        user.lastName = "zolfaghari";
+        user.firstName = "akbar";
+        user.lastName = "asghari";
         user.contactPhone = "1111111";
         user.nationalId = "000000";
 
-        when(userDao.findByEmail("hadi@zolfaghari.com")).thenReturn(user);
+        when(userDao.findByEmail(USER_EMAIL)).thenReturn(user);
 
         Dependencies.setUserDao(userDao);
     }
 
     @Test
     public void updateSuccess(){
-        //login
-        Map params = ImmutableMap.of(
-                "email", "hadi@zolfaghari.com",
-                "password", "thepassword"
-        );
-        Result result = callAction(
-                routes.ref.Accounts.loginSubmit(),
-                fakeRequest().withFormUrlEncodedBody(params)
-        );
-        Http.Cookie cookie = play.test.Helpers.cookie("PLAY_SESSION", result);
-        params = ImmutableMap.of(
-                "firstName", "هادی",
-                "lastName", "ذوالفقاری",
+        Map<String, String> params = ImmutableMap.of(
+                "firstName", "اکبر",
+                "lastName", "اضغری",
                 "contactPhone", "۱۱۱۱۱۱۱",
                 "nationalId", "۰۰۰۰۰۰۰"
         );
-        result = makeRequest(params, cookie);
-        User updatedUser = Dependencies.getUserDao().findByEmail("hadi@zolfaghari.com");
+        Result result = callAction(
+            routes.ref.Accounts.updateProfile(),
+            fakeRequest().withFormUrlEncodedBody(params).withSession("email", USER_EMAIL)
+        );
+
+        User updatedUser = Dependencies.getUserDao().findByEmail(USER_EMAIL);
         assertEquals("Update is possible after login", status(result), 303); //redirected to profile
         assertEquals(params.get("firstName"), updatedUser.firstName);
         assertEquals(params.get("lastName"), updatedUser.lastName);
         assertEquals(params.get("nationalId"), updatedUser.nationalId);
         assertEquals(params.get("contactPhone"), updatedUser.contactPhone);
     }
-
-    private Result makeRequest(Map params, Http.Cookie cookie) {
-        return callAction(
-                routes.ref.Accounts.updateProfile(),
-                (cookie==null? fakeRequest().withFormUrlEncodedBody(params)
-                        : fakeRequest().withFormUrlEncodedBody(params).withCookies(cookie))
-        );
-    }
-
-
 }

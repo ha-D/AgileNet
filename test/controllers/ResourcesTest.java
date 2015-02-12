@@ -190,9 +190,6 @@ public class ResourcesTest extends BaseTest {
                     assertEquals(resource.description, jsonResult .getString("description"));
                     assertEquals(resource.resourceType.toString().toLowerCase(),
                             jsonResult.getString("resourceType"));
-                    //TODO: assertEquals(user.firstName + " " + user.lastName, result.getString("user"));
-                    //TODO: assertEquals(resource.date, result.getString("date"));
-                    //TODO: assertEquals(resource.rating, result.getString("rating"));
                     break;
                 }
             }

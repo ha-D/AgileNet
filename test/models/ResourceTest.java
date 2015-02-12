@@ -22,7 +22,7 @@ public class ResourceTest extends BaseTest {
         UserDao userDao = mock(UserDao.class);
 
         User user = new User();
-        user.email = "hadi@zolfaghari";
+        user.email = "hadi@zolfaghari.com";
         user.setPassword("thepassword");
         user.firstName = "hadi";
         user.lastName = "zolfaghari";
@@ -59,10 +59,6 @@ public class ResourceTest extends BaseTest {
             rr.rate = i;
             resource.rates.add(rr);
         }
-
-
-
         assertTrue("GetRate should be equal to average of rates", resource.getRate()-((0.0+1+2+3+4+5)/6)<0.000001);
-
     }
 }

@@ -73,6 +73,7 @@ public class Comments {
         }
         return ok(rootJson);
     }
+
     @Authorized({"admin"})
     public static Result filterComment(){
         User user = Dependencies.getUserDao().findByEmail(session().get("email"));

@@ -13,9 +13,10 @@ public class AuthorizedAction extends Action<Authorized> {
     @Override
     public F.Promise<Result> call(Http.Context context) throws Throwable {
         String[] roles = configuration.value();
-
         String email = context.session().get("email");
-        if (email == null) {
+        User user = Dependencies.getUserDao().findByEmail(email);
+
+        if (email == null || user == null) {
             return unauthorizedRedirect();
         }
 
@@ -23,7 +24,6 @@ public class AuthorizedAction extends Action<Authorized> {
             return delegate.call(context);
         }
 
-        User user = Dependencies.getUserDao().findByEmail(email);
         for (String role : roles) {
             for (Role userRole : user.roles) {
                 if (role.equals(userRole.name)) {

@@ -62,7 +62,7 @@ public class Dependencies {
 
     public static CommentDao getCommentDao() { return commentDao;}
 
-    private static void setCommentDao(CommentDao commentDao) {
+    public static void setCommentDao(CommentDao commentDao) {
         Dependencies.commentDao=commentDao;
     }
 }

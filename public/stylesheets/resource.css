@@ -1,6 +1,6 @@
-.b-resource.container {
-    padding-right: 10%;
-    width: 70%;
+.b-resource.container.no-padding {
+    padding-right: 0px;
+    width: 60%;
 }
 
 .b-resource .float.right {
