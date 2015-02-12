@@ -3,7 +3,6 @@ package controllers;
 import com.google.common.collect.ImmutableMap;
 import dao.CategoryDao;
 import dao.ResourceDao;
-import dao.ResourceSearchCriteria;
 import dao.stubs.StubCategoryDao;
 import models.*;
 import org.json.JSONArray;
@@ -59,7 +58,7 @@ public class ResourcesTest extends BaseTest {
 
     @Test
     public void testSimpleSearch() throws JSONException {
-        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        ResourceDao.ResourceSearchCriteria criteria = new ResourceDao.ResourceSearchCriteria();
         when(resourceDao.findByCriteria(criteria)).thenReturn(Arrays.asList(resourceList));
 
         Result result = makeSearchRequest();
@@ -68,7 +67,7 @@ public class ResourcesTest extends BaseTest {
 
     @Test
     public void testPagination() throws JSONException {
-        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        ResourceDao.ResourceSearchCriteria criteria = new ResourceDao.ResourceSearchCriteria();
         criteria.setPageSize(2);
         criteria.setPageNumber(0);
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(0, 1));
@@ -92,7 +91,7 @@ public class ResourcesTest extends BaseTest {
 
     @Test
     public void testSearchResourceType() throws JSONException {
-        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        ResourceDao.ResourceSearchCriteria criteria = new ResourceDao.ResourceSearchCriteria();
         criteria.addResourceType(ResourceType.BOOK);
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(1));
 
@@ -104,7 +103,7 @@ public class ResourcesTest extends BaseTest {
 
     @Test
     public void testSearchCategory() throws JSONException {
-        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        ResourceDao.ResourceSearchCriteria criteria = new ResourceDao.ResourceSearchCriteria();
         criteria.setCategory(category);
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(0, 2));
 
@@ -116,7 +115,7 @@ public class ResourcesTest extends BaseTest {
 
     @Test
     public void testSearchQuery() throws JSONException {
-        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        ResourceDao.ResourceSearchCriteria criteria = new ResourceDao.ResourceSearchCriteria();
         criteria.setQuery("this is a query");
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(1));
 
@@ -128,7 +127,7 @@ public class ResourcesTest extends BaseTest {
 
     @Test
     public void testSearchEmpty() throws JSONException {
-        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        ResourceDao.ResourceSearchCriteria criteria = new ResourceDao.ResourceSearchCriteria();
         when(resourceDao.findByCriteria(criteria)).thenReturn(select());
 
         Result result = makeSearchRequest();

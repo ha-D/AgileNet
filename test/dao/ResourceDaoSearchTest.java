@@ -12,7 +12,7 @@ import org.junit.Test;
 import testutils.BaseTest;
 
 import java.util.List;
-
+import static dao.ResourceDao.ResourceSearchCriteria;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -53,17 +53,17 @@ public class ResourceDaoSearchTest extends BaseTest {
         book2 = newResource("book2", ResourceType.BOOK, category1);
         book3 = newResource("book3", ResourceType.BOOK, category1, category2);
 
-        article1 = newResource("article1", ResourceType.ARTICLE, childCategory1);
+        article1 = newResource("article1", ResourceType.ARTICLE, 4.5, childCategory1);
         article2 = newResource("article2 name_query", ResourceType.ARTICLE, category1, childCategory1, parentCategory);
         article3 = newResource("article3", ResourceType.ARTICLE, category1, category2);
 
         video1 = newResource("video1", ResourceType.VIDEO);
-        video2 = newResource("video2", ResourceType.VIDEO, category1);
+        video2 = newResource("video2", ResourceType.VIDEO, 5.0, category1);
         video3 = newResource("video3 name_query", ResourceType.VIDEO, category1, category2, childCategory2);
 
         site1 = newResource("site1 name_query", ResourceType.WEBSITE, childCategory1);
         site2 = newResource("site2", ResourceType.WEBSITE, category1, childCategory2);
-        site3 = newResource("site3", ResourceType.WEBSITE, category1, category2);
+        site3 = newResource("site3", ResourceType.WEBSITE, 2.0, category1, category2);
 
         book2.description = "felan felan desc_query felan felan";
         article1.description = "felan felan desc_query felan felan";
@@ -86,22 +86,22 @@ public class ResourceDaoSearchTest extends BaseTest {
 
     @Test
     public void testRetrieveResources() {
-        ResourceSearchCriteria criteria = new ResourceSearchCriteria(null, null, ResourceType.BOOK);
+        ResourceDao.ResourceSearchCriteria criteria = new ResourceDao.ResourceSearchCriteria(null, null, ResourceType.BOOK);
         assertSearch(criteria, book1, book2, book3);
 
-        criteria = new ResourceSearchCriteria(null, category1, ResourceType.ARTICLE);
+        criteria = new ResourceDao.ResourceSearchCriteria(null, category1, ResourceType.ARTICLE);
         assertSearch(criteria, article2, article3);
 
-        criteria = new ResourceSearchCriteria(null, category1, ResourceType.VIDEO, ResourceType.WEBSITE);
+        criteria = new ResourceDao.ResourceSearchCriteria(null, category1, ResourceType.VIDEO, ResourceType.WEBSITE);
         assertSearch(criteria, video2, site2, video3, site3);
 
-        criteria = new ResourceSearchCriteria(null, category2);
+        criteria = new ResourceDao.ResourceSearchCriteria(null, category2);
         assertSearch(criteria, book3, article3, video3, site3);
 
-        criteria = new ResourceSearchCriteria("name_query", category1);
+        criteria = new ResourceDao.ResourceSearchCriteria("name_query", category1);
         assertSearch(criteria, article2, video3);
 
-        criteria = new ResourceSearchCriteria("desc_query", null, ResourceType.ARTICLE, ResourceType.WEBSITE);
+        criteria = new ResourceDao.ResourceSearchCriteria("desc_query", null, ResourceType.ARTICLE, ResourceType.WEBSITE);
         assertSearch(criteria, article1, site3);
     }
 
@@ -124,12 +124,23 @@ public class ResourceDaoSearchTest extends BaseTest {
 
     @Test
     public void testParentCategory() {
-        ResourceSearchCriteria criteria = new ResourceSearchCriteria(null, parentCategory);
+        ResourceDao.ResourceSearchCriteria criteria = new ResourceDao.ResourceSearchCriteria(null, parentCategory);
         assertSearch("Searching with parent category should return results for child categories as well",
                 criteria, book1, article1, article2, video3, site1, site2);
     }
 
-    private void assertSearch(String message, ResourceSearchCriteria criteria, Resource... resources) {
+    @Test
+    public void testSortByRate() {
+        ResourceSearchCriteria criteria = new ResourceSearchCriteria(null, null);
+        criteria.setSortBy(ResourceSearchCriteria.SORT_BY_RATE);
+        List<Resource> results = resourceDao.findByCriteria(criteria);
+
+        assertEquals(video2, results.get(0));
+        assertEquals(article1, results.get(1));
+        assertEquals(site3, results.get(2));
+    }
+
+    private void assertSearch(String message, ResourceDao.ResourceSearchCriteria criteria, Resource... resources) {
         List<Resource> resourceList = resourceDao.findByCriteria(criteria);
         assertEquals(message, resources.length, resourceList.size());
         for (Resource resource : resources) {
@@ -138,7 +149,7 @@ public class ResourceDaoSearchTest extends BaseTest {
         }
     }
 
-    private void assertSearch(ResourceSearchCriteria criteria, Resource... resources) {
+    private void assertSearch(ResourceDao.ResourceSearchCriteria criteria, Resource... resources) {
         assertSearch(null, criteria, resources);
     }
 
@@ -150,6 +161,12 @@ public class ResourceDaoSearchTest extends BaseTest {
             resource.categories.add(category);
         }
 
+        return resource;
+    }
+
+    private Resource newResource(String name, ResourceType resourceType, double rating, Category... categories) {
+        Resource resource = newResource(name, resourceType, categories);
+        resource.rating = rating;
         return resource;
     }
 
