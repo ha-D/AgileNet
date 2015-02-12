@@ -10,23 +10,9 @@ GET         /login                        controllers.Accounts.login()
 POST        /login                        controllers.Accounts.loginSubmit()
 GET         /logout                       controllers.Accounts.logout()
 GET         /categories                   controllers.Categories.list()
-POST        /categories/remove            controllers.Categories.removeCategory()
-POST        /categories/add               controllers.Categories.addCategory()
-GET         /categories/map               controllers.Categories.listCategoriesAsMap()
-GET         /users                        controllers.Application.users()
-POST        /users/suspend/               controllers.Accounts.suspendUser()
-POST        /users/roles/add/             controllers.Roles.addRole()
-POST        /users/roles/remove/          controllers.Roles.removeRole()
 
 # Map static resources from the /public folder to the /assets URL path
 GET         /assets/*file                 controllers.Assets.at(path="/public", file)
-
-GET         /profile                      controllers.Accounts.profile()
-POST        /profile                      controllers.Accounts.updateProfile()
-
-
-GET         /newResource                  controllers.Resources.newResource()
-POST        /addResource                  controllers.Resources.addResource()
 
 
 GET         /resource/:id                 controllers.Resources.resourceView(id: Integer)
@@ -42,4 +28,12 @@ POST        /addComment                   controllers.Comments.addComment()
 POST        /filterComment                controllers.Comments.filterComment()
 POST        /undoFilterComment            controllers.Comments.undoFilterComment()
 
-GET         /admin                        controllers.Accounts.admin()
+GET         /settings                     controllers.Accounts.settings()
+POST        /settings/profile/update      controllers.Accounts.updateProfile()
+POST        /settings/users/suspend/      controllers.Accounts.suspendUser()
+POST        /settings/roles/add/          controllers.Roles.addRole()
+POST        /settings/roles/remove/       controllers.Roles.removeRole()
+POST        /categories/remove            controllers.Categories.removeCategory()
+POST        /categories/add               controllers.Categories.addCategory()
+GET         /categories/map               controllers.Categories.listCategoriesAsMap()
+POST        /settings/resources/add       controllers.Resources.addResource()
