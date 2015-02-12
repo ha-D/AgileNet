@@ -1,4 +1,4 @@
-@(myForm: Form[models.User], users: java.util.List[User], cats: String, resourceForm: Form[models.Resource])
+@(user: User, myForm: Form[models.User], users: java.util.List[User], cats: String, resourceForm: Form[models.Resource])
 @import helper._
 @implicitField = @{ FieldConstructor(myFieldConstructorTemplate.f) }
 
@@ -18,9 +18,13 @@
         <div class="col-md-3">
                     <ul class="nav nav-pills nav-stacked admin-nav">
                         <li class="active"><a data-toggle="tab" href="#profile">پروفایل</a></li>
-                        <li class=""><a data-toggle="tab" href="#members">مدیریت اعضا</a></li>
-                        <li class=""><a data-toggle="tab" href="#categories">مدیریت عناوین</a></li>
-                        <li class=""><a data-toggle="tab" href="#new-resource">افزودن منبع</a></li>
+                        @if(user.isAdmin()) {
+                            <li class=""><a data-toggle="tab" href="#members">مدیریت اعضا</a></li>
+                        }
+                        @if(user.isExpert() || user.isAdmin) {
+                            <li class=""><a data-toggle="tab" href="#categories">مدیریت عناوین</a></li>
+                            <li class=""><a data-toggle="tab" href="#new-resource">افزودن منبع</a></li>
+                        }
                     </ul>
         </div>
         <div class="col-lg-9">

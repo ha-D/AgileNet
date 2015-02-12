@@ -144,14 +144,14 @@ public class Accounts extends Controller {
         List<User> users = Dependencies.getUserDao().findAll();
         String cats=Category.getAllJson();
         Form<Resource> resourceForm = Form.form(Resource.class);
-        return ok(views.html.settings.render(userForm, users, cats, resourceForm));
+        return ok(views.html.settings.render(user, userForm, users, cats, resourceForm));
     }
 
     @Authorized({})
     public static Result updateProfile() {
         Form<User> form = Form.form(User.class).bindFromRequest();
         if (form.hasErrors()) {
-            return badRequest(views.html.settings.render(form, Dependencies.getUserDao().findAll(), Category.getAllJson(), Form.form(Resource.class)));
+            return badRequest(views.html.settings.render(Dependencies.getUserDao().findByEmail(session().get("email")), form, Dependencies.getUserDao().findAll(), Category.getAllJson(), Form.form(Resource.class)));
         } else {
             updateUser(form);
             return redirect(routes.Accounts.settings()+"#profile");
