@@ -1,6 +1,7 @@
 package models;
 
 import dao.RateResourceDao;
+import dao.ResourceDao;
 import dao.UserDao;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,22 +17,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class ResourceTest extends BaseTest {
-    @Before
-    public void before() {
-        UserDao userDao = mock(UserDao.class);
-
-        User user = new User();
-        user.email = "hadi@zolfaghari.com";
-        user.setPassword("thepassword");
-        user.firstName = "hadi";
-        user.lastName = "zolfaghari";
-
-        when(userDao.findByEmail("hadi@zolfaghari.com")).thenReturn(user);
-
-        Dependencies.setUserDao(userDao);
-    }
-
+public class ResourceTest {
     @Test
     public void testResourceEquals() {
         Resource resource1 = new Resource();
@@ -52,6 +38,7 @@ public class ResourceTest extends BaseTest {
 
     @Test
     public void testGetRate(){
+        Dependencies.setResourceDao(mock(ResourceDao.class));
         Resource resource = new Resource();
         resource.rates = new HashSet<>();
         for(int i=0; i<=5; ++i) {

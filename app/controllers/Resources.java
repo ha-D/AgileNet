@@ -84,13 +84,10 @@ public class Resources {
         criteria.setPageNumber(request.getInt("page", criteria.getPageNumber()));
 
         String sortBy = request.get("sortBy", null);
-        switch (sortBy) {
-            case "date":
-                criteria.setSortBy(ResourceSearchCriteria.SORT_BY_DATE);
-                break;
-            case "rating":
-                criteria.setSortBy(ResourceSearchCriteria.SORT_BY_RATE);
-                break;
+        if ("date".equals(sortBy)) {
+            criteria.setSortBy(ResourceSearchCriteria.SORT_BY_DATE);
+        } else if ("rating".equals(sortBy)) {
+            criteria.setSortBy(ResourceSearchCriteria.SORT_BY_RATE);
         }
 
         List<Resource> resources = Dependencies.getResourceDao().findByCriteria(criteria);
