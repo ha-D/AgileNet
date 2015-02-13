@@ -48,7 +48,7 @@
     resourceType: BOOK
     owner: "Sasha Mobley"
     url: "http://www.amazon.com/Agile-Half-Assed-Creating-Anything-Scratch-ebook/dp/B00R0QHV3G/"
-    rating: 0
+    rating: 1
     description: "آنطور که از اسم کتاب بر‌می‌اید گویا راجب چابک است و در آن خیلی چیز‌ها یاد خواهید گرفت"
     #imageUrl: "http://ecx.images-amazon.com/images/I/410HTuOfikL._AA160_.jpg"
     categories:
@@ -155,69 +155,136 @@
         - *catHistory
         - *catPrinciples
 
-# -------------- RATES -----------------
-- !!models.User &user
-    firstName:  the
-    lastName:   rater
-    email:      the@rater.com
+# -------------- USERS -----------------
+- !!models.User &user1
+    firstName:  هادی
+    lastName:   ذوالفقاری
+    email:      hadi@zolfaghari.com
     password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
 
+- !!models.User &user2
+    firstName:  عطیه
+    lastName:   اشعری
+    email:      atiye@ashari.com
+    password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
+
+- !!models.User &user3
+    firstName:  خدیجه
+    lastName:   شیخات
+    email:      khadije@sheikhan.com
+    password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
+
+- !!models.User &user4
+    firstName:  شهاب
+    lastName:   تاجیک
+    email:      shahab@tajik.com
+    password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
+
+# -------------- RATES -----------------
+
 - !!models.RateResource
-    user: *user
+    user: *user1
     resource: *resource1
     rate: 2
     date: "2014-11-11"
 
 - !!models.RateResource
-    user: *user
+    user: *user3
     resource: *resource2
     rate: 0
     date: "2014-11-10"
 
 - !!models.RateResource
-    user: *user
+    user: *user4
     resource: *resource3
     rate: 3
     date: "2014-11-09"
 
 - !!models.RateResource
-    user: *user
+    user: *user3
     resource: *resource4
     rate: 2
     date: "2014-11-08"
 
 - !!models.RateResource
-    user: *user
+    user: *user2
     resource: *resource5
     rate: 1
     date: "2014-11-07"
 
 - !!models.RateResource
-    user: *user
+    user: *user1
     resource: *resource6
     rate: 2
     date: "2014-11-07"
 
 - !!models.RateResource
-    user: *user
+    user: *user4
     resource: *resource7
     rate: 5
     date: "2014-11-12"
 
 - !!models.RateResource
-    user: *user
+    user: *user1
     resource: *resource8
     rate: 5
     date: "2014-11-13"
 
 - !!models.RateResource
-    user: *user
+    user: *user3
     resource: *resource9
     rate: 3
     date: "2014-11-14"
 
 - !!models.RateResource
-    user: *user
+    user: *user2
     resource: *resource10
     rate: 4
     date: "2014-11-01"
+
+# -------------- COMMENTS -----------------
+- !!models.Comment &comment1
+    user: *user1
+    parResource: *resource1
+    body: "دیدم که چهار ساعت از عمر خود را تلف کردم. پیشنهاد می‌کنم شما هم ببینید و چهار ساعت از عمر خود را تلف کنید."
+    date: "2014-11-07"
+
+- !!models.Comment
+    user: *user3
+    parComment: *comment1
+    body: "ممنون، من هم دیدم و چهار ساعت تلف کردم"
+    date: "2014-11-08"
+
+- !!models.Comment
+    user: *user2
+    parComment: *comment1
+    body: "این یک نظر است که من دارم می‌دهم درباره‌ی یک مرجع که اضافه شده است در این سایت و نظر من خیلی مفید است"
+    date: "2014-11-09"
+
+- !!models.Comment
+    user: *user4
+    parResource: *resource2
+    body: "کتاب را خواندم. جالب بود. پس کتاب را بخوانید"
+    date: "2014-11-03"
+
+- !!models.Comment &comment2
+    user: *user1
+    parResource: *resource2
+    body: "کتاب را نخوانم، ولی می‌خواهم نظر بدهم. تا نظر داده باشم"
+    date: "2014-11-01"
+- !!models.Comment
+    user: *user2
+    parComment: *comment2
+    body: "مرسی از نظرتان، خیلی مفید بود. استفاده بردم. ایشالا بقیه هم استفاده ببرند."
+    date: "2014-11-06"
+- !!models.Comment
+    user: *user4
+    parComment: *comment2
+    body: "نظر شما مرا تشویق کرد کتاب را بخوانم، بسیار متشکرم. لطفا برای بقیه‌ی مراجع نیز نظر بگذارید تا بخوانم و تشویق شوم تا بخوانم تا بعد از شما تشکر کنم و از شما بخواهم که راجب سایر مراجع نیز نظر دهید تا آن‌ها را نیز بخوانم"
+    date: "2014-11-14"
+
+- !!models.Comment
+    user: *user3
+    parResource: *resource4
+    body: "این فیلم را نبینید. با یاد گرفتن این تکنیک موجب مرگ حریفان در دعوا خواهید شد و مجبور به پرداخت دیه می‌شوید و سر از زندان در‌می‌آورید. اکنون در زندان هستم. می‌خواستم اپلای کنم. نشد."
+    date: "2014-11-13"

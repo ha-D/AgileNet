@@ -125,4 +125,8 @@ public class FormRequest {
     public static FormRequest formBody() {
         return new FormRequest(request().body().asFormUrlEncoded());
     }
+
+    public static FormRequest formGetBody() {
+        return new FormRequest(request().queryString());
+    }
 }

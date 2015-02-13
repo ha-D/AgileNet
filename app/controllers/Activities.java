@@ -21,14 +21,15 @@ import static java.util.Collections.sort;
 import static java.util.Collections.reverse;
 import static play.mvc.Results.ok;
 import static utilities.FormRequest.formBody;
+import static utilities.FormRequest.formGetBody;
 
 public class Activities {
     @Ajax
     @Authorized({"admin"})
     public static Result getUserActivity() {
-        FormRequest request = formBody();
+        FormRequest request = formGetBody();
         int pageNumber = request.getInt("pageNumber", 0);
-        int pageSize = 5;
+        int pageSize = 8;
 
         List<Comment> comments = Dependencies.getCommentDao().findLatest((pageNumber + 1) * pageSize);
         List<RateResource> rates = Dependencies.getRateResourceDao().findLatest((pageNumber + 1) * pageSize);
@@ -39,11 +40,16 @@ public class Activities {
         sort(activities);
         reverse(activities);
 
-        JsonNode json = serializeActivities(activities);
+        int from = pageNumber * pageSize;
+        int to = Math.min(activities.size(), (pageNumber + 1) * pageSize);
+        boolean isLastPage = activities.size() - from < pageSize;
+
+        JsonNode json = serializeActivities(activities.subList(from, to), isLastPage);
+
         return ok(json);
     }
 
-    private static JsonNode serializeActivities(List<Activity> activities) {
+    private static JsonNode serializeActivities(List<Activity> activities, boolean isLastPage) {
         ObjectNode rootJson = Json.newObject();
         rootJson.put("resultCount", activities.size());
         ArrayNode jsonList = rootJson.putArray("results");
@@ -53,10 +59,14 @@ public class Activities {
             ObjectNode json = jsonList.addObject();
             json.put("id", activity.id);
             json.put("resourceId", activity.resourceId);
+            json.put("resourceName", activity.resourceName);
             json.put("user", activity.user);
             json.put("type", activity.type);
             json.put("value", activity.val);
             json.put("date", dateFormat.format(activity.date));
+        }
+        if (isLastPage) {
+            rootJson.put("lastPage", true);
         }
         return rootJson;
     }
@@ -73,6 +83,7 @@ public class Activities {
                 comment = comment.parComment;
             }
             activity.resourceId = comment.parResource.id;
+            activity.resourceName = comment.parResource.name;
             activities.add(activity);
         }
         return activities;
@@ -87,6 +98,7 @@ public class Activities {
             activity.user = rate.user.getFullName();
             activity.type = "rate";
             activity.resourceId = rate.resource.id;
+            activity.resourceName = rate.resource.name;
             activity.val = rate.rate;
             activities.add(activity);
         }
@@ -96,6 +108,7 @@ public class Activities {
     private static class Activity implements Comparable<Activity> {
         public int id;
         public int resourceId;
+        public String resourceName;
         public Date date;
         public String user;
         public String type;

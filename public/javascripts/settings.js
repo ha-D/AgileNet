@@ -1,6 +1,7 @@
 /**
  * USERS
  */
+var activityPage = 0;
 
 $(function(){
     var o=$('.oUsers'), s=$('.sUsers'), e=$('.eUsers');
@@ -144,3 +145,84 @@ function addCat(){
         }
     });
 }
+
+function setUserActivites(data) {
+    var table = $(".activity.table tbody");
+    table.html("");
+    _.each(data.results, function(row) {
+        var tr = $("<tr>");
+
+        var icon = $("<span>").addClass("glyphicon").attr("aria-hidden", "true");
+        if (row.type == "rate") {
+            icon.addClass("glyphicon-star")
+        } else if (row.type == "comment") {
+            icon.addClass("glyphicon-comment")
+        }
+        tr.append($("<td>").append(icon));
+
+        tr.append($("<td>").html(row.date));
+
+        var content = "";
+        if (row.type == "rate") {
+            content =
+                row.user +
+                " به مرجع " +
+                '<a href="/resource/' + row.resourceId + '">' + row.resourceName + '</a>' +
+                " امتیاز "+
+                row.value +
+                " داد."
+        } else if (row.type == "comment") {
+            content =
+                row.user +
+                " به مرجع " +
+                '<a href="/resource/' + row.resourceId + '">' + row.resourceName + '</a>' +
+                " نظر "+
+                " داد."
+        }
+        tr.append($("<td>").html(content));
+        table.append(tr);
+    });
+
+    if (data.lastPage) {
+        $('.activity.page.older').addClass("disabled");
+    } else {
+        $('.activity.page.older').removeClass("disabled");
+    }
+
+    if (activityPage == 0) {
+        $('.activity.page.newer').addClass("disabled");
+    } else {
+        $('.activity.page.newer').removeClass("disabled");
+    }
+}
+
+function loadUserActivities() {
+    $.ajax({
+        url: '/settings/activities',
+        method: 'GET',
+        data:{
+            pageNumber: activityPage
+        },
+        success: function(data){
+            setUserActivites(data);
+        }
+    });
+}
+
+$(function() {
+    $('.activity.page.newer').click(function() {
+        if (! $(this).hasClass('disabled')) {
+            activityPage -= 1;
+            loadUserActivities();
+        }
+    });
+
+    $('.activity.page.older').click(function() {
+        if (! $(this).hasClass('disabled')) {
+            activityPage += 1;
+            loadUserActivities();
+        }
+    })
+
+    loadUserActivities();
+});
