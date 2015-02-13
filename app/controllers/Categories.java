@@ -1,6 +1,7 @@
 package controllers;
 
 import actions.Ajax;
+import actions.Authorized;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.Category;
@@ -13,26 +14,35 @@ import utilities.FormRequest;
 import static play.mvc.Results.ok;
 import static utilities.FormRequest.formBody;
 
+/**
+ * Controllers for viewing and modifying categories
+ */
 public class Categories {
-    //TODO:you should use StringBuilder
+    /**
+     * JSON list of all categories
+     *
+     * Ajax Method
+     */
+    @Ajax
     public static Result list() {
-//        String cats = "[{id:1, name:'عنوان ۱', children:[{id:2, name:'عنوان ۲'},{id:3, name:'عنوان ۴', children:[{id:4, name:'عنوان ۵شس یب شس ب'},{id:5, name:'عنو سی ب سی سشیان ۲'}]},{id:6, name:'عنوان ۳'}]}]";
-        String cats = "[";
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
         for(Category c: Dependencies.getCategoryDao().findRootCategories())
-            cats+=c.getJson()+", ";
-        cats+="]";
-        return ok(views.html.categories.render(cats));
+            builder.append(c.getJson()+", ");
+        builder.append("]");
+        return ok(views.html.categories.render(builder.toString()));
     }
 
+    /**
+     * Add a category
+     * POST parent: id of parent category to add new category under
+     * POST name: name of new category
+     *
+     * Ajax Method
+     * Authorization: Expert, Admin
+     */
     @Ajax
-    public static Result removeCategory() {
-        FormRequest request = formBody();
-        int id = Integer.parseInt(request.getSingleElement("category"));
-        Dependencies.getCategoryDao().deleteCategory(id);
-        return ok();
-    }
-
-    @Ajax
+    @Authorized({"admin", "expert"})
     public static Result addCategory() {
         FormRequest request = formBody();
         Category cat;
@@ -49,6 +59,26 @@ public class Categories {
         return ok(json);
     }
 
+    /**
+     * Remove a category
+     * POST category: id of category to remove
+     *
+     * Ajax Method
+     * Authorization: Expert, Admin
+     */
+    @Ajax
+    @Authorized({"admin", "expert"})
+    public static Result removeCategory() {
+        FormRequest request = formBody();
+        int id = Integer.parseInt(request.getSingleElement("category"));
+        Dependencies.getCategoryDao().deleteCategory(id);
+        return ok();
+    }
+
+
+    /**
+     * JSON map of categories
+     */
     @Ajax
     public static Result listCategoriesAsMap() {
         return ok(getCategoryMap());

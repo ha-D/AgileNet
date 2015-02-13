@@ -9,6 +9,11 @@ import play.libs.Json;
 import java.util.List;
 
 public class CategorySerializer {
+    /**
+     * Serializes categories into a JSON map
+     * @param rootCategories The root categories to be serialized
+     * @return A JSON object of the categories
+     */
     public static JsonNode serialize(List<Category> rootCategories) {
         ObjectNode root = Json.newObject();
 

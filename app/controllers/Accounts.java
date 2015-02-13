@@ -22,11 +22,21 @@ import java.lang.String;
 
 import actions.Authorized;
 
+/**
+ * Controllers for account management and user authentication
+ */
 public class Accounts extends Controller {
+    /**
+     * Render Signup form html
+     */
     public static Result signup() {
         return ok(views.html.signUp.render(Form.form(SignupForm.class)));
     }
 
+    /**
+     * POST submit for sign up form
+     * post parameter partial Determines if the submitted form was a complete form or a partial one (from the index page)
+     */
     public static Result signupSubmit() {
         Form<SignupForm> form = Form.form(SignupForm.class).bindFromRequest();
 
@@ -54,10 +64,16 @@ public class Accounts extends Controller {
         }
     }
 
+    /**
+     *  Render the login form html page
+     */
     public static Result login() {
         return ok(views.html.login.render(Form.form(LoginForm.class)));
     }
 
+    /**
+     * POST submit for the login form
+     */
     public static Result loginSubmit() {
         Form<LoginForm> form = Form.form(LoginForm.class).bindFromRequest();
         if (form.hasErrors()) {
@@ -69,12 +85,23 @@ public class Accounts extends Controller {
         }
     }
 
+    /**
+     * Logout the currently logged in user and redirect to index page
+     */
     public static Result logout() {
         session().clear();
         return redirect(routes.Application.index());
     }
 
+    /**
+     * Suspend a user
+     * POST user: the id of the user to suspend
+     *
+     * Ajax Method
+     * Authorization: Admin
+     */
     @Ajax
+    @Authorized({"admin"})
     public static Result suspendUser() {
         FormRequest request = formBody();
         User user = request.parseUser();
@@ -83,7 +110,15 @@ public class Accounts extends Controller {
         return ok();
     }
 
+    /**
+     * Remove a user suspension
+     * POST user: the id of the user to remove suspension for
+     *
+     * Ajax Method
+     * Authorization: Admin
+     */
     @Ajax
+    @Authorized({"admin"})
     public static Result unsuspendUser() {
         FormRequest request = formBody();
         User user = request.parseUser();
@@ -92,6 +127,51 @@ public class Accounts extends Controller {
         return ok();
     }
 
+    /**
+     * Render settings page html
+     *
+     * Authorization: User
+     */
+    @Authorized({})
+    public static Result settings() {
+        String email = session().get("email");
+        User user = Dependencies.getUserDao().findByEmail(email);
+        Form<User> userForm = Form.form(User.class);
+        userForm = userForm.fill(user);
+        List<User> users = Dependencies.getUserDao().findAll();
+        String cats=Category.getAllJson();
+        Form<Resource> resourceForm = Form.form(Resource.class);
+        return ok(views.html.settings.render(user, userForm, users, cats, resourceForm));
+    }
+
+    /**
+     * POST submit for update profile form
+     *
+     * Authorization: User
+     */
+    @Authorized({})
+    public static Result updateProfile() {
+        Form<User> form = Form.form(User.class).bindFromRequest();
+        if (form.hasErrors()) {
+            return badRequest(views.html.settings.render(Dependencies.getUserDao().findByEmail(session().get("email")), form, Dependencies.getUserDao().findAll(), Category.getAllJson(), Form.form(Resource.class)));
+        } else {
+            updateUser(form);
+            return redirect(routes.Accounts.settings()+"#profile");
+        }
+    }
+
+    private static void updateUser(Form<User> form) {
+        User user = Dependencies.getUserDao().findByEmail(session().get("email"));
+        user.firstName = form.get().firstName;
+        user.lastName = form.get().lastName;
+        user.nationalId = form.get().nationalId;
+        user.contactPhone = form.get().contactPhone;
+        Dependencies.getUserDao().update(user);
+    }
+
+    /**
+     * SignUp Form
+     */
     public static class SignupForm {
         @Required
         public String firstName;
@@ -120,6 +200,9 @@ public class Accounts extends Controller {
         }
     }
 
+    /**
+     * Login Form
+     */
     public static class LoginForm {
         @Required
         public String email;
@@ -135,37 +218,4 @@ public class Accounts extends Controller {
             return null;
         }
     }
-
-    @Authorized({})
-    public static Result settings() {
-        String email = session().get("email");
-        User user = Dependencies.getUserDao().findByEmail(email);
-        Form<User> userForm = Form.form(User.class);
-        userForm = userForm.fill(user);
-        List<User> users = Dependencies.getUserDao().findAll();
-        String cats=Category.getAllJson();
-        Form<Resource> resourceForm = Form.form(Resource.class);
-        return ok(views.html.settings.render(user, userForm, users, cats, resourceForm));
-    }
-
-    @Authorized({})
-    public static Result updateProfile() {
-        Form<User> form = Form.form(User.class).bindFromRequest();
-        if (form.hasErrors()) {
-            return badRequest(views.html.settings.render(Dependencies.getUserDao().findByEmail(session().get("email")), form, Dependencies.getUserDao().findAll(), Category.getAllJson(), Form.form(Resource.class)));
-        } else {
-            updateUser(form);
-            return redirect(routes.Accounts.settings()+"#profile");
-        }
-    }
-
-    private static void updateUser(Form<User> form) {
-        User user = Dependencies.getUserDao().findByEmail(session().get("email"));
-        user.firstName = form.get().firstName;
-        user.lastName = form.get().lastName;
-        user.nationalId = form.get().nationalId;
-        user.contactPhone = form.get().contactPhone;
-        Dependencies.getUserDao().update(user);
-    }
-
 }

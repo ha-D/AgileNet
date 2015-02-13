@@ -23,13 +23,24 @@ import static play.mvc.Results.ok;
 import static utilities.FormRequest.formBody;
 import static utilities.FormRequest.formGetBody;
 
+/**
+ * Controllers for viewing user activity reports
+ */
 public class Activities {
+    /**
+     * Return latest user activity as JSON
+     * GET pageNumber: page number of results
+     * GET pageNumber: page size of results
+     *
+     * Ajax Method
+     * Authorization: Admin
+     */
     @Ajax
     @Authorized({"admin"})
     public static Result getUserActivity() {
         FormRequest request = formGetBody();
         int pageNumber = request.getInt("pageNumber", 0);
-        int pageSize = 8;
+        int pageSize = request.getInt("pageSize", 8);
 
         List<Comment> comments = Dependencies.getCommentDao().findLatest((pageNumber + 1) * pageSize);
         List<RateResource> rates = Dependencies.getRateResourceDao().findLatest((pageNumber + 1) * pageSize);

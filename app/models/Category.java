@@ -25,6 +25,10 @@ public class Category extends BaseModel<CategoryDao> {
         children = new ArrayList<Category>();
     }
 
+    /**
+     * @return A list of all descendants of the category,
+     * i.e. the categories children and the chidlren of it's children
+     */
     public List<Category> getDescendants() {
         List<Category> list = new ArrayList<Category>();
         if (children == null) {
@@ -36,6 +40,30 @@ public class Category extends BaseModel<CategoryDao> {
             list.addAll(child.getDescendants());
         }
         return list;
+    }
+
+    /**
+     * @return A representation of the category in the JSON format
+     */
+    public String getJson(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        for(Category c: this.children)
+            builder.append(c.getJson()+", ");
+        builder.append("]");
+        return "{id: "+this.id+", name: '"+this.name+"', children: "+builder.toString()+"}";
+    }
+
+    /**
+     * @return All the root categories in JSON format
+     */
+    public static String getAllJson(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("[");
+        for(Category c: Dependencies.getCategoryDao().findRootCategories())
+            builder.append(c.getJson()+", ");
+        builder.append("]");
+        return builder.toString();
     }
 
     @Override
@@ -51,21 +79,5 @@ public class Category extends BaseModel<CategoryDao> {
             return name.equals(c.name);
         }
         return false;
-    }
-
-    public String getJson(){
-        String children = "[";
-        for(Category c: this.children)
-            children+=c.getJson()+", ";
-        children+="]";
-        return "{id: "+this.id+", name: '"+this.name+"', children: "+children+"}";
-    }
-
-    public static String getAllJson(){
-        String cats = "[";
-        for(Category c: Dependencies.getCategoryDao().findRootCategories())
-            cats+=c.getJson()+", ";
-        cats+="]";
-        return cats;
     }
 }

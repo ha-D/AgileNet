@@ -17,13 +17,6 @@ public final class Resource extends BaseModel<ResourceDao>{
     @Column(nullable = false)
     public String name;
 
-    public List<Comment> getComments() {
-        List<Comment> ret = new ArrayList<>();
-        for(Comment comment: comments)
-            ret.add(Dependencies.getCommentDao().findById(comment.id));
-        return ret;
-    }
-
     @ManyToMany(cascade= CascadeType.ALL)
     public Set<Category> categories;
 
@@ -49,17 +42,21 @@ public final class Resource extends BaseModel<ResourceDao>{
 
     public ResourceType resourceType;
 
-    @Override
-    public boolean equals(Object o) {
-        if (o instanceof Resource) {
-            Resource r = (Resource)o;
-            return id == r.id;
-        }
-        return false;
-    }
-
     public Resource(){}
 
+    /**
+     * @return A list of comments given to the resource
+     */
+    public List<Comment> getComments() {
+        List<Comment> ret = new ArrayList<>();
+        for(Comment comment: comments)
+            ret.add(Dependencies.getCommentDao().findById(comment.id));
+        return ret;
+    }
+
+    /**
+     * @return The average rating given to the resource by users
+     */
     public double getRate(){
         double sum = 0;
         for(RateResource rateResource: rates)
@@ -70,6 +67,15 @@ public final class Resource extends BaseModel<ResourceDao>{
             Dependencies.getResourceDao().update(this);
         }
         return rating;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Resource) {
+            Resource r = (Resource)o;
+            return id == r.id;
+        }
+        return false;
     }
 
 }

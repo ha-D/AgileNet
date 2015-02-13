@@ -1,5 +1,6 @@
 package controllers;
 
+import actions.Ajax;
 import actions.Authorized;
 import models.*;
 import utilities.Dependencies;
@@ -10,19 +11,30 @@ import static play.mvc.Controller.session;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.libs.Json;
+import utilities.FormRequest;
 
 import static play.mvc.Results.*;
+import static utilities.FormRequest.formBody;
+import static utilities.UserUtils.sessionUser;
 
 
 public class Comments {
 
+    /**
+     * Upvote or Downvote a comment
+     * POST rate: 1 if action is an upvote, -1 if downvote
+     * POST comment: id of comment to vote on
+     *
+     * Ajax Method
+     * Authorization: User
+     */
+    @Ajax
     @Authorized({})
     public static Result rateComment() {
-        //form with two fields: rate and resourceId
-
-        User user = Dependencies.getUserDao().findByEmail(session().get("email"));
-        int rate = Integer.parseInt(Form.form().bindFromRequest().get("rate")); //+1 upvote, -1 remove vote
-        int commentId = Integer.parseInt(Form.form().bindFromRequest().get("comment"));
+        User user = sessionUser();
+        FormRequest request = formBody();
+        int rate = request.getInt("rate");
+        int commentId = request.getInt("comment");
         Comment comment = Dependencies.getCommentDao().findById(commentId);
         switch (rate){
             case 1:
@@ -37,13 +49,24 @@ public class Comments {
         return ok(rootJson);
     }
 
+    /**
+     * Add comment to resource
+     * POST rate: 1 if action is an upvote, -1 if downvote
+     * POST comment: id of comment to vote on
+     *
+     * Ajax Method
+     * Authorization: User
+     */
+    @Ajax
     @Authorized({})
     public static Result addComment(){
-        User user = Dependencies.getUserDao().findByEmail(session().get("email"));
-        String type = Form.form().bindFromRequest().get("type");
-        int id = Integer.parseInt(Form.form().bindFromRequest().get("id"));
-        String body = Form.form().bindFromRequest().get("body");
-        Comment comment;
+        User user = sessionUser();
+        FormRequest request = formBody();
+        String type = request.get("type");
+        int id = request.getInt("id");
+        String body = request.get("body");
+
+        Comment comment = null;
         ObjectNode rootJson = Json.newObject();
         switch (type){
             case "on resource":
@@ -56,25 +79,41 @@ public class Comments {
                 comment = Dependencies.getCommentDao().create(user, body, parComment);
                 rootJson.put("id", comment.id);
                 break;
-
         }
         return ok(rootJson);
     }
 
+    /**
+     * Filter a comment
+     * POST id: id of comment to filter
+     *
+     * Ajax Method
+     * Authorization: Admin
+     */
+    @Ajax
     @Authorized({"admin"})
     public static Result filterComment(){
-        User user = Dependencies.getUserDao().findByEmail(session().get("email"));
-        int id = Integer.parseInt(Form.form().bindFromRequest().get("id"));
+        User user = sessionUser();
+        FormRequest request = formBody();
+        int id = request.getInt("id");
         Comment comment = Dependencies.getCommentDao().findById(id);
         comment.filtered = true;
         Dependencies.getCommentDao().update(comment);
         return ok();
     }
 
+    /**
+     * Unfilter a comment
+     * POST id: id of comment to filter
+     *
+     * Ajax Method
+     * Authorization: Admin
+     */
     @Authorized({"admin"})
     public static Result undoFilterComment(){
-        User user = Dependencies.getUserDao().findByEmail(session().get("email"));
-        int id = Integer.parseInt(Form.form().bindFromRequest().get("id"));
+        User user = sessionUser();
+        FormRequest request = formBody();
+        int id = request.getInt("id");
         Comment comment = Dependencies.getCommentDao().findById(id);
         comment.filtered = false;
         Dependencies.getCommentDao().update(comment);

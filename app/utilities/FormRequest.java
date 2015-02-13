@@ -18,7 +18,12 @@ public class FormRequest {
         }
     }
 
-    //TODO:you should use resource file to define exception message
+    /**
+     * Retrieves a single string parameter assigned with the tokenName
+     * @param tokenName The parameter name
+     * @return The value assigned to the tokenName
+     * @throws RequestParseException If no value or more than one value exists with the tokenName
+     */
     public String getSingleElement(String tokenName) {
         String[] parts = body.get(tokenName);
         if (parts == null || parts.length == 0 || parts[0] == null || parts[0].isEmpty()) {
@@ -30,6 +35,13 @@ public class FormRequest {
         return parts[0];
     }
 
+    /**
+     * Retrieves a user based on request parameters.
+     * @param tokenName The tokenName to retrieve the user based upon. The id of the user should exist in the value
+     *                  of this parameter.
+     * @return The retrieved user
+     * @throws RequestParseException If invalid value was assigned to tokenName or no user exists with the given id.
+     */
     public User parseUser(String tokenName) {
         String userString = getSingleElement(tokenName);
         int userId = 0;
@@ -48,11 +60,22 @@ public class FormRequest {
         return user;
     }
 
-    //TODO: "static final String" use to define column name
+    /**
+     * Retrieves a user based on request parameters. The user id should exist in a parameter with the token name 'user'.
+     * @return The retrieved user
+     * @throws RequestParseException If invalid value was assigned to tokenName or no user exists with the given id.
+     */
     public User parseUser() {
         return parseUser("user");
     }
 
+    /**
+     * Retrieves a role based on request parameters.
+     * @param tokenName The tokenName to retrieve the role based upon. The name of the role should exist in the value
+     *                  of this parameter.
+     * @return The retrieved role
+     * @throws RequestParseException If invalid value was assigned to tokenName or no role exists with the given name.
+     */
     public Role parseRole(String tokenName) {
         String roleString = getSingleElement(tokenName);
 
@@ -66,10 +89,22 @@ public class FormRequest {
         return role;
     }
 
+    /**
+     * Retrieves a role based on request parameters. The role name should exist in a parameter with the name 'role'.
+     * @return The retrieved role
+     * @throws RequestParseException If invalid value was assigned to tokenName or no role exists with the given name.
+     */
     public Role parseRole() {
         return parseRole("role");
     }
 
+    /**
+     * Retrieves a single string parameter assigned with the given name
+     * @param name The parameter name
+     * @param defaultValue The value to return if the parameter was not found
+     * @return The value assigned to the given name
+     * @throws RequestParseException If more than one value exists with the given name
+     */
     public String get(String name, String defaultValue) {
         String[] params = body.get(name);
         if (params == null || params.length < 1) {
@@ -81,6 +116,12 @@ public class FormRequest {
         return params[0];
     }
 
+    /**
+     * Retrieves a single string parameter assigned with the given name
+     * @param name The parameter name
+     * @return The value assigned to the given name
+     * @throws RequestParseException If no value or more than one value exists with the given name
+     */
     public String get(String name) {
         String res =  get(name, null);
         if (res == null) {
@@ -89,6 +130,12 @@ public class FormRequest {
         return res;
     }
 
+    /**
+     * Retrieves a list of string parameters assigned with the given name
+     * @param name The parameter name
+     * @param defaultValue The default value to return if no value was assigned to the given name
+     * @return The value assigned to the given name
+     */
     public List<String> getList(String name,  List<String> defaultValue) {
         String[] params = body.get(name);
         if (params == null) {
@@ -98,10 +145,24 @@ public class FormRequest {
         return new ArrayList<String>(Arrays.asList(params));
     }
 
+    /**
+     * Retrieves a list of string parameters assigned with the given name
+     * @param name The parameter name
+     * @return The value assigned to the given name
+     * @throws RequestParseException If no value exists with the given name
+     */
     public List<String> getList(String name) {
         return getList(name, null);
     }
 
+    /**
+     * Retrieves a single integer parameter assigned with the given name
+     * @param name The parameter name
+     * @param defaultValue The default value to return if no value was assigned to the given name
+     * @return The value assigned to the given name
+     * @throws RequestParseException If more than value exists with the given name or if the value
+     *                               was not a valid integer
+     */
     public Integer getInt(String name, Integer defaultValue) {
         String value = get(name, null);
         if (value == null) {
@@ -114,6 +175,13 @@ public class FormRequest {
         }
     }
 
+    /**
+     * Retrieves a single integer parameter assigned with the given name
+     * @param name The parameter name
+     * @return The value assigned to the given name
+     * @throws RequestParseException If no value or more than one value exists with the given name or if the value
+     *                               was not a valid integer
+     */
     public Integer getInt(String name) {
         Integer val = getInt(name, null);
         if (val == null) {
@@ -122,10 +190,18 @@ public class FormRequest {
         return val;
     }
 
+    /**
+     * Creates a FormRequest object based on the POST parameters of the current request
+     * @return The newly created FormRequest object
+     */
     public static FormRequest formBody() {
         return new FormRequest(request().body().asFormUrlEncoded());
     }
 
+    /**
+     * Creates a FormRequest object based on the GET parameters of the current request
+     * @return The newly created FormRequest object
+     */
     public static FormRequest formGetBody() {
         return new FormRequest(request().queryString());
     }

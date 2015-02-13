@@ -32,7 +32,6 @@ public class RateResource extends BaseModel<RateResourceDao> {
     public boolean equals(Object o) {
         if (o instanceof RateResource) {
             RateResource r = (RateResource)o;
-//            return (r.id == id);
             return (user.equals(r.user) && resource.equals(r.resource));
         }
         return false;

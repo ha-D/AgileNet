@@ -3,6 +3,7 @@ package controllers;
 import com.google.common.collect.ImmutableMap;
 import dao.CategoryDao;
 import dao.ResourceDao;
+import dao.UserDao;
 import dao.stubs.StubCategoryDao;
 import models.*;
 import org.json.JSONArray;
@@ -54,6 +55,7 @@ public class ResourcesTest extends BaseTest {
         resourceList[2].name = "resource 2";
         resourceList[2].description = "resource 2 description";
         resourceList[2].date = new Date();
+
     }
 
     @Test
@@ -146,11 +148,19 @@ public class ResourcesTest extends BaseTest {
         when(resourceDao.findById(5)).thenReturn(resource);
         when(categoryDao.findById(10)).thenReturn(category);
 
+        final String EXPERT_EMAIL = "expert@expert.com";
+        User expert = newUser(1, EXPERT_EMAIL, "hispassword");
+        Role expertRole = new Role("expert");
+        expert.assignRole(expertRole);
+        UserDao userDao = mock(UserDao.class);
+        Dependencies.setUserDao(userDao);
+        when(userDao.findByEmail(EXPERT_EMAIL)).thenReturn(expert);
+
         Result result =  makeRequest(routes.ref.Resources.addCategory(), (ImmutableMap.of(
                     "category", "10",
                     "resource", "5"
             ))
-        );
+        , EXPERT_EMAIL);
 
         assertSuccess(result);
         assertTrue(resource.categories.contains(category));
@@ -159,7 +169,7 @@ public class ResourcesTest extends BaseTest {
                         "category", "10",
                         "resource", "5"
                 )
-        );
+        , EXPERT_EMAIL);
         assertSuccess(result);
         assertFalse(resource.categories.contains(category));
     }

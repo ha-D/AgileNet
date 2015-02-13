@@ -1,47 +1,52 @@
 package controllers;
 
+import actions.Ajax;
 import actions.Authorized;
-import dao.ResourceDao;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import models.*;
-import utilities.Dependencies;
 import org.apache.commons.io.FileUtils;
 import play.data.Form;
+import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
+import utilities.Dependencies;
+import utilities.FormRequest;
 
 import java.io.File;
 import java.io.IOException;
-
-import static play.mvc.Controller.request;
-import static play.mvc.Controller.session;
-
-import actions.Ajax;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import play.libs.Json;
-import utilities.FormRequest;
-
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
 import static dao.ResourceDao.ResourceSearchCriteria;
-
+import static play.mvc.Controller.request;
+import static play.mvc.Controller.session;
 import static play.mvc.Results.*;
 import static utilities.FormRequest.formBody;
 import static utilities.UserUtils.sessionUser;
 
-
+/**
+ * Controllers for viewing, adding, modifying, commenting and rating resources
+ */
 public class Resources {
-    @Authorized({})
+    /**
+     * POST form submit to add a new resource
+     *
+     * Authorization: Expert
+     */
+    @Authorized({"expert"})
     public static Result addResource() {
         Form<Resource> form = Form.form(Resource.class).bindFromRequest();
-        if (form.hasErrors())
+        if (form.hasErrors()) {
             return redirect(routes.Accounts.settings() + "#new-resource");
+        }
+
         Resource r = form.get();
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart part = body.getFile("content");
         r = Dependencies.getResourceDao().create(r);
+
         if (r.resourceType != ResourceType.WEBSITE && part != null) {
             File file = part.getFile();
             System.out.println(file.getName());
@@ -53,15 +58,31 @@ public class Resources {
                 System.out.println("Problem operating on filesystem");
             }
         }
+
         r.user = Dependencies.getUserDao().findByEmail(session().get("email"));
         Dependencies.getResourceDao().update(r);
+
         return redirect(routes.Resources.resourceView(r.id));
     }
 
+    /**
+     * Render resource search page
+     */
     public static Result searchPage() {
         return ok(views.html.resourceSearch.render(sessionUser()));
     }
 
+    /**
+     * Search for resources with the given criteria
+     * POST category: Category id of desired resources
+     * POST resourceType[]: A list of resource types to be included
+     * POST query: A query string to search for in resource names and descriptions
+     * POST sortBy: Determines what to order search results by, either 'date' or 'rate'
+     * POST pageSize: Maximum number of results to return in each page
+     * POST pageNumber: Page number of results
+     *
+     * Ajax Method
+     */
     @Ajax
     public static Result search() {
         FormRequest request = formBody();
@@ -120,22 +141,35 @@ public class Resources {
         return rootJson;
     }
 
+    /**
+     * Render the detail page of a resource
+     *
+     * Authorization: User
+     */
     @Authorized({})
     public static Result resourceView(Integer id) {
         Resource resource = Dependencies.getResourceDao().findById(id);
-        User user = Dependencies.getUserDao().findByEmail(session().get("email"));
+        User user = sessionUser();
         int userRate = Dependencies.getRateResourceDao().getRate(user, resource);
         return ok(views.html.resource.render(resource, userRate, user));
     }
 
+    /**
+     * Rate a resource from 1 to 5
+     * POST resource: The of the resource being rated
+     * POST rate: The rate to give to the resource
+     *
+     * Ajax Method
+     * Authorization: User
+     */
+    @Ajax
     @Authorized({})
     public static Result rateResource() {
-        //form with two fields: rate and resourceId
+        User user = sessionUser();
+        FormRequest request = formBody();
+        int rate = request.getInt("rate");
+        int resourceId = request.getInt("resource");
 
-        User user = Dependencies.getUserDao().findByEmail(session().get("email"));
-        int rate = Integer.parseInt(Form.form().bindFromRequest().get("rate"));
-        int resourceId = Integer.parseInt(Form.form().bindFromRequest().get("resource"));
-        System.out.println(resourceId);
         Resource resource = Dependencies.getResourceDao().findById(resourceId);
         RateResource rateResource = Dependencies.getRateResourceDao().create(rate, resource, user);
 
@@ -145,7 +179,16 @@ public class Resources {
         return ok(rootJson);
     }
 
+    /**
+     * Add a category to a resource
+     * POST category: The id of the category to add to the resource
+     * POST resource: The id of the resource to add the category to
+     *
+     * Ajax Method
+     * Authorization: Expert
+     */
     @Ajax
+    @Authorized({"expert"})
     public static Result addCategory() {
         FormRequest request = formBody();
         int categoryId = request.getInt("category");
@@ -165,7 +208,16 @@ public class Resources {
         return ok();
     }
 
+    /**
+     * Remove a category from a resource
+     * POST category: The id of the category to remove from the resource
+     * POST resource: The id of the resource to remove the category from
+     *
+     * Ajax Method
+     * Authorization: Expert
+     */
     @Ajax
+    @Authorized({"expert"})
     public static Result removeCategory() {
         FormRequest request = formBody();
         int categoryId = request.getInt("category");

@@ -25,35 +25,10 @@ public class Comment extends BaseModel<CommentDao> {
     @Column(nullable = false)
     public Date date;
 
-//    @OneToMany(cascade = CascadeType.ALL)
-//    @Column(nullable = false)
     @OneToMany(mappedBy = "parComment", cascade = CascadeType.ALL)
     public List<Comment> comments;
 
     public boolean filtered = false;
-
-    public Resource getParResource() {
-        return Dependencies.getResourceDao().findById(parResource.id);
-    }
-
-    public Comment getParComment() {
-        return Dependencies.getCommentDao().findById(parComment.id);
-    }
-
-    public List<Comment> getComments() {
-        List<Comment> ret = new ArrayList<>();
-        for(Comment comment: comments) {
-            ret.add(Dependencies.getCommentDao().findById(comment.id));
-        }
-        return ret;
-    }
-
-    public List<User> getUpvotes() {
-        List<User> ret = new ArrayList<>();
-        for(User user: upvotes)
-            ret.add(Dependencies.getUserDao().findById(user.id));
-        return ret;
-    }
 
     @ManyToOne
     public Comment parComment;
@@ -69,6 +44,44 @@ public class Comment extends BaseModel<CommentDao> {
         upvotes = new ArrayList<User>();
     }
 
+    /**
+     * @return The resource the comment belongs to if there is one, null otherwise
+     */
+    public Resource getParResource() {
+        return Dependencies.getResourceDao().findById(parResource.id);
+    }
+
+    /**
+     * @return The comments parent if it is a child of another comment, null otherwise
+     */
+    public Comment getParComment() {
+        return Dependencies.getCommentDao().findById(parComment.id);
+    }
+
+    /**
+     * @return A list of the comments children
+     */
+    public List<Comment> getComments() {
+        List<Comment> ret = new ArrayList<>();
+        for(Comment comment: comments) {
+            ret.add(Dependencies.getCommentDao().findById(comment.id));
+        }
+        return ret;
+    }
+
+    /**
+     * @return The number of upvotes given to the comment
+     */
+    public List<User> getUpvotes() {
+        List<User> ret = new ArrayList<>();
+        for(User user: upvotes)
+            ret.add(Dependencies.getUserDao().findById(user.id));
+        return ret;
+    }
+
+    /**
+     * @return The number of upvotes given to the comment
+     */
     public int getRate(){
         return upvotes.size();
     }
@@ -77,8 +90,7 @@ public class Comment extends BaseModel<CommentDao> {
     public boolean equals(Object o) {
         if (o instanceof Comment) {
             Comment comment = (Comment)o;
-//            return (r.id == id);
-            return comment.id==id;
+            return comment.id == id;
         }
         return false;
     }

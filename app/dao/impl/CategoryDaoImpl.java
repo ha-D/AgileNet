@@ -40,12 +40,6 @@ public class CategoryDaoImpl implements dao.CategoryDao {
         return category;
     }
 
-//    @Override
-//    public void addChild(String parent_name, Category category){
-//        Category parent = find.where().eq("name", parent_name).findUnique();
-//        parent.children.add(category);
-//    }
-
     @Override
     public void update(Category category){
         Ebean.update(category);

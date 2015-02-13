@@ -2,50 +2,50 @@
     name:       admin
 - !!models.Role &expert
     name:       expert
-
 - !!models.User
-    firstName:  admin
-    lastName:   admini
+    firstName:  ادمین
+    lastName:   ادیمن‌زاده
     email:      admin@admin.com
     password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
     roles:
         - *admin
+        - *expert
 - !!models.User
-    firstName:  expert
-    lastName:   experti
+    firstName:  مهندس
+    lastName:   خبره
     email:      expert@expert.com
     password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
     roles:
         - *expert
 - !!models.User
-    firstName:   asghar
-    lastName:   akbari
+    firstName:  اصغر
+    lastName:   اکبری
     email:      asghar@akbar.com
     password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
 - !!models.User
-    firstName:   jafar
-    lastName:   jafari
+    firstName:  جعفر
+    lastName:   جعفری
     email:      jafar@akbar.com
     password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
 - !!models.User
-    firstName:   asghar2
-    lastName:   akbari
+    firstName:  هومن
+    lastName:   هاشمی
     email:      asghar2@akbar.com
     password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
 - !!models.User
-    firstName:   jafar2
-    lastName:   jafari
+    firstName:   هاشم
+    lastName:   هومنی
     email:      jafar2@akbar.com
     password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
     isSuspended: true
 - !!models.User
-    firstName:   asghar3
-    lastName:   akbari3
+    firstName:  آقای
+    lastName:   کاربر
     email:      asghar3@akbar.com
     password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
     isSuspended: true
 - !!models.User
-    firstName:   jafar3
-    lastName:   jafari
+    firstName:  خانم
+    lastName:   کاربر
     email:      jafar3@akbar.com
     password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i

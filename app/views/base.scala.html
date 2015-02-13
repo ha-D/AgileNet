@@ -1,5 +1,7 @@
 @(title: String, scripts: Html = Html(""), styles: Html = Html(""))(content: Html)
 
+@import utilities.UserUtils.sessionUser
+
 <html dir="rtl">
     <head>
         <script src='@routes.Assets.at("javascripts/jquery-2.1.3.min.js")'></script>
@@ -33,10 +35,16 @@
                             <li><a href="@routes.Resources.searchPage()">
                                 مراجع
                             </a></li>
-                            <li><a href="@routes.Accounts.settings()">
-                                تنظیمات</a></li>
-                            <li><a href="/signup">ثبت‌نام</a></li>
-                            <li><a href="/login">ورود</a></li>
+                            @if(sessionUser() == null) {
+                                <li><a href="/signup">ثبت‌نام</a></li>
+                                <li><a href="/login">ورود</a></li>
+                            } else {
+                                <li><a href="@routes.Accounts.settings()">
+                                    تنظیمات</a></li>
+                                <li><a href="/logout">
+خروج
+                                </a></li>
+                            }
                         </ul>
                     </div>
                 </div>
