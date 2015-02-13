@@ -3,7 +3,6 @@ package controllers;
 import com.google.common.collect.ImmutableMap;
 import dao.CategoryDao;
 import dao.ResourceDao;
-import dao.ResourceSearchCriteria;
 import dao.stubs.StubCategoryDao;
 import models.*;
 import org.json.JSONArray;
@@ -59,21 +58,21 @@ public class ResourcesTest extends BaseTest {
 
     @Test
     public void testSimpleSearch() throws JSONException {
-        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        ResourceDao.ResourceSearchCriteria criteria = new ResourceDao.ResourceSearchCriteria();
         when(resourceDao.findByCriteria(criteria)).thenReturn(Arrays.asList(resourceList));
 
-        Result result = makeSearchRequest();
+        Result result = makeRequest(routes.ref.Resources.search());
         assertResults(result, resourceList);
     }
 
     @Test
     public void testPagination() throws JSONException {
-        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        ResourceDao.ResourceSearchCriteria criteria = new ResourceDao.ResourceSearchCriteria();
         criteria.setPageSize(2);
         criteria.setPageNumber(0);
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(0, 1));
 
-        Result result = makeSearchRequest(ImmutableMap.of(
+        Result result = makeRequest(routes.ref.Resources.search(), ImmutableMap.of(
                 "pageSize", "2",
                 "page", "0"
         ));
@@ -83,7 +82,7 @@ public class ResourcesTest extends BaseTest {
         criteria.setPageNumber(1);
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(2));
 
-        result = makeSearchRequest(ImmutableMap.of(
+        result = makeRequest(routes.ref.Resources.search(), ImmutableMap.of(
                 "pageSize", "2",
                 "page", "1"
         ));
@@ -92,11 +91,11 @@ public class ResourcesTest extends BaseTest {
 
     @Test
     public void testSearchResourceType() throws JSONException {
-        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        ResourceDao.ResourceSearchCriteria criteria = new ResourceDao.ResourceSearchCriteria();
         criteria.addResourceType(ResourceType.BOOK);
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(1));
 
-        Result result = makeSearchRequest(ImmutableMap.of(
+        Result result = makeRequest(routes.ref.Resources.search(), ImmutableMap.of(
                 "resourceType[]", "book"
         ));
         assertResults(result, select(1));
@@ -104,11 +103,11 @@ public class ResourcesTest extends BaseTest {
 
     @Test
     public void testSearchCategory() throws JSONException {
-        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        ResourceDao.ResourceSearchCriteria criteria = new ResourceDao.ResourceSearchCriteria();
         criteria.setCategory(category);
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(0, 2));
 
-        Result result = makeSearchRequest(ImmutableMap.of(
+        Result result = makeRequest(routes.ref.Resources.search(), ImmutableMap.of(
                 "category", "1"
         ));
         assertResults(result, select(0, 2));
@@ -116,11 +115,11 @@ public class ResourcesTest extends BaseTest {
 
     @Test
     public void testSearchQuery() throws JSONException {
-        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        ResourceDao.ResourceSearchCriteria criteria = new ResourceDao.ResourceSearchCriteria();
         criteria.setQuery("this is a query");
         when(resourceDao.findByCriteria(criteria)).thenReturn(select(1));
 
-        Result result = makeSearchRequest(ImmutableMap.of(
+        Result result = makeRequest(routes.ref.Resources.search(), ImmutableMap.of(
                 "query", "this is a query"
         ));
         assertResults(result, select(1));
@@ -128,10 +127,10 @@ public class ResourcesTest extends BaseTest {
 
     @Test
     public void testSearchEmpty() throws JSONException {
-        ResourceSearchCriteria criteria = new ResourceSearchCriteria();
+        ResourceDao.ResourceSearchCriteria criteria = new ResourceDao.ResourceSearchCriteria();
         when(resourceDao.findByCriteria(criteria)).thenReturn(select());
 
-        Result result = makeSearchRequest();
+        Result result = makeRequest(routes.ref.Resources.search());
         assertResults(result, select());
     }
 
@@ -147,22 +146,19 @@ public class ResourcesTest extends BaseTest {
         when(resourceDao.findById(5)).thenReturn(resource);
         when(categoryDao.findById(10)).thenReturn(category);
 
-        Result result =  callAction(
-            routes.ref.Resources.addCategory(),
-            fakeRequest().withFormUrlEncodedBody(ImmutableMap.of(
+        Result result =  makeRequest(routes.ref.Resources.addCategory(), (ImmutableMap.of(
                     "category", "10",
                     "resource", "5"
             ))
         );
+
         assertSuccess(result);
         assertTrue(resource.categories.contains(category));
 
-        result =  callAction(
-                routes.ref.Resources.removeCategory(),
-                fakeRequest().withFormUrlEncodedBody(ImmutableMap.of(
+        result =  makeRequest(routes.ref.Resources.removeCategory(), ImmutableMap.of(
                         "category", "10",
                         "resource", "5"
-                ))
+                )
         );
         assertSuccess(result);
         assertFalse(resource.categories.contains(category));
@@ -200,20 +196,6 @@ public class ResourcesTest extends BaseTest {
 
     private void assertResults(Result result, Resource[] resources) throws JSONException {
         assertResults(result, Arrays.asList(resources));
-    }
-
-    private Result makeSearchRequest(Map params) {
-        return callAction(
-                routes.ref.Resources.search(),
-                fakeRequest().withFormUrlEncodedBody(params)
-        );
-    }
-
-    private Result makeSearchRequest() {
-        return callAction(
-                routes.ref.Resources.search(),
-                fakeRequest()
-        );
     }
 
     private void assertSuccess(String message, Result result) {

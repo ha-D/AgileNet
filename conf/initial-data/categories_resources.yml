@@ -29,58 +29,64 @@
         - !!models.Category &catToolOnline
             name: "ابزار آنلاین"
 
-- !!models.Resource
+# ----------- RESOURCES --------------------
+- !!models.Resource &resource1
 #    #id: 10000
     name: "مستند تاریخ چابک"
     resourceType: VIDEO
     owner: هادی ذوالفقاری
     date: "2014-11-11"
+    rating: 2
     description: "در این مستند از آغاز متودولوژی‌های چابک شروع می‌شود و توضیح داده می‌شود و شما خوابتون می‌بره و وقتی بیدار می‌شوید می‌بینید که چهار ساعت از عمر خود را تلف کرده‌اید و نباید این فیلم را نگاه می‌کردید ولی دیگر دیر شده است و این زمان را شما نمی‌توانید پس بگیرید و تا آخر عمر حسرت آن را خواهید خرد"
     categories:
         - *catToolOnline
 
-- !!models.Resource
+- !!models.Resource &resource2
     ##id: 2
-    date: "2014-11-11"
+    date: "2014-11-10"
     name: "Agile"
     resourceType: BOOK
     owner: "Sasha Mobley"
     url: "http://www.amazon.com/Agile-Half-Assed-Creating-Anything-Scratch-ebook/dp/B00R0QHV3G/"
+    rating: 0
     description: "آنطور که از اسم کتاب بر‌می‌اید گویا راجب چابک است و در آن خیلی چیز‌ها یاد خواهید گرفت"
     #imageUrl: "http://ecx.images-amazon.com/images/I/410HTuOfikL._AA160_.jpg"
     categories:
         - *catMethodologies
         - *catPrinciples
 
-- !!models.Resource
+- !!models.Resource &resource3
     ##id: 3
-    date: "2014-11-11"
+    date: "2014-11-09"
     name: "Essential Scrum"
     resourceType: BOOK
     owner: "Chris Sims"
     url: "http://www.amazon.com/Essential-Scrum-Practical-Addison-Wesley-Signature/dp/0137043295/"
+    rating: 3
     description: " یک کتاب خیلی مفید درباره‌ی اسکرام که در آن درباره‌ی اسکرام توضیح داده شده. با خواندن آن یک اسکرام مستر حرفه‌ای شوید."
     #imageUrl: "http://ecx.images-amazon.com/images/I/51CICLfmf-L._AA160_.jpg"
     categories:
         - *catScrum
         - *catPrinciples
 
-- !!models.Resource
+- !!models.Resource &resource4
     ##id: 4
-    date: "2014-11-11"
+    date: "2014-11-08"
     name: "Taichi Agile Fist"
     resourceType: VIDEO
     owner: "Yuan Zhangguo"
+    rating: 2
     url: "http://www.amazon.com/Taichi-Agile-Fist-English-Subtitled/dp/B0050AJSNA"
     description: "در این فیلم شما با هنر‌های رزمی به سبک agile آشنا خواهید شد. به خصوص تکنیک مشت چابکین (agile fist) را یاد خواهید گرفت که با استفاده از آن قادر خواهید بود هر حریفی را زمین بزنید"
     #imageUrl: "http://ecx.images-amazon.com/images/I/51YY#idJJ2AL._PI_PJStripe-Prime-Only-500px,TopLeft,0,0_AA160_.jpg"
 
-- !!models.Resource
+- !!models.Resource &resource5
     ##id: 5
-    date: "2014-11-11"
+    date: "2014-11-07"
     name: "Agile Manifesto"
     resourceType: WEBSITE
     url: "http://www.agilemanifesto.com"
+    rating: 1
     description: "سایت منیفستو چابک که در آن منیفستو چابک است و سایت خوب است"
     categories:
         - *catHistory
@@ -88,58 +94,130 @@
         - *catMethodologies
         - *catTools
 
-- !!models.Resource
+- !!models.Resource &resource6
     ##id: 6
-    date: "2014-11-11"
+    date: "2014-11-06"
     name: "Learning Agile"
     resourceType: BOOK
     owner: "Andrew Stellman"
+    rating: 2
     url: "http://www.amazon.com/Learning-Agile-Understanding-Scrum-Kanban/dp/1449331920/"
     description: "در این کتاب به توضیح متودولوژی‌های مختلف چابک پرداخته می‌شود. از جمله متودولوژی‌های مورد بررسی می‌توان به اسکرام، xp، کان‌بان و Lean اشاره کرد"
     #imageUrl: "http://ecx.images-amazon.com/images/I/51iUIv3an0L._AA160_.jpg"
     categories:
         - *catMethodologies
 
-- !!models.Resource
+- !!models.Resource &resource7
     ##id: 7
-    date: "2014-11-11"
+    date: "2014-11-05"
     name: "آموزش استفاده از Jira"
     owner: "محمد طاهری"
     resourceType: VIDEO
+    rating: 5
     description: "در این ویدیو شما نحوه‌ی استفاده‌ی درست و بهینه از سامانه‌ی jira را یاد خواهید گرفت و خواهید دید که چقدر خوب است ولی نخواهید تنوانست از آن استفاده کیند چرا که پولی است و پول ندارید بدهید که از یک سامانه استفاده کنید پس در نهایت می‌روید از tfs استفاده می‌کنید اون هم نسخه‌ی مجانی، پس بهتر است که وقت خود را تلف نکرده و این فیلم را مشاهده نکنید"
     categories:
         - *catTools
         - *catToolOnline
 
-- !!models.Resource
+- !!models.Resource &resource8
     ##id: 8
-    date: "2014-11-11"
+    date: "2014-11-04"
     name: "تاریخ اجایل از دید یک مگس"
     owner: "یک مگس"
     resourceType: ARTICLE
+    rating: 5
     description: "این مقاله که توسط یک مگس نوشته شده است شما را با دید جدیدی نسبت به تاریخ چابک آشنا خواهد کرد. با خواندن آن می‌بنینید که داستان آنطور که فکر می‌کردید نبوده."
     categories:
         - *catHistory
         - *catPeople
 
-- !!models.Resource
+- !!models.Resource &resource9
     ##id: 9
-    date: "2014-11-11"
+    date: "2014-11-03"
     name: "Nightly Scrum"
     owner: "قلی اکبری"
     resourceType: ARTICLE
+    rating: 3
     description: "برای آن‌هایی که تا بعد از ظهر خواب هستند و نمی‌توانند جلسات روزانه‌ی Daily Scrum برگزار کنند، این مقاله روش جدیدی از اسکرام ارایه می‌دهد که در آن جلسات نصفه شب برگزار می‌شوند"
     categories:
         - *catScrum
         - *catMeetings
 
-- !!models.Resource
+- !!models.Resource &resource10
     ##id: 10
-    date: "2014-11-11"
+    date: "2014-11-02"
     name: "Agile Alliance"
     resourceType: WEBSITE
     url: "http://www.agilealliance.com"
+    rating: 4
     description: "گروه متحدین چابک. ما معتقدیم که فقط چابک. هر کس چابک نباشد در این دنیا از بین می‌رود. برنده‌ی واقعی چابک است"
     categories:
         - *catHistory
         - *catPrinciples
+
+# -------------- RATES -----------------
+- !!models.User &user
+    firstName:  the
+    lastName:   rater
+    email:      the@rater.com
+    password:   $2a$10$84vh8VaAiVU5SCtwx06Ll.tnXAEQjtlPioP0njDOceuEwCIE9Zk8i
+
+- !!models.RateResource
+    user: *user
+    resource: *resource1
+    rate: 2
+    date: "2014-11-11"
+
+- !!models.RateResource
+    user: *user
+    resource: *resource2
+    rate: 0
+    date: "2014-11-10"
+
+- !!models.RateResource
+    user: *user
+    resource: *resource3
+    rate: 3
+    date: "2014-11-09"
+
+- !!models.RateResource
+    user: *user
+    resource: *resource4
+    rate: 2
+    date: "2014-11-08"
+
+- !!models.RateResource
+    user: *user
+    resource: *resource5
+    rate: 1
+    date: "2014-11-07"
+
+- !!models.RateResource
+    user: *user
+    resource: *resource6
+    rate: 2
+    date: "2014-11-07"
+
+- !!models.RateResource
+    user: *user
+    resource: *resource7
+    rate: 5
+    date: "2014-11-12"
+
+- !!models.RateResource
+    user: *user
+    resource: *resource8
+    rate: 5
+    date: "2014-11-13"
+
+- !!models.RateResource
+    user: *user
+    resource: *resource9
+    rate: 3
+    date: "2014-11-14"
+
+- !!models.RateResource
+    user: *user
+    resource: *resource10
+    rate: 4
+    date: "2014-11-01"

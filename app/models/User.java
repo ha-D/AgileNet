@@ -86,6 +86,9 @@ public class User extends BaseModel<UserDao> {
     public boolean isExpert(){
         return hasRole("expert");
     }
+    public boolean isAdmin(){
+        return hasRole("admin");
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -104,5 +107,9 @@ public class User extends BaseModel<UserDao> {
             return true;
         }
         return false;
+    }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
     }
 }

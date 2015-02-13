@@ -1,3 +1,13 @@
+/*@import "login.css";*/
+
+.b-settings {
+    margin-top: 30px;
+}
+
+.admin-nav>li>a{
+    border-radius: 0;
+}
+
 .colorgraph {
     height: 5px;
     border-top: 0;
@@ -10,11 +20,10 @@
 }
 
 .oUsers, .sUsers, .eUsers{
-    margin: 10px;
+    margin: 10px 0;
     padding: 0 20px 20px 20px;
     border: 1px solid gray;
     border-radius: 10px;
-    height: 100%;
 }
 
 .oUsers.hover, .eUsers.hover, .sUsers.hover {
@@ -25,14 +34,51 @@
     float: right;
 }
 
-.container{
-    margin: 40px;
-    height: 100%;
-    width: auto;
+.users-container h2{
+    font-size: 20px;
+    margin-bottom: 0;
+}
+
+.users-container{
     text-align: right;
 }
 
+.col-lg-4:hover{
+    z-index: 10;
+}
 .user{
     cursor: move;
     margin: 5px;
+}
+
+.item{
+    margin-right: 30px;
+}
+
+.name{
+    border: 1px solid #bbbbbb;
+    border-radius: 5px;
+    padding: 5px;
+    height: 30px;
+    margin-top: 10px;
+    margin-left: 10px;
+    display: inline-block;
+    position: relative;
+    background-color: #eee;
+}
+
+.remove, .add{
+    width: 30px;
+    margin-left: 10px;
+    height: 30px;
+    padding: 4px 0 0 0;
+}
+
+.remove{
+    padding-right: 2px;
+}
+
+.add-root{
+    margin-right: 30px;
+    margin-top: 10px;
 }

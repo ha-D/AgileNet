@@ -45,12 +45,12 @@
 	clear: both;
 	overflow: hidden;
 	width: 200px;
-	min-height: 250px;
 	margin-top: 0px;
 }
 
 .b-resource-search .filter-container.topic-container {
 	margin-top: 10px;
+	min-height: 250px;
 }
 
 .b-resource-search .filter-list-wrapper {
@@ -81,12 +81,16 @@
 
 }
 
+.b-resource-search .sort-container {
+	margin-top: 20px;
+}
+
 .b-resource-search .filter-container h3{
 	font-weight: bold;
 	font-size: 15px;
 }
 
-.b-resource-search .filter.type {
+.b-resource-search .filter.type,.filter.sort {
 	/*background-color: rgb(150, 150, 150);
 	color: white;*/
 	padding: 5px 20px 5px 10px;
@@ -96,13 +100,13 @@
 	/*border: 1px solid #888888;*/
 }
 
-.b-resource-search .filter.type:hover {
+.b-resource-search .filter.type:hover,.filter.sort:hover {
 	background-color: rgb(100, 100, 100);
 	color: white;
 }
 
-.b-resource-search .filter.type.selected {
-	background-color: rgb(50, 50, 50);
+.b-resource-search .filter.type.selected,.filter.sort.selected {
+	background-color: rgb(69,93,106);
 	color: white;
 }
 

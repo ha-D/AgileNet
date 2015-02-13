@@ -3,28 +3,15 @@ package controllers;
 import actions.Authorized;
 import models.*;
 import utilities.Dependencies;
-import org.apache.commons.io.FileUtils;
 import play.data.Form;
-import play.mvc.Http;
 import play.mvc.Result;
 
-import java.io.File;
-import java.io.IOException;
-
-import static play.mvc.Controller.request;
 import static play.mvc.Controller.session;
 
-import actions.Ajax;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dao.ResourceSearchCriteria;
 import play.libs.Json;
-import utilities.FormRequest;
-
-import java.util.List;
 
 import static play.mvc.Results.*;
-import static utilities.FormRequest.formBody;
 
 
 public class Comments {

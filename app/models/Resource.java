@@ -42,9 +42,10 @@ public final class Resource extends BaseModel<ResourceDao>{
     @OneToMany(mappedBy = "resource", cascade = CascadeType.ALL)
     public Set<RateResource> rates;
 
-
     @Column(nullable = false)
     public Date date;
+
+    public double rating;
 
     public ResourceType resourceType;
 
@@ -63,7 +64,12 @@ public final class Resource extends BaseModel<ResourceDao>{
         double sum = 0;
         for(RateResource rateResource: rates)
             sum += rateResource.rate;
-        return sum/Math.max(rates.size(), 1);
+        double rating = sum/Math.max(rates.size(), 1);
+        if (this.rating != rating) {
+            this.rating = rating;
+            Dependencies.getResourceDao().update(this);
+        }
+        return rating;
     }
 
 }

@@ -46,10 +46,8 @@ public class ProfileTest extends BaseTest {
                 "contactPhone", "۱۱۱۱۱۱۱",
                 "nationalId", "۰۰۰۰۰۰۰"
         );
-        Result result = callAction(
-            routes.ref.Accounts.updateProfile(),
-            fakeRequest().withFormUrlEncodedBody(params).withSession("email", USER_EMAIL)
-        );
+
+        Result result = makeRequest(routes.ref.Accounts.updateProfile(), params, USER_EMAIL);
 
         User updatedUser = Dependencies.getUserDao().findByEmail(USER_EMAIL);
         assertEquals("Update is possible after login", status(result), 303); //redirected to profile

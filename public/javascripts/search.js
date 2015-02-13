@@ -20,9 +20,9 @@ function createTopicFilterElement(selection, itemId, itemName, subcategories) {
 	li.attr('data-item', selection + " " + itemId);
 	li.append(mainLi);
 	//if (subcategories) {
-		var nextBtn = $("<span>")
-			.addClass("filter-next glyphicon glyphicon-chevron-right");
-		li.append(nextBtn);
+	var nextBtn = $("<span>")
+		.addClass("filter-next glyphicon glyphicon-chevron-right");
+	li.append(nextBtn);
 	//}
 	return li;
 }
@@ -133,7 +133,7 @@ function setTopicFilters(selection, animate) {
 			current = current[next].subcategories;
 		}
 		//if (current) {
-			intializeList(current);
+		intializeList(current);
 		//} else {
 		//	AGS.noBackAnim = true;
 		//}
@@ -174,6 +174,12 @@ function setSearchResults(results, clear) {
 
 	var elements = createResultElements(results);
 	$(".search-result-container").append(elements);
+
+	if (AGS.selectedCategory) {
+		$('.addmodal.btn').show();
+	} else {
+		$('.addmodal.btn').hide();
+	}
 }
 
 function loadCategories() {
@@ -201,6 +207,8 @@ function createQuery() {
 	if (resourceTypes.length > 0) {
 		request.resourceType = resourceTypes;
 	}
+
+	request.sortBy = $('.filter.sort.selected').attr('data-val');
 
 	if (AGS.selectedCategory) {
 		request.category = AGS.selectedCategory;
@@ -243,7 +251,7 @@ function addNewCategory() {
 		},
 		success: function(result) {
 			var uiList = $(".topic .filter-list");
-			if (uiList.find('.empty')) {
+			if (uiList.find('.empty').length > 0) {
 				uiList.html("");
 			}
 			uiList.append(createTopicFilterElement(AGS.selection, result.id, category));
@@ -271,8 +279,13 @@ $(function() {
 		loadResults(true);
 	});
 
-	function categoryClick() {
+	$(".filter.sort").click(function() {
+		$(".filter.sort").removeClass("selected");
+		$(this).addClass('selected');
+		loadResults(true);
+	});
 
+	function categoryClick() {
 		$('.topic.filter.selected').removeClass('selected');
 		$(this).parent().addClass('selected');
 		var items = $(this).parent().attr('data-item').split(' ');
@@ -287,7 +300,7 @@ $(function() {
 		loadResults(true);
 	}
 
-	$(".b-resource")
+	$(".b-resource-search")
 		.on('click', '.filter.topic .filter-next', categoryClick)
 		.on('click', '.topic.filter .filter-main', categoryClick)
 		.on('click', '.topic.filter-history.item', function() {

@@ -32,7 +32,7 @@ public class SignupTest extends BaseTest {
             "password", "thepassword",
             "passwordConfirm", "thepassword"
         );
-        Result result = makeRequest(params);
+        Result result = makeRequest(routes.ref.Accounts.signupSubmit(), params);
         assertSuccess("Sign up should be successful with required fields", result);
     }
 
@@ -44,7 +44,7 @@ public class SignupTest extends BaseTest {
             "password", "thepassword",
             "passwordConfirm", "thepassword"
         );
-        Result result = makeRequest(params);
+        Result result = makeRequest(routes.ref.Accounts.signupSubmit(), params);
         assertFail("Sign Up should fail without required fields", result);
     }
 
@@ -57,7 +57,7 @@ public class SignupTest extends BaseTest {
             "password", "thepassword",
             "passwordConfirm", "adifferentpassword"
         );
-        Result result = makeRequest(params);
+        Result result = makeRequest(routes.ref.Accounts.signupSubmit(), params);
         assertFail("Sign up should fail if passwords differ", result);
     }
 
@@ -74,15 +74,8 @@ public class SignupTest extends BaseTest {
                 "password", "thepassword",
                 "passwordConfirm", "adifferentpassword"
         );
-        Result result = makeRequest(params);
+        Result result = makeRequest(routes.ref.Accounts.signupSubmit(), params);
         assertFail("Sign up should fail if email already exists", result);
-    }
-
-    private Result makeRequest(Map params) {
-        return callAction(
-                routes.ref.Accounts.signupSubmit(),
-                fakeRequest().withFormUrlEncodedBody(params)
-        );
     }
 
     private void assertSuccess(String message, Result result) {

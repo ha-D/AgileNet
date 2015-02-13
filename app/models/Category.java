@@ -7,6 +7,7 @@ import play.db.ebean.Model;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import utilities.Dependencies;
 
 @Entity
 public class Category extends BaseModel<CategoryDao> {
@@ -58,5 +59,13 @@ public class Category extends BaseModel<CategoryDao> {
             children+=c.getJson()+", ";
         children+="]";
         return "{id: "+this.id+", name: '"+this.name+"', children: "+children+"}";
+    }
+
+    public static String getAllJson(){
+        String cats = "[";
+        for(Category c: Dependencies.getCategoryDao().findRootCategories())
+            cats+=c.getJson()+", ";
+        cats+="]";
+        return cats;
     }
 }

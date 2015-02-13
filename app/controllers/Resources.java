@@ -1,6 +1,7 @@
 package controllers;
 
 import actions.Authorized;
+import dao.ResourceDao;
 import models.*;
 import utilities.Dependencies;
 import org.apache.commons.io.FileUtils;
@@ -17,15 +18,14 @@ import static play.mvc.Controller.session;
 import actions.Ajax;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dao.ResourceSearchCriteria;
 import play.libs.Json;
 import utilities.FormRequest;
-import utilities.UserUtils;
 
-import java.sql.DriverManager;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+
+import static dao.ResourceDao.ResourceSearchCriteria;
 
 import static play.mvc.Results.*;
 import static utilities.FormRequest.formBody;
@@ -34,16 +34,10 @@ import static utilities.UserUtils.sessionUser;
 
 public class Resources {
     @Authorized({})
-    public static Result newResource() {
-        Form<Resource> resourceForm = Form.form(Resource.class);
-        return ok(views.html.addResource.render(resourceForm));
-    }
-
-    @Authorized({})
     public static Result addResource() {
         Form<Resource> form = Form.form(Resource.class).bindFromRequest();
         if (form.hasErrors())
-            return badRequest(views.html.addResource.render(form));
+            return redirect(routes.Accounts.settings() + "#new-resource");
         Resource r = form.get();
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart part = body.getFile("content");
@@ -88,6 +82,13 @@ public class Resources {
         }
         criteria.setPageSize(request.getInt("pageSize", criteria.getPageSize()));
         criteria.setPageNumber(request.getInt("page", criteria.getPageNumber()));
+
+        String sortBy = request.get("sortBy", null);
+        if ("date".equals(sortBy)) {
+            criteria.setSortBy(ResourceSearchCriteria.SORT_BY_DATE);
+        } else if ("rating".equals(sortBy)) {
+            criteria.setSortBy(ResourceSearchCriteria.SORT_BY_RATE);
+        }
 
         List<Resource> resources = Dependencies.getResourceDao().findByCriteria(criteria);
         return ok(serializeResources(resources));

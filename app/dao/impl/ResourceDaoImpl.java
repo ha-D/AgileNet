@@ -3,8 +3,6 @@ package dao.impl;
 import com.avaje.ebean.Ebean;
 import com.avaje.ebean.Expr;
 import com.avaje.ebean.ExpressionList;
-import dao.ResourceDao;
-import dao.ResourceSearchCriteria;
 import models.Category;
 import models.Resource;
 import models.ResourceType;
@@ -45,8 +43,6 @@ public class ResourceDaoImpl implements dao.ResourceDao {
         }
         return create(resource.resourceType, resource.name, resource.categories, resource.description, resource.user,
                 resource.fileUrl, resource.url, resource.owner);
-
-//        Ebean.save(resource);
     }
 
     @Override
@@ -83,7 +79,13 @@ public class ResourceDaoImpl implements dao.ResourceDao {
             );
         }
 
-        return  query.findPagingList(criteria.getPageSize())
+        if (criteria.getSortBy() == ResourceSearchCriteria.SORT_BY_DATE) {
+            query = query.orderBy("date desc").where();
+        } else if (criteria.getSortBy() == ResourceSearchCriteria.SORT_BY_RATE) {
+            query = query.orderBy("rating desc").where();
+        }
+
+        return query.findPagingList(criteria.getPageSize())
                 .getPage(criteria.getPageNumber()).getList();
     }
 
