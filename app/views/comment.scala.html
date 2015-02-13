@@ -1,0 +1,24 @@
+@(c: models.Comment, user: models.User, panelType: String, removeOrOk: String)
+<div id="comment-@c.id" class="panel panel-@panelType">
+  <div class="panel-heading">
+    <span class="margin-left-10">@c.user.firstName</span>
+    <span class="datetime">@c.date</span>
+    <span id="span-like-@c.id" class="float left">
+      <span id="comment-num-of-likes-@c.id" class="margin-left-10">@c.getRate</span>
+      @if(c.getUpvotes.contains(user)) {
+        <span id="dislike-@c.id" class="glyphicon glyphicon-thumbs-down clickable"></span>
+      } else {
+        <span id="like-@c.id" class="glyphicon glyphicon-thumbs-up clickable"></span>
+      }
+      @if(user.hasRole("admin")){
+        <span id="@removeOrOk-@c.id" class="glyphicon glyphicon-@removeOrOk margin-right-10 clickable"></span>
+      }
+    </span>
+  </div>
+  <div class="panel-body">
+    @c.body
+  <div class="float left">
+    <span id="comment-icon-@c.id" class="glyphicon glyphicon-comment clickable"></span>
+  </div>
+  </div>
+</div>

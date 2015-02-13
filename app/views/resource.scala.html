@@ -8,6 +8,7 @@
     var userRate = @userRate;
     var resourceId = @resource.id;
     var userName = "@user.firstName";
+    var isAdmin = @user.hasRole("admin");
     </script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/jdate.min.js")" charset="utf-8"></script>
     <script type="text/javascript" src="@routes.Assets.at("javascripts/resource.js")"></script>
@@ -83,43 +84,31 @@
             </h3>
             <div id="comments-container">
             @for(c <- resource.comments.reverse) {
-                <div id="comment-@c.id" class="panel panel-primary">
-                    <div class="panel-heading">
-                        <span class="margin-left-10">@c.user.firstName</span>
-                        <span class="datetime">@c.date</span>
-                        <span class="float left">
-                            <span id="comment-num-of-likes-@c.id" class="margin-left-10">@c.getRate</span>
-                            @if(c.getUpvotes.contains(user)) {
-                                <span id="dislike-@c.id" class="glyphicon glyphicon-thumbs-down clickable"></span>
-                            } else {
-                                <span id="like-@c.id" class="glyphicon glyphicon-thumbs-up clickable"></span>
+                @if(!c.filtered){
+                    @comment(c, user, "primary", "remove")
+                    @for(subc <- c.getComments){
+                        @if(!subc.filtered) {
+                            @subComment(subc, user, "info", "remove")
+                        } else{
+                            @if(user.hasRole("admin")) {
+                                @subComment(subc, user, "warning", "ok")
                             }
-                        </span>
-                    </div>
-                    <div class="panel-body">
-                        @c.body
-                    <div class="float left">
-                        <span id="comment-icon-@c.id" class="glyphicon glyphicon-comment clickable"></span>
-                    </div>
-                    </div>
-                </div>
+                        }
+                    }
+                } else{
+                    @if(user.hasRole("admin")){
+                        @comment(c, user, "danger", "ok")
+                        @for(subc <- c.getComments){
+                            @if(!subc.filtered) {
+                                @subComment(subc, user, "info", "remove")
+                            } else{
+                                @subComment(subc, user, "warning", "ok")
+                            }
+                        }
+                    }
+                }
 
                 @for(subc <- c.getComments){
-                    <div class="panel panel-info margin-right-40">
-                        <div class="panel-heading">
-                            <span class="margin-left-10">@subc.user.firstName</span>
-                            <span class="datetime">@subc.date</span>
-                            <span class="float left">
-                                <span id="comment-num-of-likes-@subc.id" class="margin-left-10">@subc.getRate</span>
-                                @if(subc.getUpvotes.contains(user)) {
-                                    <span id="dislike-@subc.id" class="glyphicon glyphicon-thumbs-down clickable"></span>
-                                } else {
-                                    <span id="like-@subc.id" class="glyphicon glyphicon-thumbs-up clickable"></span>
-                                }
-                            </span>
-                        </div>
-                        <div class="panel-body">@subc.body</div>
-                    </div>
                 }
             }
             </div>

@@ -7,7 +7,9 @@ $(function(){
 function listen(){
     listenToLike();
     listentTodislike();
-    listenToCommentOnComment()
+    listenToCommentOnComment();
+    listenToAddOrRemove("remove-", "/filterComment", "primary", "danger", "info", "warning", "ok");
+    listenToAddOrRemove("ok-", "/undoFilterComment", "danger", "primary", "warning", "info", "remove");
 }
 
 $(function() {
@@ -55,7 +57,6 @@ function submitComment(){
         $.ajax({
             url: "/addComment",
             type: 'POST',
-            //dataType: 'html',
             data: {id: resourceId,
                 body: commentBody,
                 type: "on resource"},
@@ -82,7 +83,8 @@ function submitComment(){
                     text: todayInJalali()
                 }));
                 var likeSpan = $('<span/>', {
-                    class: 'float left'
+                    class: 'float left',
+                    id: 'span-like-' + data['id']
                 });
                 panelHeader.append(likeSpan);
                 likeSpan.append($('<span/>', {
@@ -94,6 +96,11 @@ function submitComment(){
                     class: 'glyphicon glyphicon-thumbs-up clickable',
                     id: "like-" + data['id']
                 }));
+                if(isAdmin)
+                    likeSpan.append($('<span/>', {
+                        id: "remove-" + data['id'],
+                        class: 'glyphicon glyphicon-remove margin-right-10 clickable'
+                    }));
                 panelBody = $('<div/>', {
                     class: "panel-body",
                     text: commentBody
@@ -109,8 +116,7 @@ function submitComment(){
                     id: "comment-icon-" + data['id']
                 }));
 
-                listenToLike();
-                listenToCommentOnComment();
+                listen();
             },
             error: function(xhr, textStatus, errorThrown) {
             }
@@ -212,7 +218,8 @@ function submitCommentOnComment(id){
                 $("#comment-on-comment").remove();
 
                 var panel = $('<div/>', {
-                    class: 'panel panel-info margin-right-40'
+                    class: 'panel panel-info margin-right-40',
+                    id: 'subComment-' + data['id']
                 });
                 $("#comment-" + id).after(panel);
 
@@ -228,7 +235,8 @@ function submitCommentOnComment(id){
                     text: todayInJalali()
                 }));
                 var likeSpan = $('<span/>', {
-                    class: 'float left'
+                    class: 'float left',
+                    id: 'span-like-' + data['id']
                 });
                 panelHeader.append(likeSpan);
                 likeSpan.append($('<span/>', {
@@ -240,16 +248,63 @@ function submitCommentOnComment(id){
                     class: 'glyphicon glyphicon-thumbs-up clickable',
                     id: "like-" + data['id']
                 }));
-                panelBody = $('<div/>', {
+                if(isAdmin)
+                    likeSpan.append($('<span/>', {
+                        id: "remove-" + data['id'],
+                        class: 'glyphicon glyphicon-remove margin-right-10 clickable'
+                    }));
+                var panelBody = $('<div/>', {
                     class: "panel-body",
                     text: commentBody
                 });
                 panel.append(panelBody);
 
-                listenToLike();
+                listen();
             },
             error: function(xhr, textStatus, errorThrown) {
             }
         });
     });
+}
+
+
+function listenToAddOrRemove(addOrRemove, url, fromC, toC, fromSubC, toSubC, changed){
+    $('[id^=' + addOrRemove + ']').click(function(e){
+        var commentId = e.target.id.split(addOrRemove)[1];
+
+        $.ajax({
+            url: url,
+            type: 'POST',
+            data: {id: commentId},
+            beforeSend: function() {
+            },
+            success: function(data, textStatus, xhr) {
+                var prefix;
+                if ($('#comment-' + commentId).exists()){
+                    prefix = '#comment-';
+                    $(prefix + commentId).removeClass('panel-' + fromC);
+                    $(prefix + commentId).addClass('panel-' + toC);
+                }
+                else{
+                    prefix = '#subComment-';
+                    $(prefix + commentId).removeClass('panel-' + fromSubC);
+                    $(prefix + commentId).addClass('panel-' + toSubC);
+                }
+
+                $('#' + addOrRemove + commentId).remove();
+                $("#span-like-" + commentId).append($('<span/>', {
+                    id: changed + '-' + commentId,
+                    class: 'glyphicon glyphicon-' + changed + ' margin-right-10 clickable'
+                }));
+
+                listen();
+            },
+            error: function(xhr, textStatus, errorThrown) {
+            }
+        });
+    });
+}
+
+$.fn.exists = function () {
+    return this.length !== 0;
 }

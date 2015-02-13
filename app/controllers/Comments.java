@@ -80,6 +80,8 @@ public class Comments {
         int id = Integer.parseInt(Form.form().bindFromRequest().get("id"));
         Comment comment = Dependencies.getCommentDao().findById(id);
         comment.filtered = true;
+        System.out.print("filtered");
+        System.out.println(id);
         Dependencies.getCommentDao().update(comment);
         return ok();
     }
