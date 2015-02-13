@@ -4,10 +4,7 @@ import dao.CommentDao;
 import dao.RateResourceDao;
 import dao.ResourceDao;
 import dao.UserDao;
-import models.Comment;
-import models.RateResource;
-import models.Resource;
-import models.User;
+import models.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,10 +46,15 @@ public class UserActivityTest extends BaseTest {
         comment.parResource = resource;
         rate = newRateResource(resource, user, 4);
 
+        User admin = newUser(2, ADMIN_EMAIL, "adminpassword");
+        Role adminRole = new Role("admin");
+        admin.assignRole(adminRole, false);
+
         ResourceDao resourceDao = mock(ResourceDao.class);
         CommentDao commentDao = mock(CommentDao.class);
         RateResourceDao rateDao = mock(RateResourceDao.class);
         UserDao userDao = mock(UserDao.class);
+        Dependencies.setUserDao(userDao);
         Dependencies.setResourceDao(resourceDao);
         Dependencies.setCommentDao(commentDao);
         Dependencies.setRateResourceDao(rateDao);
@@ -64,9 +66,6 @@ public class UserActivityTest extends BaseTest {
         when(resourceDao.findById(1)).thenReturn(resource);
         when(commentDao.findLatest(anyInt())).thenReturn(Arrays.asList(comment));
         when(rateDao.findLatest(anyInt())).thenReturn(Arrays.asList(rate));
-
-        User admin = mock(User.class);
-        when(admin.hasRole("admin")).thenReturn(true);
         when(userDao.findByEmail(ADMIN_EMAIL)).thenReturn(admin);
         when(userDao.findByEmail(user.email)).thenReturn(user);
     }
