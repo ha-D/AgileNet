@@ -6,6 +6,7 @@ import static utilities.FormRequest.formBody;
 
 import actions.Ajax;
 import dao.UserDao;
+import models.Comment;
 import utilities.Dependencies;
 import models.User;
 import models.Category;
@@ -166,4 +167,5 @@ public class Accounts extends Controller {
         user.contactPhone = form.get().contactPhone;
         Dependencies.getUserDao().update(user);
     }
+
 }

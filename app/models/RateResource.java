@@ -5,6 +5,8 @@ import javax.persistence.*;
 import dao.RateResourceDao;
 import play.data.validation.Constraints;
 
+import java.util.Date;
+
 @Entity
 public class RateResource extends BaseModel<RateResourceDao> {
     @Id
@@ -23,6 +25,8 @@ public class RateResource extends BaseModel<RateResourceDao> {
     @Column(nullable = false)
     @ManyToOne
     public User user;
+
+    public Date date;
 
     @Override
     public boolean equals(Object o) {

@@ -13,7 +13,7 @@
 }
 
 @base(title="چابک‌نت", styles=styles, scripts=scripts) {
-<div class="login container">
+<div class="b-settings login container">
     <div class="row">
         <div class="col-md-3">
                     <ul class="nav nav-pills nav-stacked admin-nav">
@@ -24,6 +24,11 @@
                         @if(user.isExpert() || user.isAdmin) {
                             <li class=""><a data-toggle="tab" href="#categories">مدیریت عناوین</a></li>
                             <li class=""><a data-toggle="tab" href="#new-resource">افزودن منبع</a></li>
+                        }
+                        @if(user.isAdmin()) {
+                            <li class=""><a data-toggle="tab" href="#activity">
+فعالیت اعضا
+                            </a></li>
                         }
                     </ul>
         </div>
@@ -325,6 +330,17 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="activity" class="tab-pane fade">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading"><h3 class="panel-title">
+فعالیت اعضا
+                            </h3></div>
+                            <div class="panel-body" style="min-height: 432px">
+                                یی
+
                             </div>
                         </div>
                     </div>

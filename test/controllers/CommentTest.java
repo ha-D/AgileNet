@@ -74,10 +74,7 @@ public class CommentTest extends BaseTest {
             "body", "content"
         );
 
-        Result result = callAction(
-                routes.ref.Comments.addComment(),
-                fakeRequest().withFormUrlEncodedBody(params).withSession("email", USER_EMAIL)
-        );
+        Result result = makeRequest(routes.ref.Comments.addComment(), params, USER_EMAIL);
 
         assertSuccess(null, result);
         verify(commentDao).create(user, "content", resource);
@@ -91,10 +88,7 @@ public class CommentTest extends BaseTest {
                 "body", "content"
         );
 
-        Result result = callAction(
-                routes.ref.Comments.addComment(),
-                fakeRequest().withFormUrlEncodedBody(params).withSession("email", USER_EMAIL)
-        );
+        Result result = makeRequest(routes.ref.Comments.addComment(), params, USER_EMAIL);
 
         assertSuccess(null, result);
         verify(commentDao).create(user, "content", baseComment);
@@ -108,10 +102,7 @@ public class CommentTest extends BaseTest {
                 "body", "content"
         );
 
-        Result result = callAction(
-                routes.ref.Comments.addComment(),
-                fakeRequest().withFormUrlEncodedBody(params)
-        );
+        Result result = makeRequest(routes.ref.Comments.addComment(), params);
 
         assertFail("Should not be able to comment if not signed in", result);
     }
@@ -120,18 +111,12 @@ public class CommentTest extends BaseTest {
     public void testFilterComment() {
         Map<String, String> params = ImmutableMap.of("id", "2");
 
-        Result result = callAction(
-                routes.ref.Comments.filterComment(),
-                fakeRequest().withFormUrlEncodedBody(params).withSession("email", ADMIN_EMAIL)
-        );
+        Result result = makeRequest(routes.ref.Comments.filterComment(), params, ADMIN_EMAIL);
 
         assertSuccess(null, result);
         assertTrue("Comment filtered should be true after being filtered", comment.filtered);
 
-        result = callAction(
-                routes.ref.Comments.undoFilterComment(),
-                fakeRequest().withFormUrlEncodedBody(params).withSession("email", ADMIN_EMAIL)
-        );
+        result = makeRequest(routes.ref.Comments.undoFilterComment(), params, ADMIN_EMAIL);
 
         assertSuccess(null, result);
         assertFalse("Comment filtered should be false after undoing filter", comment.filtered);
@@ -141,10 +126,7 @@ public class CommentTest extends BaseTest {
     public void testOnlyAdminCanFilterComment() {
         Map<String, String> params = ImmutableMap.of("id", "2");
 
-        Result result = callAction(
-                routes.ref.Comments.filterComment(),
-                fakeRequest().withFormUrlEncodedBody(params).withSession("email", USER_EMAIL)
-        );
+        Result result = makeRequest(routes.ref.Comments.filterComment(), params, USER_EMAIL);
 
         assertFail(null, result);
         assertFalse("Comment should not be filtered by normal user", comment.filtered);
@@ -160,24 +142,5 @@ public class CommentTest extends BaseTest {
         assertNotEquals(message, 200, status);
     }
 
-    private Resource newResource(int id, String name) {
-        Resource resource = new Resource();
-        resource.name = name;
-        resource.id = id;
-        return resource;
-    }
 
-    private Comment newComment(int id) {
-        Comment comment = new Comment();
-        comment.id = id;
-        return comment;
-    }
-
-    private User newUser(int id, String email, String password) {
-        User user = new User();
-        user.id = id;
-        user.email = email;
-        user.setPassword(password);
-        return user;
-    }
 }

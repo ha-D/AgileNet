@@ -108,4 +108,8 @@ public class User extends BaseModel<UserDao> {
         }
         return false;
     }
+
+    public String getFullName() {
+        return firstName + " " + lastName;
+    }
 }

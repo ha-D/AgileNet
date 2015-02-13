@@ -37,3 +37,5 @@ POST        /categories/remove            controllers.Categories.removeCategory(
 POST        /categories/add               controllers.Categories.addCategory()
 GET         /categories/map               controllers.Categories.listCategoriesAsMap()
 POST        /settings/resources/add       controllers.Resources.addResource()
+
+GET         /settings/activities          controllers.Activities.getUserActivity()

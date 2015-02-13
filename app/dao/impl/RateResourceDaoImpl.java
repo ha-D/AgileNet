@@ -73,4 +73,9 @@ public class RateResourceDaoImpl implements dao.RateResourceDao {
         }
         return 0;
     }
+
+    @Override
+    public List<RateResource> findLatest(int limit) {
+        return find.setMaxRows(limit).findList();
+    }
 }

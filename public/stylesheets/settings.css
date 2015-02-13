@@ -1,5 +1,9 @@
 /*@import "login.css";*/
 
+.b-settings {
+    margin-top: 30px;
+}
+
 .admin-nav>li>a{
     border-radius: 0;
 }

@@ -161,26 +161,5 @@ public class ResourceDaoSearchTest extends BaseTest {
         assertSearch(null, criteria, resources);
     }
 
-    private Resource newResource(String name, ResourceType resourceType, Category... categories) {
-        Resource resource = new Resource();
-        resource.name = name;
-        resource.resourceType = resourceType;
-        for (Category category : categories) {
-            resource.categories.add(category);
-        }
 
-        return resource;
-    }
-
-    private Resource newResource(String name, ResourceType resourceType, double rating, Category... categories) {
-        Resource resource = newResource(name, resourceType, categories);
-        resource.rating = rating;
-        return resource;
-    }
-
-    private Category newCategory(String name) {
-        Category category = new Category();
-        category.name = name;
-        return category;
-    }
 }

@@ -45,7 +45,7 @@ public class Dependencies {
         return categoryDao;
     }
 
-    private static void setRateResourceDao(RateResourceDao rateResourceDao) {
+    public static void setRateResourceDao(RateResourceDao rateResourceDao) {
         Dependencies.rateResourceDao = rateResourceDao;
     }
 

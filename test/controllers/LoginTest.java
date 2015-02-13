@@ -39,7 +39,7 @@ public class LoginTest extends BaseTest {
             "email", "hadi@zolfaghari.com",
             "password", "thepassword"
         );
-        Result result = makeRequest(params);
+        Result result = makeRequest(routes.ref.Accounts.loginSubmit(), params);
         assertSuccess("Login should be successful with valid fields", result);
         assertEquals("User email should exist in session after successful loginSubmit",
                 "hadi@zolfaghari.com", session(result).get("email"));
@@ -51,7 +51,7 @@ public class LoginTest extends BaseTest {
             "email", "hadi@zolfaghari.com",
             "password", "thewrongpassword"
         );
-        Result result = makeRequest(params);
+        Result result = makeRequest(routes.ref.Accounts.loginSubmit(), params);
         assertFail("Login should fail if fields are invalid", result);
         assertNull("User email should not exist in session after failed loginSubmit", session(result).get("email"));
     }
@@ -62,16 +62,9 @@ public class LoginTest extends BaseTest {
             "email", "who@huh.com",
             "password", "somepassword"
         );
-        Result result = makeRequest(params);
+        Result result = makeRequest(routes.ref.Accounts.loginSubmit(), params);
         assertFail("Login should fail if fields are invalid", result);
         assertNull("User email should not exist in session after failed loginSubmit", session(result).get("email"));
-    }
-
-    private Result makeRequest(Map params) {
-        return callAction(
-                routes.ref.Accounts.loginSubmit(),
-                fakeRequest().withFormUrlEncodedBody(params)
-        );
     }
 
     private void assertSuccess(String message, Result result) {

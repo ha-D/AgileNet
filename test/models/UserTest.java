@@ -42,5 +42,4 @@ public class UserTest {
         result = user.authenticate("wrongpass");
         assertFalse(result);
     }
-
 }

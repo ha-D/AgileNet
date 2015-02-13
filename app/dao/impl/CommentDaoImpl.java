@@ -62,6 +62,11 @@ public class CommentDaoImpl implements dao.CommentDao {
     }
 
     @Override
+    public List<Comment> findLatest(int limit) {
+        return find.setMaxRows(limit).findList();
+    }
+
+    @Override
     public void edit(Comment comment, String body) {
         comment.body = body;
         Ebean.update(comment);
@@ -83,4 +88,6 @@ public class CommentDaoImpl implements dao.CommentDao {
     public Comment create(Comment object) {
         return null;
     }
+
+
 }
