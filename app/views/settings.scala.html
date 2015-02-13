@@ -1,0 +1,336 @@
+@(user: User, myForm: Form[models.User], users: java.util.List[User], cats: String, resourceForm: Form[models.Resource])
+@import helper._
+@implicitField = @{ FieldConstructor(myFieldConstructorTemplate.f) }
+
+@scripts = {
+    <script type="application/javascript">
+        cats=@Html(cats);
+    </script>
+    <script src='@routes.Assets.at("javascripts/settings.js")'></script>
+}
+@styles = {
+    <link rel="stylesheet" href="@routes.Assets.at("stylesheets/settings.css")" media="screen" type="text/css" />
+}
+
+@base(title="چابک‌نت", styles=styles, scripts=scripts) {
+<div class="login container">
+    <div class="row">
+        <div class="col-md-3">
+                    <ul class="nav nav-pills nav-stacked admin-nav">
+                        <li class="active"><a data-toggle="tab" href="#profile">پروفایل</a></li>
+                        @if(user.isAdmin()) {
+                            <li class=""><a data-toggle="tab" href="#members">مدیریت اعضا</a></li>
+                        }
+                        @if(user.isExpert() || user.isAdmin) {
+                            <li class=""><a data-toggle="tab" href="#categories">مدیریت عناوین</a></li>
+                            <li class=""><a data-toggle="tab" href="#new-resource">افزودن منبع</a></li>
+                        }
+                    </ul>
+        </div>
+        <div class="col-lg-9">
+            <div class="panel-group" id="accordion">
+                <div class="tab-content">
+                    <div id="profile" class="tab-pane fade active in">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading"><h3 class="panel-title">نمایش و ویرایش اطلاعات شخصی</h3></div>
+                            <div class="panel-body edit-cat" style="min-height: 432px">
+                            @form(routes.Accounts.updateProfile, 'id -> "signUpForm") {
+                                <div class="row">
+
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                    @inputText(myForm("firstName"))
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                    @inputText(myForm("lastName"))
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                    @inputText(myForm("nationalId"))
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                    @inputText(myForm("contactPhone"))
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-12"><input type="submit" value="به‌روزرسانی مشخصات" class="btn btn-primary btn-block btn-lg center-block" tabindex="9"></div>
+                                </div>
+                            }
+                            </div>
+                        </div>
+                    </div>
+                    <div id="members" class="tab-pane fade">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading"><h3 class="panel-title">مدیریت اعضا</h3></div>
+                            <div class="panel-body" style="min-height: 432px">
+                                <div class="users-container">
+                                    <div class="col-lg-4">
+                                        <div class="oUsers">
+                                            <h2>
+                                                اعضای عادی
+                                            </h2>
+                                            <br>
+                                            @for(u <- users){
+                                                @if(!u.isExpert() && !u.isSuspended) {
+                                                    <div class="user btn btn-primary" data-id="@u.id">
+                                                        @u.firstName @u.lastName
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <div class="eUsers">
+                                            <h2>
+                                                اعضای صاحب‌نظر
+                                            </h2>
+                                            <br>
+                                            @for(u <- users){
+                                                @if(u.isExpert() && !u.isSuspended) {
+                                                    <div class="user btn btn-success" data-id="@u.id">
+                                                        @u.firstName @u.lastName
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <div class="sUsers">
+                                            <h2>
+                                                اعضای معلق‌شده
+                                            </h2>
+                                            <br>
+                                            @for(u <- users){
+                                                @if(u.isSuspended) {
+                                                    <div class="user btn btn-danger" data-id="@u.id">
+                                                        @u.firstName @u.lastName
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div id="categories" class="tab-pane fade">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading"><h3 class="panel-title">مدیریت عناوین</h3></div>
+                            <div class="panel-body" style="min-height: 432px">
+                                <div class="" id="cats">
+
+                                </div>
+
+                                <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="myModalLabel">حذف</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                آیا مطمئنید که می‌خواهید عنوان
+                                                '
+                                                <span id="deleteModalCatName"></span>
+                                                '
+                                                را حذف نمایید؟
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" onclick="removeCat()">بله</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">خیر</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="myModalLabel">افزودن عنوان</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <input type="text" id="catName" class="form-control" placeholder="نام">
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" onclick="addCat()">ثبت</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">انصراف</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="new-resource" class="tab-pane fade">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading"><h3 class="panel-title">افزودن منبع</h3></div>
+                            <div class="panel-body" style="min-height: 432px">
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#book" role="tab" data-toggle="tab">کتاب</a></li>
+                                    <li role="presentation"><a href="#article" role="tab" data-toggle="tab">مقاله</a></li>
+                                    <li role="presentation"><a href="#website" role="tab" data-toggle="tab">وب‌سایت</a></li>
+                                    <li role="presentation"><a href="#video" role="tab" data-toggle="tab">ویدئو</a></li>
+                                </ul>
+
+                                    <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="panel tab-pane active" id="book">
+                                        <div class="panel-body">
+                                        @form(routes.Resources.addResource, 'method ->"POST", 'enctype -> "multipart/form-data", 'id -> "resourceForm") {
+                                            <div class="row">
+                                                <input class="hidden" type="text" name="resourceType" value="BOOK">
+                                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                                @inputText(resourceForm("name"))
+                                                </div>
+                                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                                @inputText(resourceForm("owner"))
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                    <div class="">
+                                                        <label for="content">محتوا</label>
+                                                        <div class="input form-group">
+                                                            <input type="file" id="content" name="content" value="" class="form-control large-input">
+                                                            <span class="errors"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                @inputText(resourceForm("url"))
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                @inputText(resourceForm("description"), 'class -> "form-control large-input")
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-md-12"><input type="submit" value="افزودن کتاب" class="btn btn-primary btn-block btn-lg center-block" tabindex="9"></div>
+                                            </div>
+                                        }
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="panel tab-pane" id="article">
+                                        <div class="panel-body">
+                                        @form(routes.Resources.addResource, 'method ->"POST", 'enctype -> "multipart/form-data", 'id -> "resourceForm") {
+                                            <div class="row">
+                                                <input class="hidden" type="text" name="resourceType" value="ARTICLE">
+                                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                                @inputText(resourceForm("name"))
+                                                </div>
+                                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                                @inputText(resourceForm("owner"))
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                    <div class="">
+                                                        <label for="content">محتوا</label>
+                                                        <div class="input form-group">
+                                                            <input type="file" name="content" value="" class="form-control large-input">
+                                                            <span class="errors"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                @inputText(resourceForm("url"))
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                @inputText(resourceForm("description"), 'class -> "form-control large-input")
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-md-12"><input type="submit" value="افزودن مقاله" class="btn btn-primary btn-block btn-lg center-block" tabindex="9"></div>
+                                            </div>
+                                        }
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="panel tab-pane" id="website">
+                                        <div class="panel-body">
+                                        @form(routes.Resources.addResource, 'method ->"POST", 'enctype -> "multipart/form-data", 'id -> "resourceForm") {
+                                            <div class="row">
+                                                <input class="hidden" type="text" name="resourceType" value="WEBSITE">
+                                                </input>
+                                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                                @inputText(resourceForm("name"))
+                                                </div>
+                                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                                @inputText(resourceForm("owner"))
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                @inputText(resourceForm("url"))
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                @inputText(resourceForm("description"), 'class -> "form-control large-input")
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-md-12"><input type="submit" value="افزودن وب‌سایت" class="btn btn-primary btn-block btn-lg center-block" tabindex="9"></div>
+                                            </div>
+                                        }
+                                        </div>
+                                    </div>
+                                    <div role="tabpanel" class="panel tab-pane" id="video">
+                                        <div class="panel-body">
+                                        @form(routes.Resources.addResource, 'method ->"POST", 'enctype -> "multipart/form-data", 'id -> "resourceForm") {
+                                            <div class="row">
+                                                <input class="hidden" type="text" name="resourceType" value="VIDEO">
+                                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                                @inputText(resourceForm("name"))
+                                                </div>
+                                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                                @inputText(resourceForm("owner"))
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                    <div class="">
+                                                        <label for="content">محتوا</label>
+                                                        <div class="input form-group">
+                                                            <input type="file" name="content" value="" class="form-control large-input">
+                                                            <span class="errors"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                @inputText(resourceForm("url"))
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
+                                                @inputText(resourceForm("description"), 'class -> "form-control large-input")
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-md-12"><input type="submit" value="افزودن ویدئو" class="btn btn-primary btn-block btn-lg center-block" tabindex="9"></div>
+                                            </div>
+                                        }
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}

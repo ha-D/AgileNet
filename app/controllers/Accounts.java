@@ -8,10 +8,13 @@ import actions.Ajax;
 import dao.UserDao;
 import utilities.Dependencies;
 import models.User;
+import models.Category;
+import models.Resource;
 import play.data.Form;
 import play.mvc.Controller;
 import play.mvc.Result;
 import utilities.FormRequest;
+import java.util.List;
 
 import java.lang.String;
 
@@ -133,22 +136,25 @@ public class Accounts extends Controller {
     }
 
     @Authorized({})
-    public static Result profile() {
+    public static Result settings() {
         String email = session().get("email");
         User user = Dependencies.getUserDao().findByEmail(email);
         Form<User> userForm = Form.form(User.class);
         userForm = userForm.fill(user);
-        return ok(views.html.profile.render(userForm));
+        List<User> users = Dependencies.getUserDao().findAll();
+        String cats=Category.getAllJson();
+        Form<Resource> resourceForm = Form.form(Resource.class);
+        return ok(views.html.settings.render(user, userForm, users, cats, resourceForm));
     }
 
     @Authorized({})
     public static Result updateProfile() {
         Form<User> form = Form.form(User.class).bindFromRequest();
         if (form.hasErrors()) {
-            return badRequest(views.html.profile.render(form));
+            return badRequest(views.html.settings.render(Dependencies.getUserDao().findByEmail(session().get("email")), form, Dependencies.getUserDao().findAll(), Category.getAllJson(), Form.form(Resource.class)));
         } else {
             updateUser(form);
-            return redirect(routes.Accounts.profile());
+            return redirect(routes.Accounts.settings()+"#profile");
         }
     }
 
@@ -160,10 +166,4 @@ public class Accounts extends Controller {
         user.contactPhone = form.get().contactPhone;
         Dependencies.getUserDao().update(user);
     }
-    
-    @Authorized({})
-    public static Result admin(){
-        return ok(views.html.admin.render());
-    }
-
 }

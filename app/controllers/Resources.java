@@ -34,16 +34,10 @@ import static utilities.UserUtils.sessionUser;
 
 public class Resources {
     @Authorized({})
-    public static Result newResource() {
-        Form<Resource> resourceForm = Form.form(Resource.class);
-        return ok(views.html.addResource.render(resourceForm));
-    }
-
-    @Authorized({})
     public static Result addResource() {
         Form<Resource> form = Form.form(Resource.class).bindFromRequest();
         if (form.hasErrors())
-            return badRequest(views.html.addResource.render(form));
+            return redirect(routes.Accounts.settings() + "#new-resource");
         Resource r = form.get();
         Http.MultipartFormData body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart part = body.getFile("content");
