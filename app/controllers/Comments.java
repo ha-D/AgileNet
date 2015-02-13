@@ -17,9 +17,10 @@ import static play.mvc.Results.*;
 import static utilities.FormRequest.formBody;
 import static utilities.UserUtils.sessionUser;
 
-
+/**
+ * Controller for viewing, adding, modifying and rating comments
+ */
 public class Comments {
-
     /**
      * Upvote or Downvote a comment
      * POST rate: 1 if action is an upvote, -1 if downvote

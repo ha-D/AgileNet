@@ -151,7 +151,7 @@ public class ResourcesTest extends BaseTest {
         final String EXPERT_EMAIL = "expert@expert.com";
         User expert = newUser(1, EXPERT_EMAIL, "hispassword");
         Role expertRole = new Role("expert");
-        expert.assignRole(expertRole);
+        expert.assignRole(expertRole, false);
         UserDao userDao = mock(UserDao.class);
         Dependencies.setUserDao(userDao);
         when(userDao.findByEmail(EXPERT_EMAIL)).thenReturn(expert);
