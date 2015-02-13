@@ -23,6 +23,7 @@ public class ResourceDaoSearchTest extends BaseTest {
     Resource article1, article2, article3;
     Resource video1, video2, video3;
     Resource site1, site2, site3;
+    Resource highRate1, highRate2, highRate3;
     dao.ResourceDao resourceDao;
 
     @Before
@@ -53,17 +54,17 @@ public class ResourceDaoSearchTest extends BaseTest {
         book2 = newResource("book2", ResourceType.BOOK, category1);
         book3 = newResource("book3", ResourceType.BOOK, category1, category2);
 
-        article1 = newResource("article1", ResourceType.ARTICLE, 4.5, childCategory1);
+        article1 = newResource("article1", ResourceType.ARTICLE, childCategory1);
         article2 = newResource("article2 name_query", ResourceType.ARTICLE, category1, childCategory1, parentCategory);
         article3 = newResource("article3", ResourceType.ARTICLE, category1, category2);
 
         video1 = newResource("video1", ResourceType.VIDEO);
-        video2 = newResource("video2", ResourceType.VIDEO, 5.0, category1);
+        video2 = newResource("video2", ResourceType.VIDEO, category1);
         video3 = newResource("video3 name_query", ResourceType.VIDEO, category1, category2, childCategory2);
 
         site1 = newResource("site1 name_query", ResourceType.WEBSITE, childCategory1);
         site2 = newResource("site2", ResourceType.WEBSITE, category1, childCategory2);
-        site3 = newResource("site3", ResourceType.WEBSITE, 2.0, category1, category2);
+        site3 = newResource("site3", ResourceType.WEBSITE, category1, category2);
 
         book2.description = "felan felan desc_query felan felan";
         article1.description = "felan felan desc_query felan felan";
@@ -72,16 +73,23 @@ public class ResourceDaoSearchTest extends BaseTest {
 
         book1 = resourceDao.create(book1);
         book2 =  resourceDao.create(book2);
-        book3 = resourceDao.create(book3);
+        book3 = highRate1 = resourceDao.create(book3);
         article1 = resourceDao.create(article1);
-        article2 = resourceDao.create(article2);
+        article2 = highRate2 = resourceDao.create(article2);
         article3 = resourceDao.create(article3);
-        video1 = resourceDao.create(video1);
+        video1 = highRate3 = resourceDao.create(video1);
         video2 = resourceDao.create(video2);
         video3 = resourceDao.create(video3);
         site1 = resourceDao.create(site1);
         site2 = resourceDao.create(site2);
         site3 = resourceDao.create(site3);
+
+        highRate1.rating = 5.0;
+        highRate2.rating = 4.5;
+        highRate3.rating = 3.0;
+        resourceDao.update(highRate1);
+        resourceDao.update(highRate2);
+        resourceDao.update(highRate3);
     }
 
     @Test
@@ -135,9 +143,9 @@ public class ResourceDaoSearchTest extends BaseTest {
         criteria.setSortBy(ResourceSearchCriteria.SORT_BY_RATE);
         List<Resource> results = resourceDao.findByCriteria(criteria);
 
-        assertEquals(video2, results.get(0));
-        assertEquals(article1, results.get(1));
-        assertEquals(site3, results.get(2));
+        assertEquals(highRate1, results.get(0));
+        assertEquals(highRate2, results.get(1));
+        assertEquals(highRate3, results.get(2));
     }
 
     private void assertSearch(String message, ResourceDao.ResourceSearchCriteria criteria, Resource... resources) {

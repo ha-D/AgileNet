@@ -1,6 +1,7 @@
 package controllers;
 
 import actions.Authorized;
+import dao.ResourceDao;
 import models.*;
 import utilities.Dependencies;
 import org.apache.commons.io.FileUtils;
@@ -17,15 +18,14 @@ import static play.mvc.Controller.session;
 import actions.Ajax;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dao.ResourceSearchCriteria;
 import play.libs.Json;
 import utilities.FormRequest;
-import utilities.UserUtils;
 
-import java.sql.DriverManager;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+
+import static dao.ResourceDao.ResourceSearchCriteria;
 
 import static play.mvc.Results.*;
 import static utilities.FormRequest.formBody;
@@ -88,6 +88,16 @@ public class Resources {
         }
         criteria.setPageSize(request.getInt("pageSize", criteria.getPageSize()));
         criteria.setPageNumber(request.getInt("page", criteria.getPageNumber()));
+
+        String sortBy = request.get("sortBy", null);
+        switch (sortBy) {
+            case "date":
+                criteria.setSortBy(ResourceSearchCriteria.SORT_BY_DATE);
+                break;
+            case "rating":
+                criteria.setSortBy(ResourceSearchCriteria.SORT_BY_RATE);
+                break;
+        }
 
         List<Resource> resources = Dependencies.getResourceDao().findByCriteria(criteria);
         return ok(serializeResources(resources));
